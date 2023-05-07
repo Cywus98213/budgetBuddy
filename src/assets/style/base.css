@@ -1,0 +1,74 @@
+:root {
+
+  --radius: 0.4rem;
+  --main-bg-clr: #1c1c21;
+  --toggle-bg-clr: #29292f;
+  --secondary-bg-clr: #191922;
+
+  --primary-font-white: #fcfcfc;
+  --primary-component-bg: #29292f;
+  --primary-button-clr: #db4659;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url(../fonts/ClashDisplay-Extralight.ttf);
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url(../fonts/ClashDisplay-Light.ttf);
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url(../fonts/ClashDisplay-Variable.ttf);
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url(../fonts/ClashDisplay-Regular.ttf);
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url(../fonts/ClashDisplay-Semibold.ttf);
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url(../fonts/ClashDisplay-Bold.ttf);
+  font-weight: 600;
+}
+
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  color: var(--primary-font-white);
+  font-size: 17px;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--toggle-bg-clr);
+  border: 2px var(--main-bg-clr) solid;
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 1rem;
+  background-color: var(--main-bg-clr);
+}
