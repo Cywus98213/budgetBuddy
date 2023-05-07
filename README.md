@@ -1,6 +1,7 @@
 # BudgetBuddy
 
 This is a web application built with Vue.js and Express.js that helps users to manage their daily expenses and savings. It also includes an authentication system to secure user accounts and data.
+![image](https://user-images.githubusercontent.com/91040918/236652507-94d08a02-559c-4f9d-944c-f80299f5696c.png)
 
 ### Frontend
 
