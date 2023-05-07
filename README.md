@@ -2,8 +2,6 @@
 
 This is a web application built with Vue.js and Express.js that helps users to manage their daily expenses and savings. It also includes an authentication system to secure user accounts and data.
 
-## Installation
-
 ### Frontend
 
 - Vue js
