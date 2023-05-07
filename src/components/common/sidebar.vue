@@ -5,7 +5,11 @@
 
       <ul class="nav-lists">
         <transition>
-          <RouterLink class="link-wrapper" :to="{ name: 'dashboard' }">
+          <RouterLink
+            :class="{ active: $route.name === 'dashboard' }"
+            class="link-wrapper"
+            :to="{ name: 'dashboard' }"
+          >
             <img
               class="nav-icon"
               src="../../assets/Icons/sidebar/Dashboard.svg"
@@ -15,7 +19,11 @@
           </RouterLink>
         </transition>
         <transition>
-          <RouterLink class="link-wrapper" :to="{ name: 'transactions' }">
+          <RouterLink
+            class="link-wrapper"
+            :to="{ name: 'transactions' }"
+            :class="{ active: $route.name === 'transactions' }"
+          >
             <img
               class="nav-icon"
               src="../../assets/Icons/sidebar/Transaction.svg"
@@ -25,7 +33,11 @@
           </RouterLink>
         </transition>
         <transition>
-          <RouterLink class="link-wrapper" :to="{ name: 'budget' }">
+          <RouterLink
+            class="link-wrapper"
+            :to="{ name: 'budget' }"
+            :class="{ active: $route.name === 'budget' }"
+          >
             <img
               class="nav-icon"
               src="../../assets/Icons/sidebar/Budget.svg"
@@ -34,8 +46,12 @@
             <p class="links" v-if="isToggle">Budget</p>
           </RouterLink>
         </transition>
-        <transition>
-          <RouterLink class="link-wrapper" :to="{ name: 'dashboard' }">
+        <!-- <transition>
+          <RouterLink
+            class="link-wrapper"
+            :to="{ name: 'dashboard' }"
+            :class="{ active: $route.name === 'dashboard' }"
+          >
             <img
               class="nav-icon"
               src="../../assets/Icons/sidebar/Statistic.svg"
@@ -45,7 +61,11 @@
           </RouterLink>
         </transition>
         <transition>
-          <RouterLink class="link-wrapper" :to="{ name: 'dashboard' }">
+          <RouterLink
+            class="link-wrapper"
+            :to="{ name: 'dashboard' }"
+            :class="{ active: $route.name === 'dashboard' }"
+          >
             <img
               class="nav-icon"
               src="../../assets/Icons/sidebar/Setting.svg"
@@ -53,7 +73,7 @@
             />
             <p class="links" v-if="isToggle">Setting</p>
           </RouterLink>
-        </transition>
+        </transition> -->
       </ul>
 
       <div class="toggle" @click="togglehandler">
@@ -127,11 +147,18 @@ export default {
 .link-wrapper {
   cursor: pointer;
   transition: all 0.3s ease;
+  border-radius: var(--radius);
 }
-.link-wrapper:hover {
+.active {
   background-color: var(--primary-button-clr);
   border-radius: var(--radius);
+  outline: 4px var(--main-bg-clr) solid;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.link-wrapper:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  outline: 4px var(--main-bg-clr) solid;
+  background-color: var(--primary-button-clr);
 }
 .toggle {
   padding: 0.6rem;

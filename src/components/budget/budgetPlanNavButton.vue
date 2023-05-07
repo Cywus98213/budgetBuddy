@@ -18,7 +18,7 @@ export default {
   background-color: var(--primary-button-clr);
   padding: 0.6rem;
   border-radius: 50%;
-  border: 3px var(--main-bg-clr) solid;
+  border: 4px var(--main-bg-clr) solid;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
