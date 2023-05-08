@@ -14,11 +14,11 @@ export default {
 <style scoped>
 .header-icon {
   cursor: pointer;
-  margin-left: 0.5rem;
+  margin-left: 0.6rem;
   background-color: var(--primary-button-clr);
-  padding: 0.6rem;
+  padding: 0.5rem;
   border-radius: 50%;
-  border: 4px var(--main-bg-clr) solid;
+  outline: 4px var(--main-bg-clr) solid;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }

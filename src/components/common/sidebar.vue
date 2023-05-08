@@ -21,15 +21,15 @@
         <transition>
           <RouterLink
             class="link-wrapper"
-            :to="{ name: 'transactions' }"
-            :class="{ active: $route.name === 'transactions' }"
+            :to="{ name: 'history' }"
+            :class="{ active: $route.name === 'history' }"
           >
             <img
               class="nav-icon"
               src="../../assets/Icons/sidebar/Transaction.svg"
               alt="Transactions"
             />
-            <p class="links" v-if="isToggle">Transactions</p>
+            <p class="links" v-if="isToggle">History</p>
           </RouterLink>
         </transition>
         <transition>
@@ -137,9 +137,7 @@ export default {
 .nav-icon {
   width: 1.3rem;
   margin: 1rem;
-  z-index: 1;
 }
-
 .links {
   margin: 0 1rem;
   font-family: "Poppins", sans-serif;

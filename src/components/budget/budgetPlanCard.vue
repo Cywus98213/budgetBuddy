@@ -12,10 +12,6 @@
       <p class="amount">$0.00 / 1400</p>
     </div>
     <br />
-    <div class="footer">
-      <h1>Recent Purchase</h1>
-      <div class="recent-wrapper"></div>
-    </div>
   </div>
 </template>
 <script>
@@ -52,16 +48,13 @@ export default {
 }
 
 .header h1 {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .main {
   display: flex;
 }
 .amount {
-  font-size: 2rem;
-}
-.recent-wrapper {
-  background-color: var(--main-bg-clr);
+  font-size: 1.4rem;
 }
 </style>

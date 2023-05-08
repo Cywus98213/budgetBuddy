@@ -1,6 +1,7 @@
 <template>
   <div class="card-wrapper">
-    <p>{{ formattedDate }}</p>
+    <p>{{ date }}</p>
+    <p>{{ title }}</p>
     <p>{{ category }}</p>
     <p>${{ amount }}</p>
   </div>
@@ -8,34 +9,31 @@
 <script>
 export default {
   props: {
+    title: {
+      type: String,
+      required: true,
+    },
     amount: {
       required: true,
       type: String,
     },
     date: {
       required: true,
-      type: Date,
+      type: String,
     },
     category: {
       required: true,
       type: String,
     },
-    note: {
-      type: String,
-    },
   },
-  computed: {
-    formattedDate() {
-      return this.date.toLocaleDateString();
-    },
-  },
+  computed: {},
 };
 </script>
 <style scoped>
 .card-wrapper {
   border-radius: var(--radius);
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
   background-color: var(--primary-component-bg);
   padding: 1rem;
   margin-bottom: 0.3rem;
@@ -44,8 +42,8 @@ export default {
 
 @media screen and (min-width: 424px) {
   .card-wrapper {
-    flex-direction: row;
-    justify-content: space-between;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr;
   }
 }
 </style>

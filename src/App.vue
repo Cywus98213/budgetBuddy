@@ -6,35 +6,18 @@ import Sidebar from "./components/common/sidebar.vue";
 <template>
   <main>
     <Sidebar />
-    <transition name="slide" mode="in-out">
-      <RouterView />
-    </transition>
+
+    <div class="content"><RouterView /></div>
   </main>
 </template>
 
 <style scoped>
 main {
   display: flex;
+  height: 100vh;
   background-color: var(--main-bg-clr);
 }
-.slide-enter-active,
-.slide-leave-active {
-  transition: transform 0.3s ease;
-}
-
-.slide-enter-from {
-  transform: translateX(100%);
-}
-
-.slide-enter-to {
-  transform: translateX(0%);
-}
-
-.slide-leave-from {
-  transform: translateX(0%);
-}
-
-.slide-leave-to {
-  transform: translateX(-100%);
+.content {
+  flex-grow: 1;
 }
 </style>
