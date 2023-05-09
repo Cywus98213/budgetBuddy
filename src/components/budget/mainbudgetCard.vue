@@ -3,15 +3,15 @@
     <ExpenseModal v-if="isAddExpense" @closeform="exitForm" />
     <IncomeModal v-if="isAddIncome" @closeform="exitForm" />
     <div class="main-section">
-      <p class="budgetTitle">My Budget</p>
-      <p class="budgetAmount">$1.550,00</p>
+      <p class="budgetTitle">My Balance</p>
+      <p class="budgetAmount">$0.00</p>
       <div class="button-section">
-        <budgetButton
+        <Button
           :text="'Add Income'"
           :iconSrc="AddincomeIcon"
           @click="toggleIncomeForm"
         />
-        <budgetButton
+        <Button
           :text="'Add Expense'"
           :iconSrc="AddspendingIcon"
           @click="toggleExpenseForm"
@@ -25,11 +25,11 @@ import IncomeModal from "./budgetModal/Income/IncomeModal.vue";
 import ExpenseModal from "./budgetModal/Expense/expenseModal.vue";
 import AddincomeIcon from "../../assets/Icons/budget/Addincome.svg";
 import AddspendingIcon from "../../assets/Icons/budget/Addspending.svg";
-import budgetButton from "./budgetButton.vue";
+import Button from "../common/Button.vue";
 export default {
   components: {
     IncomeModal,
-    budgetButton,
+    Button,
     ExpenseModal,
   },
   data() {
@@ -68,6 +68,9 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+.budgetTitle {
+  font-size: 1.2rem;
 }
 .budgetAmount {
   font-size: 2rem;

@@ -9,6 +9,7 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const Expenses = require("./models/expenses");
+const usersRoute = require("./routes/users");
 
 const PORT = process.env.PORT || 3000;
 
@@ -38,12 +39,14 @@ app.get("/history", async (req, res) => {
   res.status(200).json(expenses);
 });
 
-app.get("/budget", async (req, res) => {
+app.use("/", usersRoute);
+
+app.get("/expense", async (req, res) => {
   const expenses = await Expenses.find({});
   res.status(200).json(expenses);
 });
 
-app.post("/budget", async (req, res) => {
+app.post("/expense", async (req, res) => {
   console.log(req.body);
   const newExpense = new Expenses(req.body);
   await newExpense.save();

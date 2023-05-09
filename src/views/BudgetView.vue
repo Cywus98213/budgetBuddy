@@ -6,16 +6,23 @@
     <div class="budget-header">
       <mainBudgetCard />
     </div>
+    <div class="planNav">
+      <Button :text="'Create Plan'" />
+    </div>
     <div class="budget-main">
       <div
-        v-for="(expenseCategory, index) in expenseCategories"
+        v-if="loaded"
+        v-for="(Category, index) in expenseCategories"
         :key="index"
         class="budgetplan"
       >
         <budgetPlanCard
-          :category="expenseCategory"
-          :expenses="expenseData[expenseCategory]"
+          :category="Category"
+          :expenses="expenseData[Category]"
         />
+      </div>
+      <div v-else class="loading">
+        <p>Loading...</p>
       </div>
     </div>
   </div>
@@ -23,15 +30,18 @@
 
 <script>
 import axios from "axios";
+import Button from "../components/common/Button.vue";
 import mainBudgetCard from "../components/budget/mainbudgetCard.vue";
 import budgetPlanCard from "../components/budget/budgetPlanCard.vue";
 export default {
   components: {
     mainBudgetCard,
     budgetPlanCard,
+    Button,
   },
   data() {
     return {
+      loaded: false,
       expenseData: {}, // initialize empty object to store expenses for each category
       expenseCategories: ["Groceries", "Entertainment", "Personal", "Other"], // expense categories to display
     };
@@ -39,7 +49,7 @@ export default {
   methods: {
     getUserbudget() {
       axios
-        .get("http://localhost:3000/budget")
+        .get("http://localhost:3000/expenses")
         .then((res) => {
           console.log(res);
           // loop through each expense category and filter out the expenses that match the category
@@ -48,6 +58,7 @@ export default {
               (expense) => expense.Category === category
             );
           }
+          this.loaded = true;
         })
         .catch((err) => {
           console.log(err);
@@ -61,6 +72,12 @@ export default {
 </script>
 
 <style scoped>
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+}
 .wrapper {
   padding: 1rem;
 }
@@ -72,6 +89,11 @@ export default {
   max-width: 100%;
   margin: 0.5rem auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.planNav {
+  display: flex;
+  justify-content: flex-end;
+  margin: 1rem auto;
 }
 .budget-main {
   display: flex;

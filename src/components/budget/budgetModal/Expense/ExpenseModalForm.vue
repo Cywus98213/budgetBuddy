@@ -52,14 +52,14 @@
           required
         />
 
-        <budgetButton :text="'Add Expense'" class="formSubmit" />
+        <Button :text="'Add Expense'" class="formSubmit" />
       </form>
     </div>
   </div>
 </template>
 <script>
 import axios from "axios";
-import budgetButton from "../../budgetButton.vue";
+import Button from "../../../common/Button.vue";
 
 export default {
   data() {
@@ -71,7 +71,7 @@ export default {
     };
   },
   components: {
-    budgetButton,
+    Button,
   },
   methods: {
     exitForm() {

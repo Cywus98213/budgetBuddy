@@ -15,7 +15,7 @@ export default {
     },
     amount: {
       required: true,
-      type: String,
+      type: Number,
     },
     date: {
       required: true,

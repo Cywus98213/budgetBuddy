@@ -1,11 +1,26 @@
 <template>
   <div class="sidebar-wrapper" :class="{ expanded: isToggle }">
-    <div class="container">
-      <p class="logo">BD.</p>
+    <p class="logo">BD.</p>
 
-      <ul class="nav-lists">
+    <ul class="nav-lists">
+      <div class="top">
         <transition>
           <RouterLink
+            :class="{ active: $route.name === 'home' }"
+            class="link-wrapper"
+            :to="{ name: 'home' }"
+          >
+            <img
+              class="nav-icon"
+              src="../../assets/Icons/sidebar/home.svg"
+              alt="Dashboard"
+            />
+            <p class="links" v-if="isToggle">Home</p>
+          </RouterLink>
+        </transition>
+        <transition>
+          <RouterLink
+            v-if="IsLoggedIn"
             :class="{ active: $route.name === 'dashboard' }"
             class="link-wrapper"
             :to="{ name: 'dashboard' }"
@@ -20,6 +35,7 @@
         </transition>
         <transition>
           <RouterLink
+            v-if="IsLoggedIn"
             class="link-wrapper"
             :to="{ name: 'history' }"
             :class="{ active: $route.name === 'history' }"
@@ -34,6 +50,7 @@
         </transition>
         <transition>
           <RouterLink
+            v-if="IsLoggedIn"
             class="link-wrapper"
             :to="{ name: 'budget' }"
             :class="{ active: $route.name === 'budget' }"
@@ -74,22 +91,55 @@
             <p class="links" v-if="isToggle">Setting</p>
           </RouterLink>
         </transition> -->
-      </ul>
-
-      <div class="toggle" @click="togglehandler">
-        <img
-          v-if="!isToggle"
-          class="toggle-image"
-          src="../../assets/Icons/sidebar/expand.svg"
-          alt="Expand Sidebar"
-        />
-        <img
-          v-if="isToggle"
-          class="toggle-image"
-          src="../../assets/Icons/sidebar/minimize.svg"
-          alt="minimize Sidebar"
-        />
       </div>
+
+      <div class="footer">
+        <transition>
+          <RouterLink
+            v-if="!IsLoggedIn"
+            class="link-wrapper"
+            :to="{ name: 'login' }"
+            :class="{ active: $route.name === 'login' }"
+          >
+            <img
+              class="nav-icon"
+              src="../../assets/Icons/sidebar/Login.svg"
+              alt="login"
+            />
+            <p class="links" v-if="isToggle">Login</p>
+          </RouterLink>
+        </transition>
+        <transition>
+          <RouterLink
+            v-if="!IsLoggedIn"
+            class="link-wrapper"
+            :to="{ name: 'register' }"
+            :class="{ active: $route.name === 'register' }"
+          >
+            <img
+              class="nav-icon"
+              src="../../assets/Icons/sidebar/Register.svg"
+              alt="register"
+            />
+            <p class="links" v-if="isToggle">Register</p>
+          </RouterLink>
+        </transition>
+      </div>
+    </ul>
+
+    <div class="toggle" @click="togglehandler">
+      <img
+        v-if="!isToggle"
+        class="toggle-image"
+        src="../../assets/Icons/sidebar/expand.svg"
+        alt="Expand Sidebar"
+      />
+      <img
+        v-if="isToggle"
+        class="toggle-image"
+        src="../../assets/Icons/sidebar/minimize.svg"
+        alt="minimize Sidebar"
+      />
     </div>
   </div>
 </template>
@@ -104,6 +154,11 @@ export default {
   methods: {
     togglehandler() {
       this.isToggle = !this.isToggle;
+    },
+  },
+  computed: {
+    IsLoggedIn() {
+      return this.$store.getters.IsLoggedIn;
     },
   },
 };
@@ -132,7 +187,9 @@ export default {
   align-items: center;
 }
 .nav-lists {
-  margin-top: 3rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .nav-icon {
   width: 1.3rem;
@@ -146,6 +203,9 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   border-radius: var(--radius);
+}
+.footer {
+  margin-top: auto;
 }
 .active {
   background-color: var(--primary-button-clr);

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div v-if="expenses" class="wrapper">
     <div class="header">
       <h1>{{ category }}</h1>
       <div class="header-mod">
@@ -9,7 +9,10 @@
     </div>
     <br />
     <div class="main">
-      <p class="amount">$0.00 / 1400</p>
+      <p class="amount">
+        ${{ currentAmount.toFixed(2) }}
+        <span class="limitAmount">/ $1400.00</span>
+      </p>
     </div>
     <br />
   </div>
@@ -21,6 +24,10 @@ import budgetPlanNavButton from "./budgetPlanNavButton.vue";
 export default {
   components: { budgetPlanNavButton },
   props: {
+    expenses: {
+      type: Array,
+      required: true,
+    },
     category: {
       type: String,
       required: true,
@@ -28,12 +35,21 @@ export default {
   },
   data() {
     return {
+      currentAmount: 0,
       NavEditIcon: NavEditIcon,
       NavDeleteIcon: NavDeleteIcon,
     };
   },
   methods: {},
   computed: {},
+  mounted() {
+    // loop through each expense and add the amount to the currentAmount
+    if (this.expenses) {
+      for (const expense of this.expenses) {
+        this.currentAmount += expense.Amount;
+      }
+    }
+  },
 };
 </script>
 <style scoped>
@@ -56,5 +72,11 @@ export default {
 }
 .amount {
   font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.limitAmount {
+  font-size: 1.4rem;
+  font-weight: 100;
 }
 </style>

@@ -56,16 +56,16 @@
           required
         />
 
-        <budgetButton :text="'Add Income'" class="formSubmit" />
+        <Button :text="'Add Income'" class="formSubmit" />
       </form>
     </div>
   </div>
 </template>
 <script>
-import budgetButton from "../../budgetButton.vue";
+import Button from "../../../common/Button.vue";
 export default {
   components: {
-    budgetButton,
+    Button,
   },
   methods: {
     exitForm() {

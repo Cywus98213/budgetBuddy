@@ -11,16 +11,21 @@ const budgetPlanSchema = new Schema({
     default: 0,
     required: true,
   },
-  //   creator: {
-  //     type: Schema.Types.ObjectId,
-  //     ref: "User",
-  //   },
+  creator: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
   Expense: [
     {
       type: Schema.Types.ObjectId,
       ref: "Expenses",
     },
   ],
+  LimitAmount: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
 });
 
 const BudgetPlan = mongoose.model("BudgetPlan", budgetPlanSchema);
