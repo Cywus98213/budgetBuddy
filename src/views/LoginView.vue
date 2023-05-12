@@ -31,7 +31,7 @@ export default {
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("userId", res.data.userId);
             this.$store.dispatch("login");
-            this.$router.push({ name: "dashboard" });
+            this.$router.push({ name: "home" });
           } else {
             console.log("error");
           }

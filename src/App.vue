@@ -1,7 +1,6 @@
 <script setup>
 import { RouterView } from "vue-router";
 import Sidebar from "./components/common/sidebar.vue";
-localStorage.setItem("IsLoggedIn", "false");
 </script>
 
 <template>

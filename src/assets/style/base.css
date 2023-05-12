@@ -72,3 +72,7 @@
   border-radius: 1rem;
   background-color: var(--main-bg-clr);
 }
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}

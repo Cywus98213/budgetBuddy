@@ -34,25 +34,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/history", async (req, res) => {
-  const expenses = await Expenses.find({});
-  res.status(200).json(expenses);
-});
-
 app.use("/", usersRoute);
-
-app.get("/expense", async (req, res) => {
-  const expenses = await Expenses.find({});
-  res.status(200).json(expenses);
-});
-
-app.post("/expense", async (req, res) => {
-  console.log(req.body);
-  const newExpense = new Expenses(req.body);
-  await newExpense.save();
-  console.log(newExpense);
-  res.status(200).json(newExpense);
-});
 
 app.listen(PORT, () => {
   console.log(`listening to port ${PORT}`);

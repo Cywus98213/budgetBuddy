@@ -15,17 +15,17 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: "/dashboard",
+      path: "/:id/dashboard",
       name: "dashboard",
       component: DashboardView,
     },
     {
-      path: "/history",
+      path: "/:id/history",
       name: "history",
       component: HistoryView,
     },
     {
-      path: "/budget",
+      path: "/:id/budget",
       name: "budget",
       component: BudgetView,
     },

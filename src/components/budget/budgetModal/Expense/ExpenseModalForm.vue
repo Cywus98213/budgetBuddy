@@ -79,12 +79,21 @@ export default {
     },
     expenseFormHandler() {
       axios
-        .post("http://localhost:3000/budget", {
-          Title: this.title,
-          Amount: this.amount,
-          Category: this.category,
-          Date: this.date,
-        })
+        .post(
+          `http://localhost:3000/${this.$route.params.id}/budget`,
+          {
+            Title: this.title,
+            Amount: this.amount,
+            Category: this.category,
+            Date: this.date,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              UserId: localStorage.getItem("userId"),
+            },
+          }
+        )
         .then((res) => {
           if (res.status === 200) {
             this.$emit("closeform");

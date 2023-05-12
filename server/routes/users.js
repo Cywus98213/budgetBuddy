@@ -8,11 +8,13 @@ const router = express.Router();
 const User = require("../models/users");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const BudgetPlan = require("../models/budgetPlan");
+const mongoose = require("mongoose");
+const Expenses = require("../models/expenses");
 
 const PrivateKey = process.env.PRIVATE_KEY;
 
 router.post("/register", async (req, res) => {
-  console.log(req.body);
   const { Email, Username, Password } = req.body;
   try {
     // Hash password using bcrypt
@@ -25,6 +27,37 @@ router.post("/register", async (req, res) => {
       Username: Username,
       Hashedpassword: passwordHash,
     });
+
+    // Create Default Gorceries Plan
+    const foodPlan = new BudgetPlan({
+      Category: "Gorceries",
+      Amount: 0,
+      Expenses: [],
+      creator: user._id,
+    });
+
+    //Create Default Entertainment Plan
+    const entertainmentPlan = new BudgetPlan({
+      Category: "Entertainment",
+      Amount: 0,
+      Expenses: [],
+      creator: user._id,
+    });
+
+    //Create Default Entertainment Plan
+    const utilitiesPlan = new BudgetPlan({
+      Category: "Utilities",
+      Amount: 0,
+      Expenses: [],
+      creator: user._id,
+    });
+    await foodPlan.save();
+    await entertainmentPlan.save();
+    await utilitiesPlan.save();
+
+    user.BudgetPlan.push(foodPlan);
+    user.BudgetPlan.push(entertainmentPlan);
+    user.BudgetPlan.push(utilitiesPlan);
 
     // Save new user document to database
     await user.save();
@@ -70,6 +103,43 @@ router.post("/login", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+router.get("/:id/budget", async (req, res) => {
+  const user = await User.findById(req.params.id).populate("BudgetPlan");
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  } else {
+    res.status(200).send(user);
+  }
+});
+
+router.post("/:id/budget", async (req, res) => {
+  const { Title, Amount, Category, Date } = req.body;
+  const user = await User.findById(req.params.id);
+
+  const expense = new Expenses({
+    Title: Title,
+    Amount: Amount,
+    Category: Category,
+    Date: Date,
+    creator: user._id,
+  });
+
+  await expense.save();
+
+  const budgetPlan = await BudgetPlan.findOne({ Category: Category });
+
+  budgetPlan.Expenses.push(expense);
+
+  await budgetPlan.save();
+
+  user.Expenses.push(expense);
+
+  await user.save();
+
+  res.status(200).json({ message: "Expense added successfully" });
 });
 
 module.exports = router;

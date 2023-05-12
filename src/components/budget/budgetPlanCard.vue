@@ -10,8 +10,8 @@
     <br />
     <div class="main">
       <p class="amount">
-        ${{ currentAmount.toFixed(2) }}
-        <span class="limitAmount">/ $1400.00</span>
+        ${{ amount.toFixed(2) }}
+        <span class="limitAmount">/ ${{ limitAmount }}</span>
       </p>
     </div>
     <br />
@@ -32,10 +32,17 @@ export default {
       type: String,
       required: true,
     },
+    limitAmount: {
+      type: Number,
+      required: true,
+    },
+    amount: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
-      currentAmount: 0,
       NavEditIcon: NavEditIcon,
       NavDeleteIcon: NavDeleteIcon,
     };

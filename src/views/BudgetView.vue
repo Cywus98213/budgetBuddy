@@ -12,13 +12,15 @@
     <div class="budget-main">
       <div
         v-if="loaded"
-        v-for="(Category, index) in expenseCategories"
+        v-for="(budgetPlan, index) in userBudgetPlan"
         :key="index"
         class="budgetplan"
       >
         <budgetPlanCard
-          :category="Category"
-          :expenses="expenseData[Category]"
+          :category="budgetPlan.Category"
+          :expenses="budgetPlan.Expenses"
+          :limitAmount="budgetPlan.LimitAmount"
+          :amount="budgetPlan.Amount"
         />
       </div>
       <div v-else class="loading">
@@ -42,22 +44,17 @@ export default {
   data() {
     return {
       loaded: false,
-      expenseData: {}, // initialize empty object to store expenses for each category
-      expenseCategories: ["Groceries", "Entertainment", "Personal", "Other"], // expense categories to display
+      userBudgetPlan: {},
     };
   },
   methods: {
     getUserbudget() {
       axios
-        .get("http://localhost:3000/expenses")
+        .get(`http://localhost:3000/${this.$route.params.id}/budget`)
         .then((res) => {
-          console.log(res);
-          // loop through each expense category and filter out the expenses that match the category
-          for (const category of this.expenseCategories) {
-            this.expenseData[category] = res.data.filter(
-              (expense) => expense.Category === category
-            );
-          }
+          console.log(res.data);
+          this.userBudgetPlan = res.data.BudgetPlan;
+          console.log(this.userBudgetPlan);
           this.loaded = true;
         })
         .catch((err) => {
