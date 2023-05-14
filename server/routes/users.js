@@ -29,8 +29,8 @@ router.post("/register", async (req, res) => {
     });
 
     // Create Default Gorceries Plan
-    const foodPlan = new BudgetPlan({
-      Category: "Gorceries",
+    const groceriesPlan = new BudgetPlan({
+      Category: "Groceries",
       Amount: 0,
       Expenses: [],
       creator: user._id,
@@ -51,11 +51,11 @@ router.post("/register", async (req, res) => {
       Expenses: [],
       creator: user._id,
     });
-    await foodPlan.save();
+    await groceriesPlan.save();
     await entertainmentPlan.save();
     await utilitiesPlan.save();
 
-    user.BudgetPlan.push(foodPlan);
+    user.BudgetPlan.push(groceriesPlan);
     user.BudgetPlan.push(entertainmentPlan);
     user.BudgetPlan.push(utilitiesPlan);
 
@@ -106,7 +106,13 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/:id/budget", async (req, res) => {
-  const user = await User.findById(req.params.id).populate("BudgetPlan");
+  const user = await User.findById(req.params.id).populate({
+    path: "BudgetPlan",
+    populate: {
+      path: "Expenses",
+      model: "Expense",
+    },
+  });
 
   if (!user) {
     return res.status(404).json({ error: "User not found" });
@@ -140,6 +146,16 @@ router.post("/:id/budget", async (req, res) => {
   await user.save();
 
   res.status(200).json({ message: "Expense added successfully" });
+});
+
+router.get("/:id/history", async (req, res) => {
+  const user = await User.findById(req.params.id).populate("Expenses");
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  } else {
+    res.status(200).send(user);
+  }
 });
 
 module.exports = router;

@@ -36,20 +36,21 @@ export default {
       expenses: [],
     };
   },
-  created() {
-    this.getExpenses();
-  },
+
   methods: {
     getExpenses() {
       axios
-        .get("http://localhost:3000/history")
+        .get(`http://localhost:3000/${this.$route.params.id}/history`)
         .then((res) => {
-          this.expenses = res.data;
+          this.expenses = res.data.Expenses;
         })
         .catch((err) => {
           console.log(err);
         });
     },
+  },
+  created() {
+    this.getExpenses();
   },
 };
 </script>

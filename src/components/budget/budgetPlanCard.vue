@@ -1,5 +1,5 @@
 <template>
-  <div v-if="expenses" class="wrapper">
+  <div class="wrapper">
     <div class="header">
       <h1>{{ category }}</h1>
       <div class="header-mod">
@@ -9,9 +9,11 @@
     </div>
     <br />
     <div class="main">
-      <p class="amount">
-        ${{ amount.toFixed(2) }}
-        <span class="limitAmount">/ ${{ limitAmount }}</span>
+      <p>
+        <span class="currentValue" :class="checkLimit"
+          >${{ currentAmount.toFixed(2) }}</span
+        >
+        <span class="limitAmount"> / ${{ limitAmount }}</span>
       </p>
     </div>
     <br />
@@ -21,6 +23,7 @@
 import NavEditIcon from "../../assets/Icons/budget/edit.svg";
 import NavDeleteIcon from "../../assets/Icons/budget/delete.svg";
 import budgetPlanNavButton from "./budgetPlanNavButton.vue";
+
 export default {
   components: { budgetPlanNavButton },
   props: {
@@ -43,18 +46,26 @@ export default {
   },
   data() {
     return {
+      currentAmount: 0,
       NavEditIcon: NavEditIcon,
       NavDeleteIcon: NavDeleteIcon,
     };
   },
   methods: {},
-  computed: {},
+  computed: {
+    checkLimit() {
+      return {
+        OverLimit: this.currentAmount > this.limitAmount,
+        AlmostOverLimit: this.currentAmount > this.limitAmount * 0.8,
+      };
+    },
+  },
   mounted() {
     // loop through each expense and add the amount to the currentAmount
     if (this.expenses) {
-      for (const expense of this.expenses) {
+      this.expenses.forEach((expense) => {
         this.currentAmount += expense.Amount;
-      }
+      });
     }
   },
 };
@@ -77,13 +88,19 @@ export default {
 .main {
   display: flex;
 }
-.amount {
+.currentValue {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+.limitAmount {
   font-size: 1.4rem;
   font-weight: bold;
 }
 
-.limitAmount {
-  font-size: 1.4rem;
-  font-weight: 100;
+.AlmostOverLimit {
+  color: var(--warning-clr);
+}
+.OverLimit {
+  color: var(--danger-clr);
 }
 </style>

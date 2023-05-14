@@ -7,6 +7,7 @@
       <mainBudgetCard />
     </div>
     <div class="planNav">
+      <budgetRefreshButton :iconSrc="budgetRefreshIcon" />
       <Button :text="'Create Plan'" />
     </div>
     <div class="budget-main">
@@ -32,6 +33,9 @@
 
 <script>
 import axios from "axios";
+import budgetRefreshButton from "../components/budget/budgetRefreshButton.vue";
+import budgetRefreshIcon from "../assets/Icons/budget/refresh.svg";
+import budgetPlanNavButton from "../components/budget/budgetPlanNavButton.vue";
 import Button from "../components/common/Button.vue";
 import mainBudgetCard from "../components/budget/mainbudgetCard.vue";
 import budgetPlanCard from "../components/budget/budgetPlanCard.vue";
@@ -40,11 +44,14 @@ export default {
     mainBudgetCard,
     budgetPlanCard,
     Button,
+    budgetPlanNavButton,
+    budgetRefreshButton,
   },
   data() {
     return {
       loaded: false,
       userBudgetPlan: {},
+      budgetRefreshIcon: budgetRefreshIcon,
     };
   },
   methods: {
@@ -54,7 +61,7 @@ export default {
         .then((res) => {
           console.log(res.data);
           this.userBudgetPlan = res.data.BudgetPlan;
-          console.log(this.userBudgetPlan);
+
           this.loaded = true;
         })
         .catch((err) => {
@@ -63,6 +70,9 @@ export default {
     },
   },
   mounted() {
+    setInterval(() => {
+      this.getUserbudget();
+    }, 600000);
     this.getUserbudget();
   },
 };
@@ -90,8 +100,10 @@ export default {
 .planNav {
   display: flex;
   justify-content: flex-end;
+  gap: 2rem;
   margin: 1rem auto;
 }
+
 .budget-main {
   display: flex;
   overflow-y: scroll;
