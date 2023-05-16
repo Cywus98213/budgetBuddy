@@ -8,7 +8,8 @@
     </div>
     <div class="planNav">
       <budgetRefreshButton :iconSrc="budgetRefreshIcon" />
-      <Button :text="'Create Plan'" />
+      <planModal v-if="isAddPlan" @closeform="exitForm" />
+      <Button :text="'Create Plan'" @click="togglePlanForm" />
     </div>
     <div class="budget-main">
       <div
@@ -33,6 +34,7 @@
 
 <script>
 import axios from "axios";
+import planModal from "../components/budget/budgetModal/plan/planModal.vue";
 import budgetRefreshButton from "../components/budget/budgetRefreshButton.vue";
 import budgetRefreshIcon from "../assets/Icons/budget/refresh.svg";
 import budgetPlanNavButton from "../components/budget/budgetPlanNavButton.vue";
@@ -46,15 +48,23 @@ export default {
     Button,
     budgetPlanNavButton,
     budgetRefreshButton,
+    planModal,
   },
   data() {
     return {
       loaded: false,
       userBudgetPlan: {},
+      isAddPlan: false,
       budgetRefreshIcon: budgetRefreshIcon,
     };
   },
   methods: {
+    exitForm() {
+      this.isAddPlan = false;
+    },
+    togglePlanForm() {
+      this.isAddPlan = true;
+    },
     getUserbudget() {
       axios
         .get(`http://localhost:3000/${this.$route.params.id}/budget`)

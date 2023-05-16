@@ -2,6 +2,7 @@
   <div class="wrapper">
     <ExpenseModal v-if="isAddExpense" @closeform="exitForm" />
     <IncomeModal v-if="isAddIncome" @closeform="exitForm" />
+
     <div class="main-section">
       <p class="budgetTitle">My Balance</p>
       <p class="budgetAmount">$0.00</p>
@@ -34,6 +35,7 @@ export default {
   },
   data() {
     return {
+      isAddPlan: false,
       isAddExpense: false,
       isAddIncome: false,
       AddincomeIcon: AddincomeIcon,
