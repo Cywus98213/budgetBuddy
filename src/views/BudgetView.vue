@@ -23,6 +23,7 @@
           :expenses="budgetPlan.Expenses"
           :limitAmount="budgetPlan.LimitAmount"
           :amount="budgetPlan.Amount"
+          :planid="budgetPlan._id"
         />
       </div>
       <div v-else class="loading">

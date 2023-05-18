@@ -1,9 +1,9 @@
 <template>
   <div class="wrapper">
     <div class="form-warpper">
-      <form class="form" @submit.prevent="">
+      <form class="form" @submit.prevent="createPlanHandler">
         <div class="form-header">
-          <h1>Income Form:</h1>
+          <h1>Create Plan:</h1>
           <img
             class="closeicon"
             src="../../../../assets/Icons/budget/closeicon.svg"
@@ -26,6 +26,7 @@
 
         <label for="expense-amount">LimitAmount:</label>
         <input
+          v-model="limitAmount"
           class="input"
           type="number"
           id="expense-amount"
@@ -42,14 +43,36 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 import Button from "../../../common/Button.vue";
 export default {
   components: {
     Button,
   },
+  data() {
+    return {
+      category: "",
+      limitAmount: "",
+    };
+  },
   methods: {
     exitForm() {
       this.$emit("closeform");
+    },
+    createPlanHandler() {
+      axios
+        .post(`http://localhost:3000/${this.$route.params.id}/budgetplan`, {
+          Category: this.category,
+          LimitAmount: this.limitAmount,
+          userId: localStorage.getItem("userId"),
+        })
+        .then((res) => {
+          console.log(res);
+          this.$emit("closeform");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };

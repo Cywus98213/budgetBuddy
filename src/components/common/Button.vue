@@ -32,9 +32,9 @@ export default {
   transition: transform 0.3s ease;
 }
 .button:hover {
-  transform: translateY(-5px);
+  transform: translateY(-2px);
 }
 .button:active {
-  transform: translateY(2px);
+  transform: translateY(1px);
 }
 </style>

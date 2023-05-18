@@ -5,6 +5,7 @@ import DashboardView from "../views/DashboardView.vue";
 import BudgetView from "../views/BudgetView.vue";
 import LoginView from "../views/LoginView.vue";
 import RegisterView from "../views/RegisterView.vue";
+import BudgetPlanView from "../views/BudgetPlanDetailView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,11 @@ const router = createRouter({
       path: "/:id/budget",
       name: "budget",
       component: BudgetView,
+    },
+    {
+      path: "/:id/budgetplan/:budgetplanid",
+      name: "budgetplan",
+      component: BudgetPlanView,
     },
     {
       path: "/login",

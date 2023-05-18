@@ -3,8 +3,14 @@
     <div class="header">
       <h1>{{ category }}</h1>
       <div class="header-mod">
-        <budgetPlanNavButton :iconSrc="NavEditIcon" />
-        <budgetPlanNavButton :iconSrc="NavDeleteIcon" />
+        <RouterLink
+          :to="{ name: 'budgetplan', params: { budgetplanid: planid } }"
+        >
+          <Button :text="'View Detail'"
+        /></RouterLink>
+
+        <!-- <budgetPlanNavButton :iconSrc="NavEditIcon" />
+        <budgetPlanNavButton :iconSrc="NavDeleteIcon" /> -->
       </div>
     </div>
     <br />
@@ -20,12 +26,14 @@
   </div>
 </template>
 <script>
+import { RouterLink } from "vue-router";
+import Button from "../common/Button.vue";
 import NavEditIcon from "../../assets/Icons/budget/edit.svg";
 import NavDeleteIcon from "../../assets/Icons/budget/delete.svg";
 import budgetPlanNavButton from "./budgetPlanNavButton.vue";
 
 export default {
-  components: { budgetPlanNavButton },
+  components: { budgetPlanNavButton, Button },
   props: {
     expenses: {
       type: Array,
@@ -41,6 +49,10 @@ export default {
     },
     amount: {
       type: Number,
+      required: true,
+    },
+    planid: {
+      type: String,
       required: true,
     },
   },

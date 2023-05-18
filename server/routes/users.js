@@ -138,6 +138,7 @@ router.post("/:id/budget", async (req, res) => {
   const budgetPlan = await BudgetPlan.findOne({ Category: Category });
 
   budgetPlan.Expenses.push(expense);
+  budgetPlan.Amount += Amount;
 
   await budgetPlan.save();
 
@@ -156,6 +157,46 @@ router.get("/:id/history", async (req, res) => {
   } else {
     res.status(200).send(user);
   }
+});
+
+router.post("/:id/budgetplan", async (req, res) => {
+  const { Category, Amount, userId } = req.body;
+  const user = await User.findById(userId);
+
+  const existingBudgetPlan = user.BudgetPlan.find(
+    (budgetPlan) => budgetPlan.Category === Category
+  );
+
+  if (existingBudgetPlan) {
+    return res.status(400).json({ error: "Budget Plan already exists" });
+  }
+
+  const budgetPlan = new BudgetPlan({
+    Category: Category,
+    Amount: Amount,
+    Expenses: [],
+    creator: userId,
+  });
+
+  await budgetPlan.save();
+
+  user.BudgetPlan.push(budgetPlan);
+
+  await user.save();
+
+  res.status(200).json({ message: "Budget Plan added successfully" });
+});
+
+router.get("/:id/budgetplan/:budgetplanid", async (req, res) => {
+  const budgetPlan = await BudgetPlan.findById(
+    req.params.budgetplanid
+  ).populate("Expenses");
+
+  if (!budgetPlan) {
+    return res.status(404).json({ error: "Budget Plan not found" });
+  }
+
+  res.status(200).send(budgetPlan);
 });
 
 module.exports = router;
