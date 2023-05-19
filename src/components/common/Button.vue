@@ -35,6 +35,6 @@ export default {
   transform: translateY(-2px);
 }
 .button:active {
-  transform: translateY(1px);
+  transform: translateY(2px);
 }
 </style>

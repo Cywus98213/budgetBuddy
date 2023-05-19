@@ -52,6 +52,7 @@ export default {
     exitForm() {
       this.isAddIncome = false;
       this.isAddExpense = false;
+      location.reload();
     },
   },
 };

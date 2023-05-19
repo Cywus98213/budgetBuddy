@@ -1,8 +1,16 @@
 <template>
   <div class="wrapper">
+    <budgetplanModal v-if="isEditPlan" @closeform="exitForm" />
     <div class="header">
       <BackButton />
       <h1 class="budgetPlanCategory">{{ Category }} Plan</h1>
+      <div class="navButton">
+        <budgetPlanNavButton :iconSrc="NavEditIcon" @click="toggleEdit" />
+        <budgetPlanNavButton
+          :iconSrc="NavDeleteIcon"
+          @click="DeleteBudgetPlanHandler"
+        />
+      </div>
     </div>
     <div class="grid-container">
       <div class="main">
@@ -15,6 +23,10 @@
   </div>
 </template>
 <script>
+import budgetplanModal from "../components/budgetPlan/budgetPlanModal/budgetplanModal.vue";
+import budgetPlanNavButton from "../components/budget/budgetPlanNavButton.vue";
+import NavEditIcon from "../assets/Icons/budget/edit.svg";
+import NavDeleteIcon from "../assets/Icons/budget/delete.svg";
 import sideRecentExpense from "../components/budgetPlan/sideDisplay/sideRecentExpense.vue";
 import mainbudgetplanDisplay from "../components/budgetPlan/mainbudgetplanDisplay.vue";
 import BackButton from "../components/budgetPlan/BackButton.vue";
@@ -22,15 +34,20 @@ import axios from "axios";
 export default {
   components: {
     BackButton,
+    budgetplanModal,
     mainbudgetplanDisplay,
     sideRecentExpense,
+    budgetPlanNavButton,
   },
   data() {
     return {
+      isEditPlan: false,
       Category: "",
       LimitAmount: "",
       Expenses: [],
       Amount: "",
+      NavEditIcon: NavEditIcon,
+      NavDeleteIcon: NavDeleteIcon,
     };
   },
   methods: {
@@ -49,6 +66,26 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    DeleteBudgetPlanHandler() {
+      axios
+        .delete(
+          `http://localhost:3000/${this.$route.params.id}/budgetplan/${this.$route.params.budgetplanid}`
+        )
+        .then((res) => {
+          console.log(res.data);
+          this.$router.push({ name: "budget" });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    toggleEdit() {
+      this.isEditPlan = true;
+    },
+    exitForm() {
+      this.isEditPlan = false;
+      location.reload();
     },
   },
   mounted() {
@@ -71,25 +108,12 @@ export default {
   color: var(--primary-font-white);
   font-family: "ClashDisplay", sans-serif;
 }
+.navButton {
+  margin-left: auto;
+}
 .grid-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
-  grid-auto-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  grid-auto-flow: row;
-  grid-template-areas:
-    "main main . ."
-    "main main . ."
-    "side side . ."
-    "side side . .";
-}
-
-.main {
-  grid-area: main;
-}
-
-.side {
-  grid-area: side;
 }
 </style>

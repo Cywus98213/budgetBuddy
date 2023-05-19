@@ -1,12 +1,12 @@
 <template>
   <div class="side-display-wrapper">
     <h1>Recent Expenses:</h1>
-    <div>
+    <div class="Cards-container">
       <ExpensesCard
         v-for="expense in Expenses"
-        :Date="expense.Date"
-        :Title="expense.Title"
-        :Amount="expense.Amount"
+        :expenseDate="expense.Date"
+        :expenseTitle="expense.Title"
+        :expenseAmount="expense.Amount"
       />
     </div>
   </div>
@@ -35,5 +35,14 @@ export default {
   padding: 1rem;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.side-display-wrapper h1 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+.Cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 </style>

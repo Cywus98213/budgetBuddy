@@ -8,9 +8,6 @@
         >
           <Button :text="'View Detail'"
         /></RouterLink>
-
-        <!-- <budgetPlanNavButton :iconSrc="NavEditIcon" />
-        <budgetPlanNavButton :iconSrc="NavDeleteIcon" /> -->
       </div>
     </div>
     <br />
@@ -28,12 +25,9 @@
 <script>
 import { RouterLink } from "vue-router";
 import Button from "../common/Button.vue";
-import NavEditIcon from "../../assets/Icons/budget/edit.svg";
-import NavDeleteIcon from "../../assets/Icons/budget/delete.svg";
-import budgetPlanNavButton from "./budgetPlanNavButton.vue";
 
 export default {
-  components: { budgetPlanNavButton, Button },
+  components: { Button },
   props: {
     expenses: {
       type: Array,
@@ -59,8 +53,6 @@ export default {
   data() {
     return {
       currentAmount: 0,
-      NavEditIcon: NavEditIcon,
-      NavDeleteIcon: NavDeleteIcon,
     };
   },
   methods: {},

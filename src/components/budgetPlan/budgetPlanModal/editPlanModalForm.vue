@@ -1,74 +1,63 @@
 <template>
   <div class="wrapper">
     <div class="form-warpper">
-      <form class="form" @submit.prevent="createPlanHandler">
+      <form class="form" @submit.prevent="updateBudgetPlanHandler">
         <div class="form-header">
-          <h1>Create Plan:</h1>
+          <h1>Edit Plan:</h1>
           <img
             class="closeicon"
-            src="../../../../assets/Icons/budget/closeicon.svg"
+            src="../../../assets/Icons/budget/closeicon.svg"
             alt="Close Form"
             @click="exitForm"
           />
         </div>
 
-        <label>Category:</label>
-        <select class="input" required v-model="category">
-          <option value="" disabled selected>Select a category</option>
-          <option value="Groceries">Groceries</option>
-          <option value="Entertainment">Entertainment</option>
-          <option value="Transportation">Transportation</option>
-          <option value="Housing">Housing</option>
-          <option value="Utilities">Utilities</option>
-          <option value="Shopping">Shopping</option>
-          <option value="Other">Other</option>
-        </select>
-
         <label for="expense-amount">LimitAmount:</label>
         <input
-          v-model="limitAmount"
+          v-model="UpdateLimitAmount"
           class="input"
           type="number"
           id="expense-amount"
           name="expense-amount"
           min="0"
           step="0.01"
-          placeholder="Limit Amount "
+          placeholder=" Limit Amount"
           required
         />
 
-        <Button :text="'Add BudgetPlan'" class="formSubmit" />
+        <Button :text="'Update'" class="formSubmit" />
       </form>
     </div>
   </div>
 </template>
 <script>
 import axios from "axios";
-import Button from "../../../common/Button.vue";
+import Button from "../../../components/common/Button.vue";
 export default {
   components: {
     Button,
   },
   data() {
     return {
-      category: "",
-      limitAmount: "",
+      UpdateCategory: "",
+      UpdateLimitAmount: "",
     };
   },
   methods: {
     exitForm() {
       this.$emit("closeform");
     },
-    createPlanHandler() {
+    updateBudgetPlanHandler() {
       axios
-        .post(`http://localhost:3000/${this.$route.params.id}/budgetplan`, {
-          Category: this.category,
-          LimitAmount: this.limitAmount,
-          userId: localStorage.getItem("userId"),
-        })
+        .put(
+          `http://localhost:3000/${this.$route.params.id}/budgetplan/${this.$route.params.budgetplanid}`,
+          {
+            LimitAmount: this.UpdateLimitAmount,
+          }
+        )
         .then((res) => {
-          console.log(res);
-          this.$emit("closeform");
+          console.log(res.data);
+          this.exitForm();
         })
         .catch((err) => {
           console.log(err);

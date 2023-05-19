@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Expense = require("./expenses");
 const Schema = mongoose.Schema;
 
 const budgetPlanSchema = new Schema({
@@ -26,6 +27,16 @@ const budgetPlanSchema = new Schema({
     default: 200,
     required: true,
   },
+});
+
+budgetPlanSchema.post("findOneAndDelete", async (doc) => {
+  if (doc) {
+    await Expense.deleteMany({
+      _id: {
+        $in: doc.Expenses,
+      },
+    });
+  }
 });
 
 module.exports = mongoose.model("BudgetPlan", budgetPlanSchema);

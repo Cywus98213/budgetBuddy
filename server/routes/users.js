@@ -160,7 +160,7 @@ router.get("/:id/history", async (req, res) => {
 });
 
 router.post("/:id/budgetplan", async (req, res) => {
-  const { Category, Amount, userId } = req.body;
+  const { Category, LimitAmount, userId } = req.body;
   const user = await User.findById(userId);
 
   const existingBudgetPlan = user.BudgetPlan.find(
@@ -173,7 +173,7 @@ router.post("/:id/budgetplan", async (req, res) => {
 
   const budgetPlan = new BudgetPlan({
     Category: Category,
-    Amount: Amount,
+    LimitAmount: LimitAmount,
     Expenses: [],
     creator: userId,
   });
@@ -197,6 +197,36 @@ router.get("/:id/budgetplan/:budgetplanid", async (req, res) => {
   }
 
   res.status(200).send(budgetPlan);
+});
+
+router.put("/:id/budgetplan/:budgetplanid", async (req, res) => {
+  const { Amount, LimitAmount } = req.body;
+  try {
+    const budgetPlan = await BudgetPlan.findByIdAndUpdate(
+      req.params.budgetplanid,
+      {
+        Amount: Amount,
+        LimitAmount: LimitAmount,
+      }
+    );
+    await budgetPlan.save();
+    res.status(200).json({ message: "Budget Plan updated successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.delete("/:id/budgetplan/:budgetplanid", async (req, res) => {
+  const budgetPlan = await BudgetPlan.findById(req.params.budgetplanid);
+
+  if (!budgetPlan) {
+    return res.status(404).json({ error: "Budget Plan not found" });
+  }
+
+  await BudgetPlan.findByIdAndDelete(req.params.budgetplanid);
+
+  res.status(200).json({ message: "Budget Plan deleted successfully" });
 });
 
 module.exports = router;
