@@ -10,6 +10,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const BudgetPlan = require("../models/budgetPlan");
 const mongoose = require("mongoose");
+const schedule = require("node-schedule");
+const IncomePlan = require("../models/incomePlan");
 const Expenses = require("../models/expenses");
 
 const PrivateKey = process.env.PRIVATE_KEY;
@@ -106,13 +108,18 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/:id/budget", async (req, res) => {
-  const user = await User.findById(req.params.id).populate({
-    path: "BudgetPlan",
-    populate: {
-      path: "Expenses",
-      model: "Expense",
-    },
-  });
+  const user = await User.findById(req.params.id)
+    .populate({
+      path: "BudgetPlan",
+      populate: {
+        path: "Expenses",
+        model: "Expense",
+      },
+    })
+    .populate({
+      path: "IncomePlan",
+      model: "IncomePlan",
+    });
 
   if (!user) {
     return res.status(404).json({ error: "User not found" });
@@ -134,6 +141,8 @@ router.post("/:id/budget", async (req, res) => {
   });
 
   await expense.save();
+
+  user.Balance -= Amount;
 
   const budgetPlan = await BudgetPlan.findOne({ Category: Category });
 
@@ -227,6 +236,36 @@ router.delete("/:id/budgetplan/:budgetplanid", async (req, res) => {
   await BudgetPlan.findByIdAndDelete(req.params.budgetplanid);
 
   res.status(200).json({ message: "Budget Plan deleted successfully" });
+});
+
+router.post("/:id/income", async (req, res) => {
+  try {
+    const { IncomeSource, IncomeAmount, IncomeFrequency, IncomeDate } =
+      req.body;
+    const parsedDate = new Date(IncomeDate);
+    const user = await User.findById(req.params.id);
+    const incomePlan = new IncomePlan({
+      IncomeName: IncomeSource,
+      IncomeAmount: IncomeAmount,
+      IncomeFrequency: IncomeFrequency,
+      IncomeDate: parsedDate,
+      creator: user._id,
+    });
+
+    user.IncomePlan.push(incomePlan);
+    user.Balance += IncomeAmount;
+    await user.save();
+
+    const savedIncomePlan = await incomePlan.save();
+
+    console.log(savedIncomePlan);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+
+  // console.log(parsedDate);
+  // console.log(parsedDate.getDate());
 });
 
 module.exports = router;

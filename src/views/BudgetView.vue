@@ -4,7 +4,7 @@
       <h1 class="header-title">Budget.</h1>
     </div>
     <div class="budget-header">
-      <mainBudgetCard />
+      <mainBudgetCard :userBalance="userBalance" />
     </div>
     <div class="planNav">
       <budgetRefreshButton :iconSrc="budgetRefreshIcon" />
@@ -53,6 +53,7 @@ export default {
   },
   data() {
     return {
+      userBalance: 0,
       loaded: false,
       userBudgetPlan: {},
       isAddPlan: false,
@@ -72,6 +73,7 @@ export default {
         .get(`http://localhost:3000/${this.$route.params.id}/budget`)
         .then((res) => {
           console.log(res.data);
+          this.userBalance += res.data.Balance;
           this.userBudgetPlan = res.data.BudgetPlan;
 
           this.loaded = true;

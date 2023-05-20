@@ -59,6 +59,7 @@ export default {
   computed: {
     checkLimit() {
       return {
+        Safe: this.currentAmount <= this.limitAmount * 0.8,
         OverLimit: this.currentAmount > this.limitAmount,
         AlmostOverLimit: this.currentAmount > this.limitAmount * 0.8,
       };
@@ -94,13 +95,16 @@ export default {
 }
 .currentValue {
   font-size: 1.4rem;
-  font-weight: bold;
+  font-weight: 100;
 }
 .limitAmount {
   font-size: 1.4rem;
-  font-weight: bold;
+  font-weight: 400;
 }
 
+.Safe {
+  color: var(--safe-clr);
+}
 .AlmostOverLimit {
   color: var(--warning-clr);
 }

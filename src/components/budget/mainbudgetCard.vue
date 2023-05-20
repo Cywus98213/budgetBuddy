@@ -5,7 +5,9 @@
 
     <div class="main-section">
       <p class="budgetTitle">My Balance</p>
-      <p class="budgetAmount">$0.00</p>
+      <p class="budgetAmount" :class="BalanceChecker">
+        ${{ userBalance.toFixed(2) }}
+      </p>
       <div class="button-section">
         <Button
           :text="'Add Income'"
@@ -33,6 +35,12 @@ export default {
     Button,
     ExpenseModal,
   },
+  props: {
+    userBalance: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
       isAddPlan: false,
@@ -53,6 +61,14 @@ export default {
       this.isAddIncome = false;
       this.isAddExpense = false;
       location.reload();
+    },
+  },
+  computed: {
+    BalanceChecker() {
+      return {
+        safe: this.userBalance > 0,
+        alert: this.userBalance < 0,
+      };
     },
   },
 };
@@ -79,6 +95,15 @@ export default {
   font-size: 2rem;
   font-weight: bold;
 }
+
+.safe {
+  color: var(--safe-clr);
+}
+
+.alert {
+  color: var(--danger-clr);
+}
+
 @media screen and (min-width: 424px) {
   .budgetAmount {
     font-size: 3rem;

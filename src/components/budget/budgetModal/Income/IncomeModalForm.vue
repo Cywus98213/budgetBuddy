@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="form-warpper">
-      <form class="form" @submit.prevent="">
+      <form class="form" @submit.prevent="IncomeFormHandler">
         <div class="form-header">
           <h1>Income Form:</h1>
           <img
@@ -11,48 +11,42 @@
             @click="exitForm"
           />
         </div>
-        <label for="expense-name">Income Source:</label>
+        <label>Income Source:</label>
         <input
+          v-model="IncomeSource"
           class="input"
           type="text"
-          id="expense-name"
-          name="expense-name"
           required
-          placeholder="Product Name"
+          placeholder="Income Source"
         />
 
-        <label for="expense-amount">Amount:</label>
+        <label>Amount:</label>
         <input
+          v-model="IncomeAmount"
           class="input"
           type="number"
-          id="expense-amount"
-          name="expense-amount"
           min="0"
           step="0.01"
-          placeholder="Product Price"
+          placeholder="Income Amount"
           required
         />
 
-        <label for="expense-Frequency">Income Frequency:</label>
-        <select
-          class="input"
-          id="expense-Frequency"
-          name="expense-Frequency"
-          required
-        >
-          <option value="weekly">Weekly</option>
-          <option value="bi-weekly">Bi-weekly</option>
-          <option value="monthly">Monthly</option>
-          <option value="annually">Annually</option>
+        <label>Income Frequency:</label>
+        <select v-model="IncomeFrequency" class="input" required>
+          <option value="" disabled selected>Select a frequency</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Bi-weekly">Bi-weekly</option>
+          <option value="Monthly">Monthly</option>
         </select>
 
         <label for="expense-date">Income Date:</label>
         <input
+          v-model="IncomeDate"
           class="input"
           type="date"
           id="expense-date"
           name="expense-date"
-          placeholder="Date of Purchase"
+          placeholder="Date of Income"
           required
         />
 
@@ -62,14 +56,39 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 import Button from "../../../common/Button.vue";
 export default {
   components: {
     Button,
   },
+  data() {
+    return {
+      IncomeSource: "",
+      IncomeAmount: "",
+      IncomeFrequency: "",
+      IncomeDate: "",
+    };
+  },
   methods: {
     exitForm() {
       this.$emit("closeform");
+    },
+    IncomeFormHandler() {
+      axios
+        .post(`http://localhost:3000/${this.$route.params.id}/income`, {
+          IncomeSource: this.IncomeSource,
+          IncomeAmount: this.IncomeAmount,
+          IncomeFrequency: this.IncomeFrequency,
+          IncomeDate: this.IncomeDate,
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.exitForm();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
