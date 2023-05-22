@@ -268,4 +268,26 @@ router.post("/:id/income", async (req, res) => {
   // console.log(parsedDate.getDate());
 });
 
+router.get("/:id/overview", async (req, res) => {
+  const user = await User.findById(req.params.id)
+    .populate({
+      path: "BudgetPlan",
+      populate: {
+        path: "Expenses",
+        model: "Expense",
+      },
+    })
+    .populate({
+      path: "IncomePlan",
+      model: "IncomePlan",
+    })
+    .populate("Expenses");
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  } else {
+    res.status(200).send(user);
+  }
+});
+
 module.exports = router;

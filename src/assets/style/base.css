@@ -1,6 +1,6 @@
 :root {
 
-  --radius: 0.4rem;
+  --radius: 0.3rem;
   --main-bg-clr: #1c1c21;
   --toggle-bg-clr: #29292f;
   --secondary-bg-clr: #191922;
@@ -57,7 +57,7 @@
   margin: 0;
   font-family: "Poppins", sans-serif;
   color: var(--primary-font-white);
-  font-size: 17px;
+  font-size: 16px;
   text-decoration: none;
   font-weight: 400;
 }

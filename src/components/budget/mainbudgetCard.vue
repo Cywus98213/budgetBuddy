@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="main-budget-wrapper">
     <ExpenseModal v-if="isAddExpense" @closeform="exitForm" />
     <IncomeModal v-if="isAddIncome" @closeform="exitForm" />
 
@@ -74,7 +74,8 @@ export default {
 };
 </script>
 <style scoped>
-.wrapper {
+.main-budget-wrapper {
+  padding: 1rem;
   border-radius: var(--radius);
   background-color: var(--primary-component-bg);
 }

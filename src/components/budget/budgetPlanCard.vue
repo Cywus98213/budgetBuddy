@@ -1,8 +1,8 @@
 <template>
-  <div class="wrapper">
+  <div class="budgetplanCard-wrapper">
     <div class="header">
       <h1>{{ category }}</h1>
-      <div class="header-mod">
+      <div class="header-nav">
         <RouterLink
           :to="{ name: 'budgetplan', params: { budgetplanid: planid } }"
         >
@@ -76,14 +76,16 @@ export default {
 };
 </script>
 <style scoped>
-.wrapper {
+.budgetplanCard-wrapper {
+  padding: 1rem;
   border-radius: var(--radius);
   background-color: var(--primary-component-bg);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 .header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  gap: 1rem;
+  flex-direction: column;
 }
 
 .header h1 {
@@ -95,7 +97,7 @@ export default {
 }
 .currentValue {
   font-size: 1.4rem;
-  font-weight: 100;
+  font-weight: 40000;
 }
 .limitAmount {
   font-size: 1.4rem;
@@ -110,5 +112,12 @@ export default {
 }
 .OverLimit {
   color: var(--danger-clr);
+}
+
+@media screen and (min-width: 767px) {
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
 </style>

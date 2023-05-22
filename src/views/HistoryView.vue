@@ -56,12 +56,11 @@ export default {
 </script>
 <style scoped>
 .wrapper {
-  height: 100vh;
-  width: 100%;
   padding: 1rem;
 }
 
 .cards-section {
+  margin: 0.5rem auto;
   height: 95%;
   display: flex;
   flex-direction: column;

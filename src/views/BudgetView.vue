@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="budgetView-wrapper">
     <div class="header">
       <h1 class="header-title">Budget.</h1>
     </div>
@@ -11,6 +11,7 @@
       <planModal v-if="isAddPlan" @closeform="exitForm" />
       <Button :text="'Create Plan'" @click="togglePlanForm" />
     </div>
+
     <div class="budget-main">
       <div
         v-if="loaded"
@@ -99,7 +100,7 @@ export default {
   left: 50%;
   height: 100%;
 }
-.wrapper {
+.budgetView-wrapper {
   padding: 1rem;
 }
 .header-title {
@@ -123,7 +124,7 @@ export default {
   overflow-y: scroll;
   flex-direction: column;
   gap: 0.6rem;
-  max-height: calc(100vh - 18rem);
+  max-height: 67vh;
 }
 
 @media screen and (min-width: 767px) {
