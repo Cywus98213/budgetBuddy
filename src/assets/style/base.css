@@ -12,6 +12,9 @@
   --safe-clr: #4bcc4f;
   --danger-clr: #e23950;
   --warning-clr: #f5c542;
+
+
+
 }
 
 @font-face {
@@ -51,7 +54,9 @@
 }
 
 
-* {
+*,
+*::after,
+*::before {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
@@ -67,7 +72,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--toggle-bg-clr);
+  background-color: var(--primary-font-white);
   border: 2px var(--main-bg-clr) solid;
   border-radius: 1rem;
 }

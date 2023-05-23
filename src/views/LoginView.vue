@@ -4,9 +4,21 @@
       <h1 class="form-header">Login.</h1>
 
       <label>Username:</label>
-      <input type="text" v-model="username" class="input" required />
+      <input
+        type="text"
+        v-model="usernameInput"
+        class="input"
+        required
+        autocomplete="username"
+      />
       <label>Password:</label>
-      <input type="password" v-model="password" class="input" required />
+      <input
+        type="password"
+        v-model="passwordInput"
+        class="input"
+        required
+        autocomplete="current-password"
+      />
 
       <Button :text="'Login'" class="formSubmit" />
     </form>
@@ -19,12 +31,18 @@ export default {
   components: {
     Button,
   },
+  data() {
+    return {
+      usernameInput: "",
+      passwordInput: "",
+    };
+  },
   methods: {
     loginUser() {
       axios
         .post("http://localhost:3000/login", {
-          Username: this.username,
-          Password: this.password,
+          Username: this.usernameInput,
+          Password: this.passwordInput,
         })
         .then((res) => {
           if (res.status === 200) {

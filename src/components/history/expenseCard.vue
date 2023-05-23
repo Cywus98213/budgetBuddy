@@ -33,17 +33,23 @@ export default {
 .card-wrapper {
   border-radius: var(--radius);
   display: grid;
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   background-color: var(--primary-component-bg);
   padding: 1rem;
   margin-bottom: 0.3rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-@media screen and (min-width: 424px) {
-  .card-wrapper {
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 1fr;
+.card-wrapper p {
+  font-size: 0.8rem;
+}
+@media screen and (min-width: 767px) {
+  .card-wrapper p {
+    font-size: 1rem;
+  }
+}
+@media screen and (min-width: 1022px) {
+  .card-wrapper p {
+    font-size: 1.2rem;
   }
 }
 </style>

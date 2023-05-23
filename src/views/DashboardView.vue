@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="dashboard-wrapper">
     <div class="header">
       <h1 class="header-title">Dashboard.</h1>
     </div>
@@ -28,9 +28,16 @@ export default {
         .get(`http://localhost:3000/${this.$route.params.id}/overview`)
         .then((res) => {
           this.budgetPlans = res.data.BudgetPlan;
-
           this.expenses = res.data.Expenses;
           this.incomes = res.data.IncomePlan;
+
+          sessionStorage.setItem(
+            "budgetPlans",
+            JSON.stringify(this.budgetPlans)
+          );
+          sessionStorage.setItem("expenses", JSON.stringify(this.expenses));
+          sessionStorage.setItem("incomes", JSON.stringify(this.incomes));
+
           console.log(res.data);
         })
         .catch((err) => {
@@ -38,13 +45,13 @@ export default {
         });
     },
   },
-  mounted() {
+  created() {
     this.getOverview();
   },
 };
 </script>
 <style scoped>
-.wrapper {
+.dashboard-wrapper {
   height: 100vh;
   width: 100%;
   padding: 1rem;

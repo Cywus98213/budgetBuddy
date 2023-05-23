@@ -29,4 +29,20 @@ export default {
   display: flex;
   justify-content: space-between;
 }
+
+.subCard-main h1 {
+  font-size: 0.5rem;
+}
+
+@media screen and (min-width: 767px) {
+  .subCard-main h1 {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (min-width: 1022px) {
+  .subCard-main h1 {
+    font-size: 1.2rem;
+  }
+}
 </style>

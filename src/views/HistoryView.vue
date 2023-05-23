@@ -61,7 +61,6 @@ export default {
 
 .cards-section {
   margin: 0.5rem auto;
-  height: 95%;
   display: flex;
   flex-direction: column;
 }
@@ -71,33 +70,29 @@ export default {
 }
 
 .section-header {
-  width: 100%;
   border-radius: 0.3rem;
   margin-bottom: 1rem;
   display: grid;
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+
   background-color: var(--primary-component-bg);
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 .section-header p {
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
 .card-wrapper {
   overflow-y: auto;
 }
 @media screen and (min-width: 767px) {
   .section-header p {
-    font-size: 1.2rem;
-  }
-  .section-header {
-    grid-template-rows: 1fr;
-    grid-template-columns: repeat(4, 1fr);
+    font-size: 1rem;
   }
 }
 @media screen and (min-width: 1022px) {
   .section-header p {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
 }
 </style>
