@@ -45,7 +45,7 @@ export default {
       Category: "",
       LimitAmount: "",
       Expenses: [],
-      Amount: "",
+      Amount: 0,
       NavEditIcon: NavEditIcon,
       NavDeleteIcon: NavDeleteIcon,
     };
@@ -60,6 +60,7 @@ export default {
           this.Category = res.data.Category;
           this.LimitAmount = res.data.LimitAmount;
           this.Expenses = res.data.Expenses;
+
           this.Amount = res.data.Amount;
           console.log(res.data);
         })
@@ -104,16 +105,59 @@ export default {
   margin-bottom: 1rem;
 }
 .budgetPlanCategory {
-  font-size: 2rem;
+  font-size: 0.8rem;
   color: var(--primary-font-white);
   font-family: "ClashDisplay", sans-serif;
 }
 .navButton {
   margin-left: auto;
 }
+.graph {
+  background-color: var(--primary-component-bg);
+  border-radius: var(--radius);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.BarChart {
+  padding: 0.3rem;
+}
 .grid-container {
   display: flex;
   flex-direction: column;
+  width: 100%;
   gap: 1rem;
+}
+
+@media screen and (min-width: 374px) {
+  .budgetPlanCategory {
+    font-size: 1.1rem;
+  }
+}
+
+@media screen and (min-width: 767px) {
+  .budgetPlanCategory {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 2540px) {
+  .grid-container {
+    display: grid;
+    height: calc(100vh - 5.5rem);
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1rem;
+    grid-template-areas:
+      "graph main"
+      "side .";
+  }
+  .main {
+    grid-area: main;
+  }
+  .side {
+    grid-area: side;
+  }
+  .graph {
+    grid-area: graph;
+  }
 }
 </style>

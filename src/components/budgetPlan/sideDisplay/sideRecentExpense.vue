@@ -33,7 +33,7 @@ export default {
   background-color: var(--primary-component-bg);
   border-radius: var(--radius);
   padding: 1rem;
-  text-align: center;
+  height: 100%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 .side-display-wrapper h1 {
@@ -44,5 +44,8 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  max-height: 40vh;
+  padding: 0 1rem 0 0;
+  overflow-y: scroll;
 }
 </style>

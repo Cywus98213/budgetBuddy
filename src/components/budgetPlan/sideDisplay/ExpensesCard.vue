@@ -17,6 +17,8 @@
   </div>
 </template>
 <script>
+import Button from "../../common/Button.vue";
+
 export default {
   props: {
     expenseDate: {
@@ -32,6 +34,9 @@ export default {
       required: true,
     },
   },
+  components: {
+    Button,
+  },
 };
 </script>
 <style scoped>
@@ -39,9 +44,10 @@ export default {
   background-color: var(--main-bg-clr);
   border-radius: var(--radius);
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 .iteminfo {
   text-align: left;
@@ -49,9 +55,23 @@ export default {
 .left {
   width: 70%;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 }
 .type {
   font-weight: 100;
+}
+.right {
+  display: grid;
+  place-items: center;
+}
+@media screen and (min-width: 767px) {
+  .Card-Wrapper {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .left {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
 </style>

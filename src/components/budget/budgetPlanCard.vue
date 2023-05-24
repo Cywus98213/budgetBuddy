@@ -14,7 +14,7 @@
     <div class="main">
       <p>
         <span class="currentValue" :class="checkLimit"
-          >${{ currentAmount.toFixed(2) }}</span
+          >${{ amount.toFixed(2) }}</span
         >
         <span class="limitAmount"> / ${{ limitAmount }}</span>
       </p>
@@ -51,17 +51,15 @@ export default {
     },
   },
   data() {
-    return {
-      currentAmount: 0,
-    };
+    return {};
   },
   methods: {},
   computed: {
     checkLimit() {
       return {
-        Safe: this.currentAmount <= this.limitAmount * 0.8,
-        OverLimit: this.currentAmount > this.limitAmount,
-        AlmostOverLimit: this.currentAmount > this.limitAmount * 0.8,
+        Safe: this.amount <= this.limitAmount * 0.8,
+        OverLimit: this.amount > this.limitAmount,
+        AlmostOverLimit: this.amount > this.limitAmount * 0.8,
       };
     },
   },

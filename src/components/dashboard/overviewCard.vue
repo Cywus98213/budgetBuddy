@@ -24,7 +24,7 @@
       </div>
       <div class="main-right">
         <div class="main-right-content">
-          <Doughnut :data="data" :options="options" id="Chart" />
+          <Doughnut :data="data" :options="options" class="overviewChart" />
         </div>
       </div>
     </div>
@@ -61,13 +61,14 @@ export default {
         datasets: [
           {
             backgroundColor: [
-              "#001219",
-              "#005f73",
-              "#0a9396",
-              "#e9d8a6",
-              "#ee9b00",
-              "#ca6702",
-              "#bb3e03",
+              "#003f5c",
+              "#2f4b7c",
+              "#665191",
+              "#a05195",
+              "#d45087",
+              "#f95d6a",
+              "#ff7c43",
+              "#ffa600",
             ],
             data: sessionStorage.getItem("budgetPlans")
               ? JSON.parse(sessionStorage.getItem("budgetPlans")).map(
@@ -156,8 +157,7 @@ export default {
   place-content: center;
 }
 
-#Chart {
-  max-width: 100%;
+.overviewChart {
 }
 
 @media screen and (min-width: 767px) {
