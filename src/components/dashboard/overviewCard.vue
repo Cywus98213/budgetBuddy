@@ -24,13 +24,23 @@
       </div>
       <div class="main-right">
         <div class="main-right-content">
-          <Doughnut :data="data" :options="options" class="overviewChart" />
+          <Doughnut
+            v-if="loaded"
+            :data="chartData"
+            :options="options"
+            class="overviewChart"
+            ref="chart"
+          />
+          <div v-else class="loading">
+            <p>Loading...</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import axios from "axios";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "vue-chartjs";
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -43,21 +53,15 @@ export default {
     overviewsubCard,
     Doughnut,
   },
-  props: {
-    budgetPlans: {
-      type: Array,
-      required: true,
-    },
-  },
   data() {
     return {
       downloadIcon: downloadIcon,
-      data: {
-        labels: sessionStorage.getItem("budgetPlans")
-          ? JSON.parse(sessionStorage.getItem("budgetPlans")).map(
-              (plan) => plan.Category
-            )
-          : [],
+      budgetPlans: [],
+      expenses: [],
+      incomes: [],
+      loaded: false,
+      chartData: {
+        labels: [],
         datasets: [
           {
             backgroundColor: [
@@ -70,12 +74,7 @@ export default {
               "#ff7c43",
               "#ffa600",
             ],
-            data: sessionStorage.getItem("budgetPlans")
-              ? JSON.parse(sessionStorage.getItem("budgetPlans")).map(
-                  (plan) => plan.Amount
-                )
-              : [],
-            hoverOffset: 4,
+            data: [],
           },
         ],
       },
@@ -90,8 +89,35 @@ export default {
       },
     };
   },
-  methods: {},
-  created() {},
+  async mounted() {
+    this.loaded = false;
+
+    try {
+      axios
+        .get(`http://localhost:3000/${this.$route.params.id}/overview`)
+        .then((res) => {
+          console.log(res.data);
+          this.budgetPlans = res.data.BudgetPlan;
+          this.expenses = res.data.Expenses;
+          this.incomes = res.data.IncomePlan;
+
+          this.chartData.labels = this.budgetPlans.map(
+            (budgetPlan) => budgetPlan.Category
+          );
+
+          this.chartData.datasets[0].data = this.budgetPlans.map(
+            (budgetPlan) => budgetPlan.Amount
+          );
+
+          this.loaded = true;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (e) {
+      console.error(e);
+    }
+  },
 };
 </script>
 <style scoped>
@@ -157,7 +183,11 @@ export default {
   place-content: center;
 }
 
-.overviewChart {
+.loading {
+  height: auto;
+  width: 200px;
+  display: grid;
+  place-content: center;
 }
 
 @media screen and (min-width: 767px) {

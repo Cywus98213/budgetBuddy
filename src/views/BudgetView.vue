@@ -7,8 +7,20 @@
       <mainBudgetCard :userBalance="userBalance" />
     </div>
     <div class="planNav">
-      <budgetRefreshButton :iconSrc="budgetRefreshIcon" />
+      <!-- <budgetRefreshButton :iconSrc="budgetRefreshIcon" /> -->
+      <ExpenseModal v-if="isAddExpense" @closeform="exitForm" />
+      <IncomeModal v-if="isAddIncome" @closeform="exitForm" />
       <planModal v-if="isAddPlan" @closeform="exitForm" />
+      <Button
+        :text="'Add Income'"
+        :iconSrc="AddincomeIcon"
+        @click="toggleIncomeForm"
+      />
+      <Button
+        :text="'Add Expense'"
+        :iconSrc="AddspendingIcon"
+        @click="toggleExpenseForm"
+      />
       <Button :text="'Create Plan'" @click="togglePlanForm" />
     </div>
 
@@ -36,6 +48,8 @@
 
 <script>
 import axios from "axios";
+import ExpenseModal from "../components/budget/budgetModal/Expense/expenseModal.vue";
+import IncomeModal from "../components/budget/budgetModal/Income/IncomeModal.vue";
 import planModal from "../components/budget/budgetModal/plan/planModal.vue";
 import budgetRefreshButton from "../components/budget/budgetRefreshButton.vue";
 import budgetRefreshIcon from "../assets/Icons/budget/refresh.svg";
@@ -43,6 +57,8 @@ import budgetPlanNavButton from "../components/budget/budgetPlanNavButton.vue";
 import Button from "../components/common/Button.vue";
 import mainBudgetCard from "../components/budget/mainbudgetCard.vue";
 import budgetPlanCard from "../components/budget/budgetPlanCard.vue";
+import AddincomeIcon from "../assets/Icons/budget/addincome.svg";
+import AddspendingIcon from "../assets/Icons/budget/addspending.svg";
 export default {
   components: {
     mainBudgetCard,
@@ -51,6 +67,8 @@ export default {
     budgetPlanNavButton,
     budgetRefreshButton,
     planModal,
+    ExpenseModal,
+    IncomeModal,
   },
   data() {
     return {
@@ -58,23 +76,34 @@ export default {
       loaded: false,
       userBudgetPlan: {},
       isAddPlan: false,
+      isAddExpense: false,
+      isAddIncome: false,
+      AddincomeIcon: AddincomeIcon,
+      AddspendingIcon: AddspendingIcon,
       budgetRefreshIcon: budgetRefreshIcon,
     };
   },
   methods: {
     exitForm() {
       this.isAddPlan = false;
-      location.reload();
+      this.isAddExpense = false;
+      this.isAddIncome = false;
+      this.getUserbudget();
     },
     togglePlanForm() {
       this.isAddPlan = true;
+    },
+    toggleExpenseForm() {
+      this.isAddExpense = true;
+    },
+    toggleIncomeForm() {
+      this.isAddIncome = true;
     },
     getUserbudget() {
       axios
         .get(`http://localhost:3000/${this.$route.params.id}/budget`)
         .then((res) => {
-          console.log(res.data);
-          this.userBalance += res.data.Balance;
+          this.userBalance = res.data.Balance;
           this.userBudgetPlan = res.data.BudgetPlan;
 
           this.loaded = true;
@@ -85,9 +114,6 @@ export default {
     },
   },
   mounted() {
-    setInterval(() => {
-      this.getUserbudget();
-    }, 600000);
     this.getUserbudget();
   },
 };

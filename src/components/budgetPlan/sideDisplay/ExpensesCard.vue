@@ -14,9 +14,13 @@
         <h1>{{ expenseAmount }}</h1>
       </div>
     </div>
+    <div class="right">
+      <Button :text="'Delete'" @click="deleteExpense" />
+    </div>
   </div>
 </template>
 <script>
+import axios from "axios";
 import Button from "../../common/Button.vue";
 
 export default {
@@ -33,9 +37,28 @@ export default {
       type: Number,
       required: true,
     },
+    expenseId: {
+      type: String,
+      required: true,
+    },
   },
   components: {
     Button,
+  },
+  methods: {
+    deleteExpense() {
+      //delete expense
+      axios
+        .delete(
+          `http://localhost:3000/${this.$route.params.id}/budgetplan/${this.$route.params.budgetplanid}/expense/${this.expenseId}`
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 };
 </script>

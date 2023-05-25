@@ -1,68 +1,23 @@
 <template>
   <div class="main-budget-wrapper">
-    <ExpenseModal v-if="isAddExpense" @closeform="exitForm" />
-    <IncomeModal v-if="isAddIncome" @closeform="exitForm" />
-
     <div class="main-section">
       <p class="budgetTitle">My Balance</p>
       <p class="budgetAmount" :class="BalanceChecker">
         ${{ userBalance.toFixed(2) }}
       </p>
-      <div class="button-section">
-        <Button
-          :text="'Add Income'"
-          :iconSrc="AddincomeIcon"
-          @click="toggleIncomeForm"
-        />
-        <Button
-          :text="'Add Expense'"
-          :iconSrc="AddspendingIcon"
-          @click="toggleExpenseForm"
-        />
-      </div>
     </div>
   </div>
 </template>
 <script>
-import IncomeModal from "./budgetModal/Income/IncomeModal.vue";
-import ExpenseModal from "./budgetModal/Expense/expenseModal.vue";
-import AddincomeIcon from "../../assets/Icons/budget/Addincome.svg";
-import AddspendingIcon from "../../assets/Icons/budget/Addspending.svg";
-import Button from "../common/Button.vue";
 export default {
-  components: {
-    IncomeModal,
-    Button,
-    ExpenseModal,
-  },
   props: {
     userBalance: {
       type: Number,
       required: true,
     },
   },
-  data() {
-    return {
-      isAddPlan: false,
-      isAddExpense: false,
-      isAddIncome: false,
-      AddincomeIcon: AddincomeIcon,
-      AddspendingIcon: AddspendingIcon,
-    };
-  },
-  methods: {
-    toggleExpenseForm() {
-      this.isAddExpense = true;
-    },
-    toggleIncomeForm() {
-      this.isAddIncome = true;
-    },
-    exitForm() {
-      this.isAddIncome = false;
-      this.isAddExpense = false;
-      location.reload();
-    },
-  },
+
+  methods: {},
   computed: {
     BalanceChecker() {
       return {

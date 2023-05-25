@@ -62,7 +62,6 @@ export default {
           this.Expenses = res.data.Expenses;
 
           this.Amount = res.data.Amount;
-          console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -74,7 +73,6 @@ export default {
           `http://localhost:3000/${this.$route.params.id}/budgetplan/${this.$route.params.budgetplanid}`
         )
         .then((res) => {
-          console.log(res.data);
           this.$router.push({ name: "budget" });
         })
         .catch((err) => {
@@ -86,7 +84,7 @@ export default {
     },
     exitForm() {
       this.isEditPlan = false;
-      location.reload();
+      this.getbudgetPlanDetail();
     },
   },
   mounted() {

@@ -7,6 +7,7 @@
         :expenseDate="expense.Date"
         :expenseTitle="expense.Title"
         :expenseAmount="expense.Amount"
+        :expenseId="expense._id"
       />
     </div>
   </div>
@@ -26,6 +27,7 @@ export default {
       required: true,
     },
   },
+  methods: {},
 };
 </script>
 <style scoped>

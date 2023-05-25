@@ -228,10 +228,13 @@ router.put("/:id/budgetplan/:budgetplanid", async (req, res) => {
 
 router.delete("/:id/budgetplan/:budgetplanid", async (req, res) => {
   const budgetPlan = await BudgetPlan.findById(req.params.budgetplanid);
+  const user = await User.findById(req.params.id);
 
   if (!budgetPlan) {
     return res.status(404).json({ error: "Budget Plan not found" });
   }
+
+  user.BudgetPlan.pull(budgetPlan);
 
   await BudgetPlan.findByIdAndDelete(req.params.budgetplanid);
 
@@ -289,5 +292,33 @@ router.get("/:id/overview", async (req, res) => {
     res.status(200).send(user);
   }
 });
+
+router.delete(
+  "/:id/budgetplan/:budgetplanid/expense/:expenseid",
+  async (req, res) => {
+    const { id, budgetplanid, expenseid } = req.params;
+    const budgetPlan = await BudgetPlan.findById(budgetplanid);
+    const expense = await Expenses.findById(expenseid);
+    const user = await User.findById(id);
+
+    if (!budgetPlan) {
+      return res.status(404).json({ error: "Budget Plan not found" });
+    }
+
+    budgetPlan.Amount -= expense.Amount;
+    user.Balance += expense.Amount;
+    user.Expenses.pull(expenseid);
+
+    await BudgetPlan.findByIdAndUpdate(budgetplanid, {
+      $pull: { Expenses: expenseid },
+    });
+    await Expenses.findByIdAndDelete(expenseid);
+
+    await budgetPlan.save();
+    await user.save();
+
+    res.status(200).json({ message: "Expense deleted successfully" });
+  }
+);
 
 module.exports = router;
