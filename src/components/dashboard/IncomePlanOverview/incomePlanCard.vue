@@ -78,7 +78,7 @@ export default {
 
 @media screen and (min-width: 424px) {
   .income-overview-main {
-    width: 71vw;
+    width: 66vw;
   }
 }
 @media screen and (min-width: 767px) {
@@ -93,7 +93,7 @@ export default {
 }
 @media screen and (min-width: 1439px) {
   .income-overview-main {
-    width: 100%;
+    width: 90vw;
   }
 }
 </style>
