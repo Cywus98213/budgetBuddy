@@ -147,7 +147,7 @@ export default {
 
 .budget-main {
   display: flex;
-  overflow-y: scroll;
+  overflow-y: auto;
   flex-direction: column;
   gap: 0.6rem;
   max-height: 67vh;

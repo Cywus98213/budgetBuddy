@@ -79,7 +79,7 @@ export default {
 </script>
 <style scoped>
 .wrapper {
-  z-index: 7;
+  z-index: 50;
   width: 100vw;
   height: 100vh;
   display: grid;

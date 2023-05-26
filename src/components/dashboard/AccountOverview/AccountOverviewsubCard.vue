@@ -1,6 +1,6 @@
 <template>
-  <div class="subCard-wrapper">
-    <div class="subCard-main">
+  <div class="account-subCard-wrapper">
+    <div class="account-subCard-main">
       <h1>{{ category }}</h1>
       <h1>${{ amount }} / ${{ limitAmount }}</h1>
     </div>
@@ -25,23 +25,23 @@ export default {
 };
 </script>
 <style scoped>
-.subCard-main {
+.account-subCard-main {
   display: flex;
   justify-content: space-between;
 }
 
-.subCard-main h1 {
+.account-subCard-main h1 {
   font-size: 0.5rem;
 }
 
 @media screen and (min-width: 767px) {
-  .subCard-main h1 {
+  .account-subCard-main h1 {
     font-size: 1rem;
   }
 }
 
 @media screen and (min-width: 1022px) {
-  .subCard-main h1 {
+  .account-subCard-main h1 {
     font-size: 1.2rem;
   }
 }

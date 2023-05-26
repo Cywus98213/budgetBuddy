@@ -1,0 +1,99 @@
+<template>
+  <div class="Income-Overview-wrapper">
+    <div class="Income-Overview-wrapper-header">
+      <h1>Income Overview</h1>
+    </div>
+    <div class="income-overview-main">
+      <incomePlansubCard
+        v-if="haveIncomePlan"
+        v-for="(incomeplan, index) in incomePlans"
+        :incomeName="incomeplan.IncomeName"
+        :incomeAmount="incomeplan.IncomeAmount"
+        :incomeDate="incomeplan.IncomeDate"
+        :incomeStatus="incomeplan.status"
+        :incomeFrequency="incomeplan.IncomeFrequency"
+        :key="index"
+      />
+      <div v-else>
+        <p>No Income Plan...</p>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import axios from "axios";
+import incomePlansubCard from "./incomePlansubCard.vue";
+export default {
+  components: {
+    incomePlansubCard,
+  },
+  data() {
+    return {
+      haveIncomePlan: false,
+      incomePlans: [],
+    };
+  },
+  methods: {
+    getIncomePlan() {
+      //get income plan from database
+      axios
+        .get(`http://localhost:3000/${this.$route.params.id}/income`)
+        .then((res) => {
+          console.log(res.data);
+          this.incomePlans = res.data.IncomePlan;
+
+          if (this.incomePlans.length > 0) {
+            this.haveIncomePlan = true;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+  created() {
+    this.getIncomePlan();
+  },
+};
+</script>
+<style scoped>
+.Income-Overview-wrapper {
+  background-color: var(--primary-component-bg);
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 0.5rem 0;
+}
+
+.Income-Overview-wrapper h1 {
+  font-size: 1.2rem;
+}
+.income-overview-main {
+  gap: 1rem;
+  padding: 0.5rem 0;
+  display: flex;
+  overflow-x: auto;
+  width: 55vw;
+}
+
+@media screen and (min-width: 424px) {
+  .income-overview-main {
+    width: 71vw;
+  }
+}
+@media screen and (min-width: 767px) {
+  .income-overview-main {
+    width: 81vw;
+  }
+}
+@media screen and (min-width: 1023px) {
+  .income-overview-main {
+    width: 85vw;
+  }
+}
+@media screen and (min-width: 1439px) {
+  .income-overview-main {
+    width: 100%;
+  }
+}
+</style>

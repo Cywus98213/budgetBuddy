@@ -3,23 +3,25 @@
     <div class="header">
       <h1 class="header-title">Dashboard.</h1>
     </div>
-    <div class="main">
-      <overviewCard />
+    <div class="dashboard-main">
+      <AccountOverviewCard />
+      <incomePlanCard />
     </div>
   </div>
 </template>
 <script>
-import overviewCard from "../components/dashboard/overviewCard.vue";
+import AccountOverviewCard from "../components/dashboard/AccountOverview/AccountOverviewCard.vue";
+import incomePlanCard from "../components/dashboard/IncomePlanOverview/incomePlanCard.vue";
 export default {
   components: {
-    overviewCard,
+    AccountOverviewCard,
+    incomePlanCard,
   },
 };
 </script>
 <style scoped>
 .dashboard-wrapper {
   height: 100vh;
-  width: 100%;
   padding: 1rem;
 }
 

@@ -1,61 +1,62 @@
 <template>
-  <div class="sidebar-wrapper" :class="{ expanded: isToggle }">
-    <p class="logo">BD.</p>
+  <div class="sidebarcontainer">
+    <div class="sidebar-wrapper" :class="{ expanded: isToggle }">
+      <p class="logo">BD.</p>
 
-    <ul class="nav-lists">
-      <div class="top">
-        <RouterLink
-          :class="{ active: $route.name === 'home' }"
-          class="link-wrapper"
-          :to="{ name: 'home' }"
-        >
-          <img
-            class="nav-icon"
-            src="../../assets/Icons/sidebar/home.svg"
-            alt="Dashboard"
-          />
-          <p class="links" v-if="isToggle">Home</p>
-        </RouterLink>
-        <RouterLink
-          v-if="IsLoggedIn"
-          :class="{ active: $route.name === 'dashboard' }"
-          class="link-wrapper"
-          :to="{ name: 'dashboard', params: { id: userid } }"
-        >
-          <img
-            class="nav-icon"
-            src="../../assets/Icons/sidebar/Dashboard.svg"
-            alt="Dashboard"
-          />
-          <p class="links" v-if="isToggle">Dashboard</p>
-        </RouterLink>
-        <RouterLink
-          v-if="IsLoggedIn"
-          class="link-wrapper"
-          :to="{ name: 'history', params: { id: userid } }"
-          :class="{ active: $route.name === 'history' }"
-        >
-          <img
-            class="nav-icon"
-            src="../../assets/Icons/sidebar/Transaction.svg"
-            alt="Transactions"
-          />
-          <p class="links" v-if="isToggle">History</p>
-        </RouterLink>
-        <RouterLink
-          v-if="IsLoggedIn"
-          class="link-wrapper"
-          :to="{ name: 'budget', params: { id: userid } }"
-          :class="{ active: $route.name === 'budget' }"
-        >
-          <img
-            class="nav-icon"
-            src="../../assets/Icons/sidebar/Budget.svg"
-            alt="Budget"
-          />
-          <p class="links" v-if="isToggle">Budget</p>
-        </RouterLink>
-        <!-- <transition>
+      <ul class="nav-lists">
+        <div class="top">
+          <RouterLink
+            :class="{ active: $route.name === 'home' }"
+            class="link-wrapper"
+            :to="{ name: 'home' }"
+          >
+            <img
+              class="nav-icon"
+              src="../../assets/Icons/sidebar/home.svg"
+              alt="Dashboard"
+            />
+            <p class="links" v-if="isToggle">Home</p>
+          </RouterLink>
+          <RouterLink
+            v-if="IsLoggedIn"
+            :class="{ active: $route.name === 'dashboard' }"
+            class="link-wrapper"
+            :to="{ name: 'dashboard', params: { id: userid } }"
+          >
+            <img
+              class="nav-icon"
+              src="../../assets/Icons/sidebar/Dashboard.svg"
+              alt="Dashboard"
+            />
+            <p class="links" v-if="isToggle">Dashboard</p>
+          </RouterLink>
+          <RouterLink
+            v-if="IsLoggedIn"
+            class="link-wrapper"
+            :to="{ name: 'history', params: { id: userid } }"
+            :class="{ active: $route.name === 'history' }"
+          >
+            <img
+              class="nav-icon"
+              src="../../assets/Icons/sidebar/Transaction.svg"
+              alt="Transactions"
+            />
+            <p class="links" v-if="isToggle">History</p>
+          </RouterLink>
+          <RouterLink
+            v-if="IsLoggedIn"
+            class="link-wrapper"
+            :to="{ name: 'budget', params: { id: userid } }"
+            :class="{ active: $route.name === 'budget' }"
+          >
+            <img
+              class="nav-icon"
+              src="../../assets/Icons/sidebar/Budget.svg"
+              alt="Budget"
+            />
+            <p class="links" v-if="isToggle">Budget</p>
+          </RouterLink>
+          <!-- <transition>
           <RouterLink
             class="link-wrapper"
             :to="{ name: 'dashboard' }"
@@ -80,59 +81,60 @@
             />
             <p class="links" v-if="isToggle">Setting</p>
           </RouterLink> -->
-      </div>
+        </div>
 
-      <div class="footer">
-        <li v-if="IsLoggedIn" class="link-wrapper" @click="logout">
-          <img
-            class="nav-icon"
-            src="../../assets/Icons/sidebar/Logout.svg"
-            alt="login"
-          />
-          <p class="links" v-if="isToggle">Logout</p>
-        </li>
-        <RouterLink
-          v-if="!IsLoggedIn"
-          class="link-wrapper"
-          :to="{ name: 'login' }"
-          :class="{ active: $route.name === 'login' }"
-        >
-          <img
-            class="nav-icon"
-            src="../../assets/Icons/sidebar/Login.svg"
-            alt="register"
-          />
-          <p class="links" v-if="isToggle">Login</p>
-        </RouterLink>
-        <RouterLink
-          v-if="!IsLoggedIn"
-          class="link-wrapper"
-          :to="{ name: 'register' }"
-          :class="{ active: $route.name === 'register' }"
-        >
-          <img
-            class="nav-icon"
-            src="../../assets/Icons/sidebar/Register.svg"
-            alt="register"
-          />
-          <p class="links" v-if="isToggle">Register</p>
-        </RouterLink>
-      </div>
-    </ul>
+        <div class="footer">
+          <li v-if="IsLoggedIn" class="link-wrapper" @click="logout">
+            <img
+              class="nav-icon"
+              src="../../assets/Icons/sidebar/Logout.svg"
+              alt="login"
+            />
+            <p class="links" v-if="isToggle">Logout</p>
+          </li>
+          <RouterLink
+            v-if="!IsLoggedIn"
+            class="link-wrapper"
+            :to="{ name: 'login' }"
+            :class="{ active: $route.name === 'login' }"
+          >
+            <img
+              class="nav-icon"
+              src="../../assets/Icons/sidebar/Login.svg"
+              alt="register"
+            />
+            <p class="links" v-if="isToggle">Login</p>
+          </RouterLink>
+          <RouterLink
+            v-if="!IsLoggedIn"
+            class="link-wrapper"
+            :to="{ name: 'register' }"
+            :class="{ active: $route.name === 'register' }"
+          >
+            <img
+              class="nav-icon"
+              src="../../assets/Icons/sidebar/Register.svg"
+              alt="register"
+            />
+            <p class="links" v-if="isToggle">Register</p>
+          </RouterLink>
+        </div>
+      </ul>
 
-    <div class="toggle" @click="togglehandler">
-      <img
-        v-if="!isToggle"
-        class="toggle-image"
-        src="../../assets/Icons/sidebar/expand.svg"
-        alt="Expand Sidebar"
-      />
-      <img
-        v-if="isToggle"
-        class="toggle-image"
-        src="../../assets/Icons/sidebar/minimize.svg"
-        alt="minimize Sidebar"
-      />
+      <div class="toggle" @click="togglehandler">
+        <img
+          v-if="!isToggle"
+          class="toggle-image"
+          src="../../assets/Icons/sidebar/expand.svg"
+          alt="Expand Sidebar"
+        />
+        <img
+          v-if="isToggle"
+          class="toggle-image"
+          src="../../assets/Icons/sidebar/minimize.svg"
+          alt="minimize Sidebar"
+        />
+      </div>
     </div>
   </div>
 </template>

@@ -1,19 +1,19 @@
 <template>
-  <div class="overview-wrapper">
-    <div class="overview-header">
+  <div class="account-overview-wrapper">
+    <div class="account-overview-header">
       <h1>Account Overview</h1>
       <div class="overview-nav">
         <Button :iconSrc="downloadIcon" :text="'Download report'" />
       </div>
     </div>
-    <div class="overview-main">
+    <div class="account-overview-main">
       <div class="main-left">
         <div class="main-left-header">
           <h1>Category</h1>
           <h1>Total</h1>
         </div>
         <div class="main-left-content">
-          <overviewsubCard
+          <AccountOverviewsubCard
             v-for="(budgetPlan, index) in budgetPlans"
             :key="index"
             :category="budgetPlan.Category"
@@ -25,10 +25,10 @@
       <div class="main-right">
         <div class="main-right-content">
           <Doughnut
+            class="overviewChart"
             v-if="loaded"
             :data="chartData"
             :options="options"
-            class="overviewChart"
             ref="chart"
           />
           <div v-else class="loading">
@@ -44,13 +44,13 @@ import axios from "axios";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "vue-chartjs";
 ChartJS.register(ArcElement, Tooltip, Legend);
-import overviewsubCard from "./overviewsubCard.vue";
-import downloadIcon from "../../assets/Icons/dashboard/download.svg";
-import Button from "../common/Button.vue";
+import AccountOverviewsubCard from "./AccountOverviewsubCard.vue";
+import downloadIcon from "../../../assets/Icons/dashboard/download.svg";
+import Button from "../../../components/common/Button.vue";
 export default {
   components: {
     Button,
-    overviewsubCard,
+    AccountOverviewsubCard,
     Doughnut,
   },
   data() {
@@ -94,9 +94,8 @@ export default {
 
     try {
       axios
-        .get(`http://localhost:3000/${this.$route.params.id}/overview`)
+        .get(`http://localhost:3000/${this.$route.params.id}/account`)
         .then((res) => {
-          console.log(res.data);
           this.budgetPlans = res.data.BudgetPlan;
           this.expenses = res.data.Expenses;
           this.incomes = res.data.IncomePlan;
@@ -121,28 +120,27 @@ export default {
 };
 </script>
 <style scoped>
-.overview-wrapper {
+.account-overview-wrapper {
   background-color: var(--primary-component-bg);
   border-radius: var(--radius);
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin: 0.5rem auto;
 }
-.overview-header {
+.account-overview-header {
   display: flex;
   align-items: center;
   flex-direction: column;
 }
-.overview-header h1 {
+.account-overview-header h1 {
   font-size: 1.2rem;
 }
-.overview-main {
+.account-overview-main {
   display: flex;
   margin: 1rem auto;
   gap: 1rem;
   flex-direction: column;
   justify-content: space-between;
-
   border-radius: var(--radius);
 }
 .main-left {
@@ -174,7 +172,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: 0 0.3rem 0 0;
   max-height: 80%;
 }
@@ -189,9 +187,13 @@ export default {
   display: grid;
   place-content: center;
 }
+.overviewChart {
+  height: 175px;
+  width: 175px;
+}
 
 @media screen and (min-width: 767px) {
-  .overview-main {
+  .account-overview-main {
     flex-direction: row;
   }
   .main-left {
@@ -200,10 +202,11 @@ export default {
   .main-right {
     flex-grow: 1;
   }
-  .overview-header {
+  .account-overview-header {
     flex-direction: row;
     justify-content: space-between;
   }
+
   .main-left-header h1 {
     font-size: 1rem;
   }

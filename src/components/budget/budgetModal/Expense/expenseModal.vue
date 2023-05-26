@@ -20,7 +20,7 @@ export default {
 </script>
 <style scoped>
 .modal-bg {
-  z-index: 5;
+  z-index: 48;
   height: 100%;
   width: 100%;
   position: fixed;
@@ -30,7 +30,7 @@ export default {
   place-content: center;
 }
 .blocker {
-  z-index: 6;
+  z-index: 49;
   height: 100%;
   width: 100%;
   position: fixed;
