@@ -14,9 +14,9 @@
         :incomeFrequency="incomeplan.IncomeFrequency"
         :key="index"
       />
-      <div v-else>
+      <!-- <div v-else>
         <p>No Income Plan...</p>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -63,37 +63,16 @@ export default {
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin: 0.5rem 0;
+  max-width: calc(100vw - 7rem);
 }
 
 .Income-Overview-wrapper h1 {
   font-size: 1.2rem;
 }
 .income-overview-main {
-  gap: 1rem;
-  padding: 0.5rem 0;
   display: flex;
+  gap: 1rem;
   overflow-x: auto;
-  width: 55vw;
-}
-
-@media screen and (min-width: 424px) {
-  .income-overview-main {
-    width: 66vw;
-  }
-}
-@media screen and (min-width: 767px) {
-  .income-overview-main {
-    width: 81vw;
-  }
-}
-@media screen and (min-width: 1023px) {
-  .income-overview-main {
-    width: 85vw;
-  }
-}
-@media screen and (min-width: 1439px) {
-  .income-overview-main {
-    width: 90vw;
-  }
+  padding: 1rem 0;
 }
 </style>

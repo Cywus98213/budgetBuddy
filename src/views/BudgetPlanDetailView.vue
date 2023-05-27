@@ -136,26 +136,4 @@ export default {
     font-size: 1.5rem;
   }
 }
-
-@media screen and (min-width: 2540px) {
-  .grid-container {
-    display: grid;
-    height: calc(100vh - 5.5rem);
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 1rem;
-    grid-template-areas:
-      "graph main"
-      "side .";
-  }
-  .main {
-    grid-area: main;
-  }
-  .side {
-    grid-area: side;
-  }
-  .graph {
-    grid-area: graph;
-  }
-}
 </style>

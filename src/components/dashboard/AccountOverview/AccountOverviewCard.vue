@@ -80,7 +80,7 @@ export default {
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
         plugins: {
           legend: {
             display: false,
@@ -158,7 +158,7 @@ export default {
 }
 .main-left-header h1 {
   font-size: 0.8rem;
-  font-weight: 300;
+  font-weight: 100;
 }
 .main-left-header::after {
   content: "";

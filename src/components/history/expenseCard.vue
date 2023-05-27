@@ -32,8 +32,6 @@ export default {
 <style scoped>
 .card-wrapper {
   border-radius: var(--radius);
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
   background-color: var(--primary-component-bg);
   padding: 1rem;
   margin-bottom: 0.3rem;
@@ -42,9 +40,14 @@ export default {
 .card-wrapper p {
   font-size: 0.8rem;
 }
+
 @media screen and (min-width: 767px) {
   .card-wrapper p {
     font-size: 1rem;
+  }
+  .card-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 }
 @media screen and (min-width: 1022px) {

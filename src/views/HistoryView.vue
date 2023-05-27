@@ -72,15 +72,13 @@ export default {
 .section-header {
   border-radius: 0.3rem;
   margin-bottom: 1rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-
   background-color: var(--primary-component-bg);
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 .section-header p {
   font-size: 0.8rem;
+  font-weight: 100;
 }
 .card-wrapper {
   overflow-y: auto;
@@ -88,6 +86,10 @@ export default {
 @media screen and (min-width: 767px) {
   .section-header p {
     font-size: 1rem;
+  }
+  .section-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 }
 @media screen and (min-width: 1022px) {

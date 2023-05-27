@@ -67,7 +67,8 @@ export default {
   background-color: var(--main-bg-clr);
   border-radius: var(--radius);
   padding: 1rem;
-  min-width: 250px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
   gap: 1rem;
 }
 .incometype {

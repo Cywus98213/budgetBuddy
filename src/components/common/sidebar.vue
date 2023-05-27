@@ -173,7 +173,8 @@ export default {
   flex-direction: column;
   align-items: center;
   background-color: var(--primary-component-bg);
-  position: relative;
+  position: fixed;
+  z-index: 7;
   transition: all 0.3s ease;
   box-shadow: 5px 0 7px rgba(0, 0, 0, 0.1);
 }
@@ -238,7 +239,7 @@ export default {
 }
 .v-enter-active,
 .v-leave-active {
-  transition: opacity 0.5s ease;
+  transition: opacity 0.3s ease;
 }
 
 .v-enter-from,

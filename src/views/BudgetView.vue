@@ -11,16 +11,8 @@
       <ExpenseModal v-if="isAddExpense" @closeform="exitForm" />
       <IncomeModal v-if="isAddIncome" @closeform="exitForm" />
       <planModal v-if="isAddPlan" @closeform="exitForm" />
-      <Button
-        :text="'Add Income'"
-        :iconSrc="AddincomeIcon"
-        @click="toggleIncomeForm"
-      />
-      <Button
-        :text="'Add Expense'"
-        :iconSrc="AddspendingIcon"
-        @click="toggleExpenseForm"
-      />
+      <Button :text="'Add Income'" @click="toggleIncomeForm" />
+      <Button :text="'Add Expense'" @click="toggleExpenseForm" />
       <Button :text="'Create Plan'" @click="togglePlanForm" />
     </div>
 
@@ -141,7 +133,7 @@ export default {
 .planNav {
   display: flex;
   justify-content: flex-end;
-  gap: 2rem;
+  gap: 0.5rem;
   margin: 1rem auto;
 }
 
@@ -150,7 +142,7 @@ export default {
   overflow-y: auto;
   flex-direction: column;
   gap: 0.6rem;
-  max-height: 67vh;
+  max-height: 74vh;
 }
 
 @media screen and (min-width: 767px) {

@@ -1,22 +1,19 @@
 <template>
   <div class="Card-Wrapper">
-    <div class="left">
-      <div class="iteminfo">
-        <h1 class="type">Date:</h1>
-        <h1>{{ expenseDate }}</h1>
-      </div>
-      <div class="iteminfo">
-        <h1 class="type">Name:</h1>
-        <h1>{{ expenseTitle }}</h1>
-      </div>
-      <div class="iteminfo">
-        <h1 class="type">Price:</h1>
-        <h1>{{ expenseAmount }}</h1>
-      </div>
+    <div class="iteminfo">
+      <h1 class="type">Date:</h1>
+      <h1>{{ expenseDate }}</h1>
     </div>
-    <div class="right">
-      <Button :text="'Delete'" @click="deleteExpense" />
+    <div class="iteminfo">
+      <h1 class="type">Name:</h1>
+      <h1>{{ expenseTitle }}</h1>
     </div>
+    <div class="iteminfo">
+      <h1 class="type">Price:</h1>
+      <h1>{{ expenseAmount }}</h1>
+    </div>
+
+    <Button :text="'Delete'" @click="deleteExpense" />
   </div>
 </template>
 <script>
@@ -68,33 +65,11 @@ export default {
   border-radius: var(--radius);
   display: flex;
   flex-direction: column;
+  gap: 1rem;
   padding: 1rem;
+  min-width: 170px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position: relative;
-}
-.iteminfo {
-  text-align: left;
-}
-.left {
-  width: 70%;
-  display: flex;
-  flex-direction: column;
-}
-.type {
-  font-weight: 100;
-}
-.right {
-  display: grid;
-  place-items: center;
-}
-@media screen and (min-width: 767px) {
-  .Card-Wrapper {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  .left {
-    flex-direction: row;
-    justify-content: space-between;
-  }
+  margin-bottom: 1rem;
 }
 </style>

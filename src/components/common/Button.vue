@@ -1,6 +1,6 @@
 <template>
   <button class="button">
-    <img class="buttonImg" :src="iconSrc" />{{ text }}
+    <img class="buttonImg" :src="iconSrc" /><span class="text">{{ text }}</span>
   </button>
 </template>
 <script>
@@ -19,7 +19,7 @@ export default {
 <style scoped>
 .button {
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.4rem;
   gap: 0.3rem;
   display: flex;
   justify-content: center;
@@ -36,5 +36,20 @@ export default {
 }
 .button:active {
   transform: translateY(2px);
+}
+.text {
+  font-size: 0.7rem;
+}
+
+@media screen and (min-width: 374px) {
+  .text {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (min-width: 767px) {
+  .text {
+    font-size: 1.1rem;
+  }
 }
 </style>

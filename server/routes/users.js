@@ -289,9 +289,7 @@ router.post("/:id/income", async (req, res) => {
 
     await user.save();
 
-    const savedIncomePlan = await incomePlan.save();
-
-    console.log(savedIncomePlan);
+    await incomePlan.save();
 
     res.status(200).json({ message: "IncomePlan added successfully" });
   } catch (err) {

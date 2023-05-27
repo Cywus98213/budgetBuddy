@@ -6,7 +6,6 @@ import Sidebar from "./components/common/sidebar.vue";
 <template>
   <main>
     <Sidebar />
-
     <div class="content"><RouterView /></div>
   </main>
 </template>
@@ -19,5 +18,6 @@ main {
 }
 .content {
   flex-grow: 1;
+  padding-left: 5rem;
 }
 </style>

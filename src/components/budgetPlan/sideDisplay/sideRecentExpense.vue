@@ -44,10 +44,9 @@ export default {
 }
 .Cards-container {
   display: flex;
-  flex-direction: column;
   gap: 1rem;
-  max-height: 40vh;
+  width: 55vw;
   padding: 0 1rem 0 0;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 </style>
