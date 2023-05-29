@@ -39,6 +39,7 @@ export default {
 }
 .text {
   font-size: 0.7rem;
+  font-weight: 300;
 }
 
 @media screen and (min-width: 374px) {

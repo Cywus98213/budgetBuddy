@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="login-wrapper">
     <form action="POST" class="form" @submit.prevent="submitForm">
       <h1 class="form-header">Login.</h1>
 
@@ -19,7 +19,10 @@
         required
         autocomplete="current-password"
       />
-
+      <p>
+        Don't have an Account?
+        <span @click="$router.push({ name: 'register' })">Sign up</span>
+      </p>
       <Button :text="'Login'" class="formSubmit" />
     </form>
   </div>
@@ -49,7 +52,10 @@ export default {
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("userId", res.data.userId);
             this.$store.dispatch("login");
-            this.$router.push({ name: "home" });
+            this.$router.push({
+              name: "dashboard",
+              params: { id: res.data.userId },
+            });
           } else {
             console.log("error");
           }
@@ -65,9 +71,9 @@ export default {
 };
 </script>
 <style scoped>
-.wrapper {
+.login-wrapper {
   height: 100vh;
-  padding: 1rem;
+
   display: grid;
   place-items: center;
 }
@@ -75,12 +81,24 @@ export default {
   height: 600px;
   width: 80%;
   max-width: 600px;
+
   padding: 1rem;
   border-radius: var(--radius);
   background-color: var(--primary-component-bg);
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+.form p,
+span {
+  font-size: 0.9rem;
+}
+.form p {
+  text-align: center;
+}
+.form span {
+  color: var(--primary-button-clr);
+  cursor: pointer;
 }
 .form-header {
   text-align: center;

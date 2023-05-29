@@ -11,7 +11,10 @@
       <input type="password" v-model="password" class="input" required />
       <label>Confrim Password:</label>
       <input type="password" v-model="confirmPassword" class="input" required />
-
+      <p>
+        Already have an Account?
+        <span @click="$router.push({ name: 'login' })">Log in</span>
+      </p>
       <Button :text="'Register'" class="formSubmit" />
     </form>
   </div>
@@ -63,7 +66,6 @@ export default {
 <style scoped>
 .wrapper {
   height: 100vh;
-  padding: 1rem;
   display: grid;
   place-items: center;
 }
@@ -77,6 +79,17 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+.form p,
+span {
+  font-size: 0.9rem;
+}
+.form p {
+  text-align: center;
+}
+.form span {
+  color: var(--primary-button-clr);
+  cursor: pointer;
 }
 .form-header {
   text-align: center;

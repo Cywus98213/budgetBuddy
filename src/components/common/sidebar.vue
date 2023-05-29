@@ -6,6 +6,7 @@
       <ul class="nav-lists">
         <div class="top">
           <RouterLink
+            v-if="!IsLoggedIn"
             :class="{ active: $route.name === 'home' }"
             class="link-wrapper"
             :to="{ name: 'home' }"
