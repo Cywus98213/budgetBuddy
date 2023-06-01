@@ -17,7 +17,10 @@
         <mainbudgetplanDisplay :Amount="Amount" :LimitAmount="LimitAmount" />
       </div>
       <div class="side">
-        <sideRecentExpense :Expenses="Expenses" />
+        <sideRecentExpense
+          :Expenses="Expenses"
+          @renderExpenses="getbudgetPlanDetail"
+        />
       </div>
     </div>
   </div>
@@ -60,7 +63,6 @@ export default {
           this.Category = res.data.Category;
           this.LimitAmount = res.data.LimitAmount;
           this.Expenses = res.data.Expenses;
-
           this.Amount = res.data.Amount;
         })
         .catch((err) => {

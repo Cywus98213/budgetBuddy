@@ -12,11 +12,12 @@
         :incomeDate="incomeplan.IncomeDate"
         :incomeStatus="incomeplan.status"
         :incomeFrequency="incomeplan.IncomeFrequency"
+        :incomeId="incomeplan._id"
         :key="index"
       />
-      <!-- <div v-else>
+      <div v-else>
         <p>No Income Plan...</p>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>

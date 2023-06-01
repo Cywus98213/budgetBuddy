@@ -37,6 +37,7 @@
           <option value="Weekly">Weekly</option>
           <option value="Bi-weekly">Bi-weekly</option>
           <option value="Monthly">Monthly</option>
+          <option value="One-time">One-time</option>
         </select>
 
         <label for="expense-date">Income Date:</label>

@@ -20,7 +20,7 @@ const incomePlanSchema = new Schema({
   },
   IncomeFrequency: {
     type: String,
-    enum: ["Weekly", "Bi-weekly", "Monthly"],
+    enum: ["Weekly", "Bi-weekly", "Monthly", "One-time"],
     required: true,
   },
   status: {

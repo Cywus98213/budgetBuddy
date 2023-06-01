@@ -10,7 +10,7 @@
     </div>
     <div class="iteminfo">
       <h1 class="type">Price:</h1>
-      <h1>{{ expenseAmount }}</h1>
+      <h1>${{ expenseAmount }}</h1>
     </div>
 
     <Button :text="'Delete'" @click="deleteExpense" />
@@ -51,6 +51,7 @@ export default {
         )
         .then((res) => {
           console.log(res);
+          this.$emit("renderExpenses");
         })
         .catch((err) => {
           console.log(err);
@@ -71,5 +72,8 @@ export default {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position: relative;
   margin-bottom: 1rem;
+}
+.type {
+  font-weight: 100;
 }
 </style>

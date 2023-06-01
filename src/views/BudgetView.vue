@@ -9,9 +9,9 @@
     <div class="planNav">
       <!-- <budgetRefreshButton :iconSrc="budgetRefreshIcon" /> -->
       <ExpenseModal v-if="isAddExpense" @closeform="exitForm" />
-      <IncomeModal v-if="isAddIncome" @closeform="exitForm" />
+
       <planModal v-if="isAddPlan" @closeform="exitForm" />
-      <Button :text="'Add Income'" @click="toggleIncomeForm" />
+
       <Button :text="'Add Expense'" @click="toggleExpenseForm" />
       <Button :text="'Create Plan'" @click="togglePlanForm" />
     </div>
@@ -79,7 +79,7 @@ export default {
     exitForm() {
       this.isAddPlan = false;
       this.isAddExpense = false;
-      this.isAddIncome = false;
+
       this.getUserbudget();
     },
     togglePlanForm() {
@@ -88,9 +88,7 @@ export default {
     toggleExpenseForm() {
       this.isAddExpense = true;
     },
-    toggleIncomeForm() {
-      this.isAddIncome = true;
-    },
+
     getUserbudget() {
       axios
         .get(`http://localhost:3000/${this.$route.params.id}/budget`)

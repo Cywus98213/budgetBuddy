@@ -1,6 +1,7 @@
 <template>
   <button class="button">
-    <img class="buttonImg" :src="iconSrc" /><span class="text">{{ text }}</span>
+    <img class="buttonImg" :src="iconSrc" />
+    <p class="text">{{ text }}</p>
   </button>
 </template>
 <script>
@@ -50,7 +51,7 @@ export default {
 
 @media screen and (min-width: 767px) {
   .text {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 }
 </style>

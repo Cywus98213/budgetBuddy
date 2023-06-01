@@ -57,6 +57,19 @@
             />
             <p class="links" v-if="isToggle">Budget</p>
           </RouterLink>
+          <RouterLink
+            v-if="IsLoggedIn"
+            class="link-wrapper"
+            :to="{ name: 'income', params: { id: userid } }"
+            :class="{ active: $route.name === 'income' }"
+          >
+            <img
+              class="nav-icon"
+              src="../../assets/Icons/sidebar/income.svg"
+              alt="Budget"
+            />
+            <p class="links" v-if="isToggle">Income</p>
+          </RouterLink>
           <!-- <transition>
           <RouterLink
             class="link-wrapper"

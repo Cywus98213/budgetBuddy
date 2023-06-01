@@ -3,12 +3,16 @@
     <h1>Recent Expenses:</h1>
     <div class="Cards-container">
       <ExpensesCard
-        v-for="expense in Expenses"
+        v-if="Expenses.length > 0"
+        v-for="(expense, index) in Expenses"
         :expenseDate="expense.Date"
         :expenseTitle="expense.Title"
         :expenseAmount="expense.Amount"
         :expenseId="expense._id"
+        :key="index"
+        @renderExpenses="$emit('renderExpenses')"
       />
+      <p v-else>No Expenses...</p>
     </div>
   </div>
 </template>
