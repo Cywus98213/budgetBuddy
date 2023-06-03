@@ -49,8 +49,8 @@ export default {
         })
         .then((res) => {
           if (res.status === 200) {
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem("userId", res.data.userId);
+            sessionStorage.setItem("token", res.data.token);
+            sessionStorage.setItem("userId", res.data.userId);
             this.$store.dispatch("login");
             this.$router.push({
               name: "dashboard",

@@ -7,9 +7,21 @@
       <IncomeModal v-if="isAddIncome" @closeform="exitForm" />
       <Button :text="'Add Income'" @click="toggleIncomeForm" />
     </div>
+    <div class="content-card">
+      <incomePlanCard
+        v-for="(incomePlan, index) in incomePlans"
+        :key="index"
+        :incomeSource="incomePlan.IncomeName"
+        :incomeAmount="incomePlan.IncomeAmount"
+        :incomeDate="incomePlan.IncomeDate"
+        :incomeFrequency="incomePlan.IncomeFrequency"
+        :incomeStatus="incomePlan.status"
+      />
+    </div>
   </div>
 </template>
 <script>
+import incomePlanCard from "../components/income/incomePlanCard.vue";
 import IncomeModal from "../components/budget/budgetModal/Income/IncomeModal.vue";
 import Button from "../components/common/Button.vue";
 import axios from "axios";
@@ -24,6 +36,7 @@ export default {
   components: {
     Button,
     IncomeModal,
+    incomePlanCard,
   },
   methods: {
     getIncomePlan() {
@@ -50,6 +63,9 @@ export default {
       this.getIncomePlan();
     },
   },
+  mounted() {
+    this.getIncomePlan();
+  },
 };
 </script>
 <style scoped>
@@ -64,5 +80,11 @@ export default {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 1rem;
+}
+.content-card {
+  display: grid;
+  gap: 1rem;
+
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 </style>

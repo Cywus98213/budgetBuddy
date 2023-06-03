@@ -27,6 +27,7 @@ export default {
   components: {
     Button,
   },
+  methods: {},
 };
 </script>
 <style scoped>

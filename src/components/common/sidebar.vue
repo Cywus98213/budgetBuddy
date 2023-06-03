@@ -158,7 +158,7 @@ export default {
   data() {
     return {
       isToggle: false,
-      userid: localStorage.getItem("userId"),
+      userid: sessionStorage.getItem("userId"),
     };
   },
   methods: {
