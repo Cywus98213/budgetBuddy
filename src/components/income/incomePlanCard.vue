@@ -2,7 +2,7 @@
   <div class="incomeplan-wrapper">
     <div class="income-header">
       <p class="incometype">Source:</p>
-      <h1>{{ incomeName }}</h1>
+      <h1>{{ incomeSource }}</h1>
     </div>
     <div class="income-main">
       <p class="incometype">Amount:</p>
@@ -16,9 +16,12 @@
       <p class="incometype">Status:</p>
       <p :class="checkincomeStatus">{{ incomeStatus }}</p>
     </div>
+    <Button :text="'Delete'" @click="deleteIncomePlan" />
   </div>
 </template>
 <script>
+import axios from "axios";
+import Button from "../common/Button.vue";
 export default {
   props: {
     incomeSource: {
@@ -40,6 +43,29 @@ export default {
     incomeStatus: {
       type: String,
       required: true,
+    },
+    incomeId: {
+      type: String,
+      required: true,
+    },
+  },
+  components: {
+    Button,
+  },
+  methods: {
+    deleteIncomePlan() {
+      //delete income plan from database
+      axios
+        .delete(
+          `http://localhost:3000/${this.$route.params.id}/income/${this.incomeId}`
+        )
+        .then((res) => {
+          console.log(res.data);
+          this.$emit("deleteIncomePlan");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   computed: {

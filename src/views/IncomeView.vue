@@ -16,6 +16,8 @@
         :incomeDate="incomePlan.IncomeDate"
         :incomeFrequency="incomePlan.IncomeFrequency"
         :incomeStatus="incomePlan.status"
+        :incomeId="incomePlan._id"
+        @deleteIncomePlan="getIncomePlan"
       />
     </div>
   </div>
@@ -85,6 +87,6 @@ export default {
   display: grid;
   gap: 1rem;
 
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, min(220px));
 }
 </style>

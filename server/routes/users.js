@@ -265,6 +265,23 @@ router.get("/:id/income", async (req, res) => {
   }
 });
 
+router.delete("/:id/income/:incomeplanid", async (req, res) => {
+  const incomePlan = await IncomePlan.findById(req.params.incomeplanid);
+  const user = await User.findById(req.params.id);
+
+  if (!incomePlan) {
+    return res.status(404).json({ error: "Income Plan not found" });
+  }
+
+  user.IncomePlan.pull(incomePlan);
+
+  await IncomePlan.findByIdAndDelete(req.params.incomeplanid);
+
+  await user.save();
+
+  res.status(200).json({ message: "Income Plan deleted successfully" });
+});
+
 router.post("/:id/income", async (req, res) => {
   try {
     const { IncomeSource, IncomeAmount, IncomeFrequency, IncomeDate } =
