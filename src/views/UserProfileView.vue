@@ -1,6 +1,12 @@
 <template>
   <div class="profile-wrapper">
     <div class="userProfile-container">
+      <div class="profile-uid">
+        <h1 class="profile-section">
+          UID: <span>{{ userid }}</span>
+        </h1>
+      </div>
+
       <div class="profile-username">
         <h1 class="profile-section">
           Username: <span>{{ username }}</span>
@@ -21,6 +27,7 @@ export default {
     return {
       username: "",
       userEmail: "",
+      userid: "",
       loaded: false,
     };
   },
@@ -32,6 +39,7 @@ export default {
           console.log(res.data);
           this.username = res.data.Username;
           this.userEmail = res.data.Email;
+          this.userid = res.data._id;
           this.loaded = true;
         })
         .catch((err) => {

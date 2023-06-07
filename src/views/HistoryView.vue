@@ -2,6 +2,11 @@
   <div class="wrapper">
     <div class="header">
       <h1 class="header-title">History.</h1>
+      <div class="dateOrderButton">
+        <p>Sort By Date:</p>
+        <filterButton :iconSrc="descendingIcon" @click="filterByDescending" />
+        <filterButton :iconSrc="ascendingIcon" @click="filterByAscending" />
+      </div>
     </div>
     <div class="cards-section">
       <div class="section-header">
@@ -25,15 +30,23 @@
   </div>
 </template>
 <script>
+import ascendingIcon from "../assets/Icons/history/ascendingIcon.svg";
+import descendingIcon from "../assets/Icons/history/descendingIcon.svg";
+import filterButton from "../components/history/filterButton.vue";
 import axios from "axios";
 import ExpenseCard from "../components/history/expenseCard.vue";
 export default {
   components: {
     ExpenseCard,
+    filterButton,
   },
   data() {
     return {
       expenses: [],
+      descending: false,
+      ascending: false,
+      descendingIcon: descendingIcon,
+      ascendingIcon: ascendingIcon,
     };
   },
 
@@ -48,6 +61,20 @@ export default {
           console.log(err);
         });
     },
+    filterByAscending() {
+      this.ascending = !this.ascending;
+      this.descending = false;
+      if (this.ascending === true) {
+        this.expenses.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+      }
+    },
+    filterByDescending() {
+      this.descending = !this.descending;
+      this.ascending = false;
+      if (this.descending === true) {
+        this.expenses.sort((a, b) => new Date(a.Date) - new Date(b.Date));
+      }
+    },
   },
   created() {
     this.getExpenses();
@@ -59,6 +86,16 @@ export default {
   padding: 1rem;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dateOrderButton {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
 .cards-section {
   margin: 0.5rem auto;
   display: flex;
