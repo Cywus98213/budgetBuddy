@@ -30,7 +30,7 @@ export default {
       required: true,
     },
     incomeDate: {
-      type: Date,
+      type: String,
       required: true,
     },
     incomeFrequency: {

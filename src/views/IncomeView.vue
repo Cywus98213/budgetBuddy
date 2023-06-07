@@ -87,6 +87,6 @@ export default {
   display: grid;
   gap: 1rem;
 
-  grid-template-columns: repeat(auto-fit, min(220px));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 </style>

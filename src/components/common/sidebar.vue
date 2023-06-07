@@ -98,6 +98,19 @@
         </div>
 
         <div class="footer">
+          <RouterLink
+            v-if="IsLoggedIn"
+            class="link-wrapper"
+            :to="{ name: 'profile', params: { id: userid } }"
+            :class="{ active: $route.name === 'profile' }"
+          >
+            <img
+              class="nav-icon"
+              src="../../assets/Icons/sidebar/Profile.svg"
+              alt="register"
+            />
+            <p class="links" v-if="isToggle">Profile</p>
+          </RouterLink>
           <li v-if="IsLoggedIn" class="link-wrapper" @click="logout">
             <img
               class="nav-icon"
