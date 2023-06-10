@@ -138,9 +138,9 @@ export default {
 .budget-main {
   display: flex;
   overflow-y: auto;
+  flex-wrap: wrap;
   flex-direction: column;
   gap: 0.6rem;
-  max-height: 74vh;
 }
 
 @media screen and (min-width: 767px) {

@@ -64,7 +64,7 @@ export default {
         .post(`http://localhost:3000/${this.$route.params.id}/budgetplan`, {
           Category: this.category,
           LimitAmount: this.limitAmount,
-          userId: localStorage.getItem("userId"),
+          userId: sessionStorage.getItem("userId"),
         })
         .then((res) => {
           console.log(res);

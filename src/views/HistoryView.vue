@@ -3,7 +3,6 @@
     <div class="header">
       <h1 class="header-title">History.</h1>
       <div class="dateOrderButton">
-        <p>Sort By Date:</p>
         <filterButton :iconSrc="descendingIcon" @click="filterByDescending" />
         <filterButton :iconSrc="ascendingIcon" @click="filterByAscending" />
       </div>
@@ -16,9 +15,9 @@
         <p>Amount:</p>
       </div>
 
-      <div class="card-wrapper">
+      <div class="card-container">
         <ExpenseCard
-          v-for="expense in expenses"
+          v-for="expense in paginatedBudgetPlans"
           :amount="expense.Amount"
           :date="expense.Date"
           :title="expense.Title"
@@ -26,10 +25,25 @@
           :key="expense._id"
         />
       </div>
+      <div class="pagination">
+        <Button
+          @click="showPreviousPage"
+          :disabled="currentPage === 1"
+          :text="'Previous'"
+        />
+
+        <span>{{ currentPage }} / {{ totalPages }}</span>
+        <Button
+          @click="showNextPage"
+          :disabled="currentPage === totalPages"
+          :text="'Next'"
+        />
+      </div>
     </div>
   </div>
 </template>
 <script>
+import Button from "../components/common/Button.vue";
 import ascendingIcon from "../assets/Icons/history/ascendingIcon.svg";
 import descendingIcon from "../assets/Icons/history/descendingIcon.svg";
 import filterButton from "../components/history/filterButton.vue";
@@ -39,12 +53,15 @@ export default {
   components: {
     ExpenseCard,
     filterButton,
+    Button,
   },
   data() {
     return {
       expenses: [],
       descending: false,
       ascending: false,
+      currentPage: 1, // Current page number
+      plansPerPage: 16, // Number of plans per page
       descendingIcon: descendingIcon,
       ascendingIcon: ascendingIcon,
     };
@@ -74,6 +91,26 @@ export default {
       if (this.descending === true) {
         this.expenses.sort((a, b) => new Date(a.Date) - new Date(b.Date));
       }
+    },
+    showNextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    showPreviousPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+  },
+  computed: {
+    paginatedBudgetPlans() {
+      const startIndex = (this.currentPage - 1) * this.plansPerPage;
+      const endIndex = startIndex + this.plansPerPage;
+      return this.expenses.slice(startIndex, endIndex);
+    },
+    totalPages() {
+      return Math.ceil(this.expenses.length / this.plansPerPage);
     },
   },
   created() {
@@ -117,8 +154,16 @@ export default {
   font-size: 0.8rem;
   font-weight: 100;
 }
-.card-wrapper {
+.card-container {
   overflow-y: auto;
+  height: 80vh;
+}
+.pagination {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
 @media screen and (min-width: 767px) {
   .section-header p {

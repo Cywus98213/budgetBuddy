@@ -89,8 +89,8 @@ export default {
           },
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              UserId: localStorage.getItem("userId"),
+              Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+              UserId: sessionStorage.getItem("userId"),
             },
           }
         )

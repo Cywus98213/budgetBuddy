@@ -2,9 +2,9 @@
   <div class="account-overview-wrapper">
     <div class="account-overview-header">
       <h1>Account Overview</h1>
-      <div class="overview-nav">
+      <!-- <div class="overview-nav">
         <Button :iconSrc="downloadIcon" :text="'Download report'" />
-      </div>
+      </div> -->
     </div>
     <div class="account-overview-main">
       <div class="main-left">
@@ -53,6 +53,7 @@ export default {
     AccountOverviewsubCard,
     Doughnut,
   },
+  methods: {},
   data() {
     return {
       downloadIcon: downloadIcon,
