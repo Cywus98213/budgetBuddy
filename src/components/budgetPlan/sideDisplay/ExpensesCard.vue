@@ -65,13 +65,10 @@ export default {
   background-color: var(--main-bg-clr);
   border-radius: var(--radius);
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   gap: 1rem;
   padding: 1rem;
-  min-width: 170px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  position: relative;
-  margin-bottom: 1rem;
 }
 .type {
   font-weight: 100;
