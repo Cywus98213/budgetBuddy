@@ -47,7 +47,12 @@ export default {
       //delete expense
       axios
         .delete(
-          `http://localhost:3000/${this.$route.params.id}/budgetplan/${this.$route.params.budgetplanid}/expense/${this.expenseId}`
+          `http://localhost:3000/${this.$route.params.id}/budgetplan/${this.$route.params.budgetplanid}/expense/${this.expenseId}`,
+          {
+            headers: {
+              Authorization: sessionStorage.getItem("token"),
+            },
+          }
         )
         .then((res) => {
           console.log(res);
@@ -65,12 +70,19 @@ export default {
   background-color: var(--main-bg-clr);
   border-radius: var(--radius);
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 1rem;
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 .type {
   font-weight: 100;
+}
+
+@media screen and (min-width: 767px) {
+  .Card-Wrapper {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
 </style>

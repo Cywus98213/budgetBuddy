@@ -61,11 +61,19 @@ export default {
     },
     createPlanHandler() {
       axios
-        .post(`http://localhost:3000/${this.$route.params.id}/budgetplan`, {
-          Category: this.category,
-          LimitAmount: this.limitAmount,
-          userId: sessionStorage.getItem("userId"),
-        })
+        .post(
+          `http://localhost:3000/${this.$route.params.id}/budgetplan`,
+          {
+            Category: this.category,
+            LimitAmount: this.limitAmount,
+            userId: sessionStorage.getItem("userId"),
+          },
+          {
+            headers: {
+              Authorization: sessionStorage.getItem("token"),
+            },
+          }
+        )
         .then((res) => {
           console.log(res);
           this.$emit("closeform");

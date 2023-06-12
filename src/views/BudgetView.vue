@@ -155,4 +155,10 @@ export default {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+@media screen and (min-width: 2044px) {
+  .budget-main {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
 </style>

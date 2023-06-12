@@ -156,7 +156,6 @@ export default {
 }
 .card-container {
   overflow-y: auto;
-  height: 80vh;
 }
 .pagination {
   margin-top: 1rem;

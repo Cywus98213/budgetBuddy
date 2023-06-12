@@ -17,6 +17,11 @@
           text="Sign Up"
           @click="$router.push({ name: 'register' })"
         />
+        <Button
+          class="homeButton"
+          text="Login"
+          @click="$router.push({ name: 'login' })"
+        />
       </div>
     </div>
   </div>

@@ -53,6 +53,11 @@ export default {
           `http://localhost:3000/${this.$route.params.id}/budgetplan/${this.$route.params.budgetplanid}`,
           {
             LimitAmount: this.UpdateLimitAmount,
+          },
+          {
+            headers: {
+              Authorization: sessionStorage.getItem("token"),
+            },
           }
         )
         .then((res) => {

@@ -16,6 +16,22 @@ const Expenses = require("../models/expenses");
 
 const PrivateKey = process.env.PRIVATE_KEY;
 
+function verifyToken(req, res, next) {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  jwt.verify(token, PrivateKey, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+    req.user = decoded;
+    next();
+  });
+}
+
 router.post("/register", async (req, res) => {
   const { Email, Username, Password } = req.body;
   try {
@@ -141,7 +157,7 @@ router.get("/:id/budget", async (req, res) => {
   }
 });
 
-router.post("/:id/budget", async (req, res) => {
+router.post("/:id/budget", verifyToken, async (req, res) => {
   const { Title, Amount, Category, Date } = req.body;
   const user = await User.findById(req.params.id);
 
@@ -181,7 +197,7 @@ router.get("/:id/history", async (req, res) => {
   }
 });
 
-router.post("/:id/budgetplan", async (req, res) => {
+router.post("/:id/budgetplan", verifyToken, async (req, res) => {
   const { Category, LimitAmount, userId } = req.body;
   const user = await User.findById(userId);
 
@@ -221,7 +237,7 @@ router.get("/:id/budgetplan/:budgetplanid", async (req, res) => {
   res.status(200).send(budgetPlan);
 });
 
-router.put("/:id/budgetplan/:budgetplanid", async (req, res) => {
+router.put("/:id/budgetplan/:budgetplanid", verifyToken, async (req, res) => {
   const { Amount, LimitAmount } = req.body;
   try {
     const budgetPlan = await BudgetPlan.findByIdAndUpdate(
@@ -239,20 +255,24 @@ router.put("/:id/budgetplan/:budgetplanid", async (req, res) => {
   }
 });
 
-router.delete("/:id/budgetplan/:budgetplanid", async (req, res) => {
-  const budgetPlan = await BudgetPlan.findById(req.params.budgetplanid);
-  const user = await User.findById(req.params.id);
+router.delete(
+  "/:id/budgetplan/:budgetplanid",
+  verifyToken,
+  async (req, res) => {
+    const budgetPlan = await BudgetPlan.findById(req.params.budgetplanid);
+    const user = await User.findById(req.params.id);
 
-  if (!budgetPlan) {
-    return res.status(404).json({ error: "Budget Plan not found" });
+    if (!budgetPlan) {
+      return res.status(404).json({ error: "Budget Plan not found" });
+    }
+
+    user.BudgetPlan.pull(budgetPlan);
+
+    await BudgetPlan.findByIdAndDelete(req.params.budgetplanid);
+
+    res.status(200).json({ message: "Budget Plan deleted successfully" });
   }
-
-  user.BudgetPlan.pull(budgetPlan);
-
-  await BudgetPlan.findByIdAndDelete(req.params.budgetplanid);
-
-  res.status(200).json({ message: "Budget Plan deleted successfully" });
-});
+);
 
 router.get("/:id/income", async (req, res) => {
   const { id } = req.params;
@@ -265,7 +285,7 @@ router.get("/:id/income", async (req, res) => {
   }
 });
 
-router.delete("/:id/income/:incomeplanid", async (req, res) => {
+router.delete("/:id/income/:incomeplanid", verifyToken, async (req, res) => {
   const incomePlan = await IncomePlan.findById(req.params.incomeplanid);
   const user = await User.findById(req.params.id);
 
@@ -282,7 +302,7 @@ router.delete("/:id/income/:incomeplanid", async (req, res) => {
   res.status(200).json({ message: "Income Plan deleted successfully" });
 });
 
-router.post("/:id/income", async (req, res) => {
+router.post("/:id/income", verifyToken, async (req, res) => {
   try {
     const { IncomeSource, IncomeAmount, IncomeFrequency, IncomeDate } =
       req.body;
@@ -336,6 +356,7 @@ router.get("/:id/account", async (req, res) => {
 
 router.delete(
   "/:id/budgetplan/:budgetplanid/expense/:expenseid",
+  verifyToken,
   async (req, res) => {
     const { id, budgetplanid, expenseid } = req.params;
     const budgetPlan = await BudgetPlan.findById(budgetplanid);

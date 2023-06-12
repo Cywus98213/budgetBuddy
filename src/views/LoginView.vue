@@ -23,6 +23,13 @@
         Don't have an Account?
         <span @click="$router.push({ name: 'register' })">Sign up</span>
       </p>
+
+      <div class="demoSection">
+        <p>Demo Account:</p>
+        <p>username: test123</p>
+        <p>password: test123</p>
+      </div>
+
       <Button :text="'Login'" class="formSubmit" />
     </form>
   </div>

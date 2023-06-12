@@ -9,7 +9,7 @@
     </div>
     <div class="content-card">
       <incomePlanCard
-        v-for="(incomePlan, index) in incomePlans"
+        v-for="(incomePlan, index) in paginatedBudgetPlans"
         :key="index"
         :incomeSource="incomePlan.IncomeName"
         :incomeAmount="incomePlan.IncomeAmount"
@@ -18,6 +18,20 @@
         :incomeStatus="incomePlan.status"
         :incomeId="incomePlan._id"
         @deleteIncomePlan="getIncomePlan"
+      />
+    </div>
+    <div class="pagination">
+      <Button
+        @click="showPreviousPage"
+        :disabled="currentPage === 1"
+        :text="'Previous'"
+      />
+
+      <span>{{ currentPage }} / {{ totalPages }}</span>
+      <Button
+        @click="showNextPage"
+        :disabled="currentPage === totalPages"
+        :text="'Next'"
       />
     </div>
   </div>
@@ -32,6 +46,8 @@ export default {
     return {
       haveIncomePlan: false,
       incomePlans: [],
+      currentPage: 1, // Current page number
+      plansPerPage: 9, // Number of plans per page
       isAddIncome: false,
     };
   },
@@ -64,6 +80,26 @@ export default {
       this.isAddIncome = false;
       this.getIncomePlan();
     },
+    showNextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    showPreviousPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+  },
+  computed: {
+    paginatedBudgetPlans() {
+      const startIndex = (this.currentPage - 1) * this.plansPerPage;
+      const endIndex = startIndex + this.plansPerPage;
+      return this.incomePlans.slice(startIndex, endIndex);
+    },
+    totalPages() {
+      return Math.ceil(this.incomePlans.length / this.plansPerPage);
+    },
   },
   mounted() {
     this.getIncomePlan();
@@ -86,7 +122,30 @@ export default {
 .content-card {
   display: grid;
   gap: 1rem;
+  grid-template-columns: repeat(1, 1fr);
+}
+.pagination {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
 
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+@media screen and (min-width: 767px) {
+  .content-card {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 1023px) {
+  .content-card {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media screen and (min-width: 2044px) {
+  .content-card {
+    grid-template-columns: repeat(6, 1fr);
+  }
 }
 </style>

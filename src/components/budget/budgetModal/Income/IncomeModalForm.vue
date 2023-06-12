@@ -77,12 +77,20 @@ export default {
     },
     IncomeFormHandler() {
       axios
-        .post(`http://localhost:3000/${this.$route.params.id}/income`, {
-          IncomeSource: this.IncomeSource,
-          IncomeAmount: this.IncomeAmount,
-          IncomeFrequency: this.IncomeFrequency,
-          IncomeDate: this.IncomeDate,
-        })
+        .post(
+          `http://localhost:3000/${this.$route.params.id}/income`,
+          {
+            IncomeSource: this.IncomeSource,
+            IncomeAmount: this.IncomeAmount,
+            IncomeFrequency: this.IncomeFrequency,
+            IncomeDate: this.IncomeDate,
+          },
+          {
+            headers: {
+              Authorization: sessionStorage.getItem("token"),
+            },
+          }
+        )
         .then((res) => {
           console.log(res.data);
           this.$emit("closeform");

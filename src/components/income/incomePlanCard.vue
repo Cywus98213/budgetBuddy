@@ -82,7 +82,12 @@ export default {
       //delete income plan from database
       axios
         .delete(
-          `http://localhost:3000/${this.$route.params.id}/income/${this.incomeId}`
+          `http://localhost:3000/${this.$route.params.id}/income/${this.incomeId}`,
+          {
+            headers: {
+              Authorization: sessionStorage.getItem("token"),
+            },
+          }
         )
         .then((res) => {
           console.log(res.data);

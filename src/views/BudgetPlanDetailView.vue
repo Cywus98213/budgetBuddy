@@ -72,7 +72,12 @@ export default {
     DeleteBudgetPlanHandler() {
       axios
         .delete(
-          `http://localhost:3000/${this.$route.params.id}/budgetplan/${this.$route.params.budgetplanid}`
+          `http://localhost:3000/${this.$route.params.id}/budgetplan/${this.$route.params.budgetplanid}`,
+          {
+            headers: {
+              Authorization: sessionStorage.getItem("token"),
+            },
+          }
         )
         .then((res) => {
           this.$router.push({ name: "budget" });
