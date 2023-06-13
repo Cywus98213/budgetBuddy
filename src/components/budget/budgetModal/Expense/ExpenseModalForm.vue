@@ -52,7 +52,7 @@
           required
         />
 
-        <Button :text="'Add Expense'" class="formSubmit" />
+        <Button :text="'Submit'" class="formSubmit" />
       </form>
     </div>
   </div>

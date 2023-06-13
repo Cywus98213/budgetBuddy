@@ -92,6 +92,7 @@ export default {
         .then((res) => {
           console.log(res.data);
           this.$emit("deleteIncomePlan");
+          this.closeModal();
         })
         .catch((err) => {
           console.log(err);

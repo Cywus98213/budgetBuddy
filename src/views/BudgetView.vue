@@ -1,10 +1,13 @@
 <template>
   <div class="budgetView-wrapper">
     <div class="header">
-      <h1 class="header-title">Budget.</h1>
+      <h1 class="header-title">Budget / Saving.</h1>
     </div>
     <div class="budget-header">
       <mainBudgetCard :userBalance="userBalance" />
+    </div>
+    <div class="header">
+      <h1 class="header-title">Expenses Plan.</h1>
     </div>
     <div class="planNav">
       <!-- <budgetRefreshButton :iconSrc="budgetRefreshIcon" /> -->
@@ -16,7 +19,7 @@
       <Button :text="'Create Plan'" @click="togglePlanForm" />
     </div>
 
-    <div class="budget-main">
+    <div class="expensesPlan-main">
       <div
         v-if="loaded"
         v-for="(budgetPlan, index) in userBudgetPlan"
@@ -35,11 +38,42 @@
         <p>Loading...</p>
       </div>
     </div>
+    <div class="header">
+      <h1 class="header-title">Saving Plan.</h1>
+    </div>
+    <div class="planNav">
+      <!-- <budgetRefreshButton :iconSrc="budgetRefreshIcon" /> -->
+
+      <savingModal v-if="isAddSavingPlan" @closeform="exitForm" />
+
+      <Button :text="'Create Plan'" @click="toggleSavingForm" />
+    </div>
+
+    <div class="expensesPlan-main">
+      <div
+        v-if="loaded"
+        v-for="(savingPlan, index) in userSavingPlan"
+        :key="index"
+        class="budgetplan"
+      >
+        <savingPlanCard
+          :SavingGoalCurrentAmount="savingPlan.SavingGoalCurrentAmount"
+          :savingGoalName="savingPlan.SavingGoalName"
+          :SavingGoalTarget="savingPlan.SavingGoalTarget"
+        />
+      </div>
+      <div v-else class="loading">
+        <p>Loading...</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
 import axios from "axios";
+import savingPlanCard from "../components/budget/savingPlanCard.vue";
+import savingModal from "../components/budget/budgetModal/Saving/savingModal.vue";
 import ExpenseModal from "../components/budget/budgetModal/Expense/expenseModal.vue";
 import IncomeModal from "../components/budget/budgetModal/Income/IncomeModal.vue";
 import planModal from "../components/budget/budgetModal/plan/planModal.vue";
@@ -61,15 +95,19 @@ export default {
     planModal,
     ExpenseModal,
     IncomeModal,
+    savingModal,
+    savingPlanCard,
   },
   data() {
     return {
       userBalance: 0,
       loaded: false,
       userBudgetPlan: {},
+      userSavingPlan: {},
       isAddPlan: false,
       isAddExpense: false,
       isAddIncome: false,
+      isAddSavingPlan: false,
       AddincomeIcon: AddincomeIcon,
       AddspendingIcon: AddspendingIcon,
       budgetRefreshIcon: budgetRefreshIcon,
@@ -79,6 +117,7 @@ export default {
     exitForm() {
       this.isAddPlan = false;
       this.isAddExpense = false;
+      this.isAddSavingPlan = false;
 
       this.getUserbudget();
     },
@@ -88,13 +127,16 @@ export default {
     toggleExpenseForm() {
       this.isAddExpense = true;
     },
-
+    toggleSavingForm() {
+      this.isAddSavingPlan = true;
+    },
     getUserbudget() {
       axios
         .get(`http://localhost:3000/${this.$route.params.id}/budget`)
         .then((res) => {
           this.userBalance = res.data.Balance;
           this.userBudgetPlan = res.data.BudgetPlan;
+          this.userSavingPlan = res.data.SavingPlan;
 
           this.loaded = true;
         })
@@ -119,6 +161,9 @@ export default {
 .budgetView-wrapper {
   padding: 1rem;
 }
+.header {
+  margin: 1rem auto;
+}
 .header-title {
   font-family: "ClashDisplay", sans-serif;
   font-size: 2rem;
@@ -135,7 +180,7 @@ export default {
   margin: 1rem auto;
 }
 
-.budget-main {
+.expensesPlan-main {
   display: flex;
   overflow-y: auto;
   flex-wrap: wrap;
@@ -144,19 +189,19 @@ export default {
 }
 
 @media screen and (min-width: 767px) {
-  .budget-main {
+  .expensesPlan-main {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
   }
 }
 @media screen and (min-width: 1022px) {
-  .budget-main {
+  .expensesPlan-main {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
   }
 }
 @media screen and (min-width: 2044px) {
-  .budget-main {
+  .expensesPlan-main {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
   }

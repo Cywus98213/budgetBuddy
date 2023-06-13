@@ -13,6 +13,7 @@ const mongoose = require("mongoose");
 const schedule = require("node-schedule");
 const IncomePlan = require("../models/incomePlan");
 const Expenses = require("../models/expenses");
+const SavingPlan = require("../models/savingPlan");
 
 const PrivateKey = process.env.PRIVATE_KEY;
 
@@ -146,8 +147,8 @@ router.get("/:id/budget", async (req, res) => {
       },
     })
     .populate({
-      path: "IncomePlan",
-      model: "IncomePlan",
+      path: "SavingPlan",
+      model: "SavingPlan",
     });
 
   if (!user) {
@@ -391,6 +392,25 @@ router.get("/:id/profile", async (req, res) => {
   }
 
   res.status(200).send(user);
+});
+
+router.post("/:id/savingplan", async (req, res) => {
+  const { SavingGoalName, SavingGoalTarget, userId } = req.body;
+  const user = await User.findById(userId);
+
+  const savingPlan = new SavingPlan({
+    SavingGoalName: SavingGoalName,
+    SavingGoalTarget: SavingGoalTarget,
+    creator: userId,
+  });
+
+  user.SavingPlan.push(savingPlan);
+
+  await user.save();
+
+  await savingPlan.save();
+
+  res.status(200).json({ message: "Saving Plan added successfully" });
 });
 
 module.exports = router;

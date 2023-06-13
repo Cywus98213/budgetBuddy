@@ -1,9 +1,9 @@
 <template>
   <div class="wrapper">
     <div class="form-warpper">
-      <form class="form" @submit.prevent="IncomeFormHandler">
+      <form class="form" @submit.prevent="createPlanHandler">
         <div class="form-header">
-          <h1>Income Form:</h1>
+          <h1>Create Saving Plan:</h1>
           <img
             class="closeicon"
             src="../../../../assets/Icons/budget/closeicon.svg"
@@ -11,44 +11,22 @@
             @click="exitForm"
           />
         </div>
-        <label>Income Source:</label>
+        <label for="savingGoalName">Name: </label>
         <input
-          v-model="IncomeSource"
-          class="input"
           type="text"
           required
-          placeholder="Income Source"
+          v-model="savingGoalName"
+          class="input"
+          placeholder="Saving Purpose"
         />
 
-        <label>Amount:</label>
+        <label for="savingGoalAmount">Target Amount:</label>
         <input
-          v-model="IncomeAmount"
-          class="input"
           type="number"
-          min="0"
-          step="0.01"
-          placeholder="Income Amount"
           required
-        />
-
-        <label>Income Frequency:</label>
-        <select v-model="IncomeFrequency" class="input" required>
-          <option value="" disabled selected>Select a frequency</option>
-          <option value="Weekly">Weekly</option>
-          <option value="Bi-weekly">Bi-weekly</option>
-          <option value="Monthly">Monthly</option>
-          <option value="One-time">One-time</option>
-        </select>
-
-        <label for="expense-date">Income Date:</label>
-        <input
-          v-model="IncomeDate"
+          v-model="savingGoalTarget"
           class="input"
-          type="date"
-          id="expense-date"
-          name="expense-date"
-          placeholder="Date of Income"
-          required
+          placeholder="Saving Goal Amount"
         />
 
         <Button :text="'Submit'" class="formSubmit" />
@@ -65,25 +43,22 @@ export default {
   },
   data() {
     return {
-      IncomeSource: "",
-      IncomeAmount: "",
-      IncomeFrequency: "",
-      IncomeDate: "",
+      savingGoalName: "",
+      savingGoalTarget: "",
     };
   },
   methods: {
     exitForm() {
       this.$emit("closeform");
     },
-    IncomeFormHandler() {
+    createPlanHandler() {
       axios
         .post(
-          `http://localhost:3000/${this.$route.params.id}/income`,
+          `http://localhost:3000/${this.$route.params.id}/savingplan`,
           {
-            IncomeSource: this.IncomeSource,
-            IncomeAmount: this.IncomeAmount,
-            IncomeFrequency: this.IncomeFrequency,
-            IncomeDate: this.IncomeDate,
+            SavingGoalName: this.savingGoalName,
+            SavingGoalTarget: this.savingGoalTarget,
+            userId: sessionStorage.getItem("userId"),
           },
           {
             headers: {
@@ -92,7 +67,7 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res.data);
+          console.log(res);
           this.$emit("closeform");
         })
         .catch((err) => {

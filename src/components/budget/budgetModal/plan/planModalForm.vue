@@ -37,7 +37,7 @@
           required
         />
 
-        <Button :text="'Add BudgetPlan'" class="formSubmit" />
+        <Button :text="'Submit'" class="formSubmit" />
       </form>
     </div>
   </div>
