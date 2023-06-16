@@ -38,9 +38,12 @@ export default {
     getIncomePlan() {
       //get income plan from database
       axios
-        .get(`http://localhost:3000/${this.$route.params.id}/income`)
+        .get(`http://localhost:3000/${this.$route.params.id}/income`, {
+          headers: {
+            Authorization: sessionStorage.getItem("token"),
+          },
+        })
         .then((res) => {
-          console.log(res.data);
           this.incomePlans = res.data.IncomePlan;
 
           if (this.incomePlans.length > 0) {
@@ -48,7 +51,10 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            this.$store.dispatch("logout");
+            this.$router.push("/login");
+          }
         });
     },
   },

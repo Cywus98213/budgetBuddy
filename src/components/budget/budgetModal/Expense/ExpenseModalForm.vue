@@ -1,5 +1,8 @@
 <template>
   <div class="wrapper">
+    <Transition>
+      <ErrorBanner v-if="toggleError" :Msg="Msg" />
+    </Transition>
     <div class="form-warpper">
       <form class="form" @submit.prevent="expenseFormHandler">
         <div class="form-header">
@@ -59,6 +62,7 @@
 </template>
 <script>
 import axios from "axios";
+import ErrorBanner from "../../../common/ErrorBanner.vue";
 import Button from "../../../common/Button.vue";
 
 export default {
@@ -68,10 +72,14 @@ export default {
       amount: "",
       category: "",
       date: "",
+      isButtonDisabled: false,
+      toggleError: false,
+      Msg: "",
     };
   },
   components: {
     Button,
+    ErrorBanner,
   },
   methods: {
     exitForm() {
@@ -90,19 +98,23 @@ export default {
           {
             headers: {
               Authorization: sessionStorage.getItem("token"),
-              UserId: sessionStorage.getItem("userId"),
             },
           }
         )
         .then((res) => {
           if (res.status === 200) {
             this.$emit("closeform");
-          } else {
-            console.log("error");
+            this.$emit("successful", res.data.message);
           }
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 404) {
+            this.Msg = err.response.data.error;
+            this.toggleError = true;
+            setTimeout(() => {
+              this.toggleError = false;
+            }, 3000);
+          }
         });
     },
   },
@@ -148,5 +160,14 @@ export default {
   border-radius: var(--radius);
   background-color: var(--primary-component-bg);
   border: none;
+}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

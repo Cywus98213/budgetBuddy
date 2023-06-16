@@ -10,7 +10,7 @@
     <div class="cards-section">
       <div class="section-header">
         <p>Date:</p>
-        <p>Title</p>
+        <p>Title:</p>
         <p>Category:</p>
         <p>Amount:</p>
       </div>
@@ -25,7 +25,7 @@
           :key="expense._id"
         />
       </div>
-      <div class="pagination">
+      <div class="pagination" v-if="exceedPages">
         <Button
           @click="showPreviousPage"
           :disabled="currentPage === 1"
@@ -70,12 +70,19 @@ export default {
   methods: {
     getExpenses() {
       axios
-        .get(`http://localhost:3000/${this.$route.params.id}/history`)
+        .get(`http://localhost:3000/${this.$route.params.id}/history`, {
+          headers: {
+            Authorization: sessionStorage.getItem("token"),
+          },
+        })
         .then((res) => {
           this.expenses = res.data.Expenses;
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            this.$store.dispatch("logout");
+            this.$router.push({ name: "Login" });
+          }
         });
     },
     filterByAscending() {
@@ -111,6 +118,9 @@ export default {
     },
     totalPages() {
       return Math.ceil(this.expenses.length / this.plansPerPage);
+    },
+    exceedPages() {
+      return this.Expenses.length > this.expensesPerPage;
     },
   },
   created() {

@@ -1,6 +1,16 @@
 <template>
   <div class="wrapper">
-    <budgetplanModal v-if="isEditPlan" @closeform="exitForm" />
+    <transition>
+      <ErrorBanner v-if="toggleError" :Msg="Msg" />
+    </transition>
+    <Transition>
+      <messageBanner v-if="toggleMessage" :Msg="Msg" />
+    </Transition>
+    <budgetplanModal
+      v-if="isEditPlan"
+      @closeform="exitForm"
+      @successful="toggleMessageBanner"
+    />
     <div class="header">
       <BackButton />
       <h1 class="budgetPlanCategory">{{ Category }} Plan</h1>
@@ -26,6 +36,8 @@
   </div>
 </template>
 <script>
+import ErrorBanner from "../components/common/ErrorBanner.vue";
+import messageBanner from "../components/common/messageBanner.vue";
 import budgetplanModal from "../components/budgetPlan/budgetPlanModal/budgetplanModal.vue";
 import budgetPlanNavButton from "../components/budget/budgetPlanNavButton.vue";
 import NavEditIcon from "../assets/Icons/budget/edit.svg";
@@ -41,12 +53,17 @@ export default {
     mainbudgetplanDisplay,
     sideRecentExpense,
     budgetPlanNavButton,
+    ErrorBanner,
+    messageBanner,
   },
   data() {
     return {
       isEditPlan: false,
+      toggleError: false,
+      toggleMessage: false,
+      Msg: "",
       Category: "",
-      LimitAmount: "",
+      LimitAmount: 0,
       Expenses: [],
       Amount: 0,
       NavEditIcon: NavEditIcon,
@@ -57,7 +74,12 @@ export default {
     getbudgetPlanDetail() {
       axios
         .get(
-          `http://localhost:3000/${this.$route.params.id}/budgetplan/${this.$route.params.budgetplanid}`
+          `http://localhost:3000/${this.$route.params.id}/budgetplan/${this.$route.params.budgetplanid}`,
+          {
+            headers: {
+              Authorization: sessionStorage.getItem("token"),
+            },
+          }
         )
         .then((res) => {
           this.Category = res.data.Category;
@@ -66,7 +88,10 @@ export default {
           this.Amount = res.data.Amount;
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            this.$store.dispatch("logout");
+            this.$router.push({ name: "Login" });
+          }
         });
     },
     DeleteBudgetPlanHandler() {
@@ -80,7 +105,9 @@ export default {
           }
         )
         .then((res) => {
-          this.$router.push({ name: "budget" });
+          if (res.status === 200) {
+            this.$router.push({ name: "budget" });
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -92,6 +119,14 @@ export default {
     exitForm() {
       this.isEditPlan = false;
       this.getbudgetPlanDetail();
+    },
+    toggleMessageBanner(msg) {
+      console.log(`parent component : ${msg}`);
+      this.toggleMessage = true;
+      this.Msg = msg;
+      setTimeout(() => {
+        this.toggleMessage = false;
+      }, 3000);
     },
   },
   mounted() {
@@ -131,7 +166,15 @@ export default {
   width: 100%;
   gap: 1rem;
 }
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
 
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 @media screen and (min-width: 374px) {
   .budgetPlanCategory {
     font-size: 1.1rem;

@@ -108,12 +108,10 @@ router.post("/login", async (req, res) => {
     // Check if password is correct
     if (!passwordMatches) {
       return res.status(401).json({ error: "Invalid email or password" });
-    } else {
-      res.status(200);
     }
     // Generate JWT
     const token = jwt.sign({ userId: user._id }, PrivateKey, {
-      expiresIn: "1h",
+      expiresIn: "3h",
     });
 
     user.IncomePlan.forEach((incomePlan) => {
@@ -129,7 +127,10 @@ router.post("/login", async (req, res) => {
     });
 
     // Respond with JWT
-    res.json({ token: token, userId: user.id });
+
+    res
+      .status(200)
+      .json({ message: "Login Successful", token: token, userId: user.id });
   } catch (err) {
     // Handle errors
     console.error(err);
@@ -137,7 +138,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/:id/budget", async (req, res) => {
+router.get("/:id/budget", verifyToken, async (req, res) => {
   const user = await User.findById(req.params.id)
     .populate({
       path: "BudgetPlan",
@@ -162,33 +163,46 @@ router.post("/:id/budget", verifyToken, async (req, res) => {
   const { Title, Amount, Category, Date } = req.body;
   const user = await User.findById(req.params.id);
 
-  const expense = new Expenses({
-    Title: Title,
-    Amount: Amount,
-    Category: Category,
-    Date: Date,
-    creator: user._id,
-  });
+  try {
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
-  await expense.save();
+    const expense = new Expenses({
+      Title: Title,
+      Amount: Amount,
+      Category: Category,
+      Date: Date,
+      creator: user._id,
+    });
 
-  user.Balance -= Amount;
+    await expense.save();
 
-  const budgetPlan = await BudgetPlan.findOne({ Category: Category });
+    user.Balance -= Amount;
 
-  budgetPlan.Expenses.push(expense);
-  budgetPlan.Amount += Amount;
+    const budgetPlan = await BudgetPlan.findOne({ Category: Category });
 
-  await budgetPlan.save();
+    if (!budgetPlan) {
+      return res.status(404).json({ error: "Budget Plan not found." });
+    } else {
+      budgetPlan.Expenses.push(expense);
+      budgetPlan.Amount += Amount;
+    }
 
-  user.Expenses.push(expense);
+    await budgetPlan.save();
 
-  await user.save();
+    user.Expenses.push(expense);
 
-  res.status(200).json({ message: "Expense added successfully" });
+    await user.save();
+
+    res.status(200).json({ message: "Expense added successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
-router.get("/:id/history", async (req, res) => {
+router.get("/:id/history", verifyToken, async (req, res) => {
   const user = await User.findById(req.params.id).populate("Expenses");
 
   if (!user) {
@@ -199,34 +213,40 @@ router.get("/:id/history", async (req, res) => {
 });
 
 router.post("/:id/budgetplan", verifyToken, async (req, res) => {
-  const { Category, LimitAmount, userId } = req.body;
-  const user = await User.findById(userId);
+  const { Category, LimitAmount } = req.body;
+  const user = await User.findById(req.params.id);
 
-  const existingBudgetPlan = user.BudgetPlan.find(
-    (budgetPlan) => budgetPlan.Category === Category
-  );
+  try {
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
-  if (existingBudgetPlan) {
-    return res.status(400).json({ error: "Budget Plan already exists" });
+    const existingBudgetPlan = await BudgetPlan.findOne({ Category: Category });
+
+    if (existingBudgetPlan) {
+      return res.status(400).json({ error: "Budget Plan already exists" });
+    }
+
+    const budgetPlan = new BudgetPlan({
+      Category: Category,
+      LimitAmount: LimitAmount,
+      Expenses: [],
+      creator: req.params.id,
+    });
+
+    await budgetPlan.save();
+
+    user.BudgetPlan.push(budgetPlan);
+
+    await user.save();
+    res.status(200).json({ message: "Budget Plan added successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
   }
-
-  const budgetPlan = new BudgetPlan({
-    Category: Category,
-    LimitAmount: LimitAmount,
-    Expenses: [],
-    creator: userId,
-  });
-
-  await budgetPlan.save();
-
-  user.BudgetPlan.push(budgetPlan);
-
-  await user.save();
-
-  res.status(200).json({ message: "Budget Plan added successfully" });
 });
 
-router.get("/:id/budgetplan/:budgetplanid", async (req, res) => {
+router.get("/:id/budgetplan/:budgetplanid", verifyToken, async (req, res) => {
   const budgetPlan = await BudgetPlan.findById(
     req.params.budgetplanid
   ).populate("Expenses");
@@ -240,7 +260,12 @@ router.get("/:id/budgetplan/:budgetplanid", async (req, res) => {
 
 router.put("/:id/budgetplan/:budgetplanid", verifyToken, async (req, res) => {
   const { Amount, LimitAmount } = req.body;
+  const user = await User.findById(req.params.id);
   try {
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     const budgetPlan = await BudgetPlan.findByIdAndUpdate(
       req.params.budgetplanid,
       {
@@ -262,20 +287,27 @@ router.delete(
   async (req, res) => {
     const budgetPlan = await BudgetPlan.findById(req.params.budgetplanid);
     const user = await User.findById(req.params.id);
+    try {
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
 
-    if (!budgetPlan) {
-      return res.status(404).json({ error: "Budget Plan not found" });
+      if (!budgetPlan) {
+        return res.status(404).json({ error: "Budget Plan not found" });
+      }
+
+      user.BudgetPlan.pull(budgetPlan);
+
+      await BudgetPlan.findByIdAndDelete(req.params.budgetplanid);
+
+      res.status(200).json({ message: "Budget Plan deleted successfully" });
+    } catch (err) {
+      res.status(500).json({ error: "Internal server error" });
     }
-
-    user.BudgetPlan.pull(budgetPlan);
-
-    await BudgetPlan.findByIdAndDelete(req.params.budgetplanid);
-
-    res.status(200).json({ message: "Budget Plan deleted successfully" });
   }
 );
 
-router.get("/:id/income", async (req, res) => {
+router.get("/:id/income", verifyToken, async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id).populate("IncomePlan");
 
@@ -289,27 +321,39 @@ router.get("/:id/income", async (req, res) => {
 router.delete("/:id/income/:incomeplanid", verifyToken, async (req, res) => {
   const incomePlan = await IncomePlan.findById(req.params.incomeplanid);
   const user = await User.findById(req.params.id);
+  try {
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
-  if (!incomePlan) {
-    return res.status(404).json({ error: "Income Plan not found" });
+    if (!incomePlan) {
+      return res.status(404).json({ error: "Income Plan not found" });
+    }
+
+    user.IncomePlan.pull(incomePlan);
+
+    await IncomePlan.findByIdAndDelete(req.params.incomeplanid);
+
+    await user.save();
+
+    res.status(200).json({ message: "Income Plan deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
   }
-
-  user.IncomePlan.pull(incomePlan);
-
-  await IncomePlan.findByIdAndDelete(req.params.incomeplanid);
-
-  await user.save();
-
-  res.status(200).json({ message: "Income Plan deleted successfully" });
 });
 
 router.post("/:id/income", verifyToken, async (req, res) => {
+  const { IncomeSource, IncomeAmount, IncomeFrequency, IncomeDate } = req.body;
+  const user = await User.findById(req.params.id);
+
   try {
-    const { IncomeSource, IncomeAmount, IncomeFrequency, IncomeDate } =
-      req.body;
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     const todayDate = new Date();
     const parsedDate = new Date(IncomeDate);
-    const user = await User.findById(req.params.id);
+
     const incomePlan = new IncomePlan({
       IncomeName: IncomeSource,
       IncomeAmount: IncomeAmount,
@@ -339,7 +383,7 @@ router.post("/:id/income", verifyToken, async (req, res) => {
   // console.log(parsedDate.getDate());
 });
 
-router.get("/:id/account", async (req, res) => {
+router.get("/:id/account", verifyToken, async (req, res) => {
   const user = await User.findById(req.params.id).populate({
     path: "BudgetPlan",
     populate: {
@@ -384,7 +428,7 @@ router.delete(
   }
 );
 
-router.get("/:id/profile", async (req, res) => {
+router.get("/:id/profile", verifyToken, async (req, res) => {
   const user = await User.findById(req.params.id);
 
   if (!user) {

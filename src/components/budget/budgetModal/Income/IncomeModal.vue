@@ -1,7 +1,11 @@
 <template>
   <div class="modal-bg">
     <div class="blocker"></div>
-    <IncomeModalForm @closeform="exitForm" />
+    <IncomeModalForm
+      @closeform="exitForm"
+      @successful="successful"
+      @error="error"
+    />
   </div>
 </template>
 <script>
@@ -14,6 +18,12 @@ export default {
   methods: {
     exitForm() {
       this.$emit("closeform");
+    },
+    successful(msg) {
+      this.$emit("successful", msg);
+    },
+    error(msg) {
+      this.$emit("error", msg);
     },
   },
 };

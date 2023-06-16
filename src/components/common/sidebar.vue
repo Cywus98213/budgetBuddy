@@ -29,6 +29,7 @@
               src="../../assets/Icons/sidebar/Dashboard.svg"
               alt="Dashboard"
             />
+
             <p class="links" v-if="isToggle">Dashboard</p>
           </RouterLink>
           <RouterLink
@@ -180,8 +181,8 @@ export default {
     },
     logout() {
       this.$router.push({ name: "home" });
-      localStorage.removeItem("token");
-      localStorage.removeItem("userId");
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("userId");
       this.$store.dispatch("logout");
     },
   },
@@ -266,7 +267,7 @@ export default {
 }
 .v-enter-active,
 .v-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
 }
 
 .v-enter-from,
@@ -275,7 +276,7 @@ export default {
 }
 .sidebar-wrapper {
   width: 80px;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-in-out;
 }
 
 .sidebar-wrapper.expanded {

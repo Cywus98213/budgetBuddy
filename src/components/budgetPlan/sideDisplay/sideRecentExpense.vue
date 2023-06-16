@@ -14,7 +14,7 @@
       />
       <p v-else>No Expenses...</p>
     </div>
-    <div class="pagination">
+    <div class="pagination" v-if="exceedPages">
       <Button
         @click="showPreviousPage"
         :disabled="currentPage === 1"
@@ -58,6 +58,9 @@ export default {
       const start = (this.currentPage - 1) * this.expensesPerPage;
       const end = start + this.expensesPerPage;
       return this.Expenses.slice(start, end);
+    },
+    exceedPages() {
+      return this.Expenses.length > this.expensesPerPage;
     },
   },
   methods: {

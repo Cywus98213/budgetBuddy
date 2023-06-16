@@ -44,9 +44,6 @@ export default {
     };
   },
   methods: {
-    exitForm() {
-      this.$emit("closeform");
-    },
     updateBudgetPlanHandler() {
       axios
         .put(
@@ -61,8 +58,11 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res.data);
-          this.exitForm();
+          console.log(res);
+          if (res.status === 200) {
+            this.$emit("closeform");
+            this.$emit("successful", res.data.message);
+          }
         })
         .catch((err) => {
           console.log(err);

@@ -81,8 +81,8 @@ export default {
 
 @media screen and (min-width: 767px) {
   .Card-Wrapper {
-    flex-direction: row;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 }
 </style>

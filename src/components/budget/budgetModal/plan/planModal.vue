@@ -1,7 +1,7 @@
 <template>
   <div class="modal-bg">
     <div class="blocker"></div>
-    <planModalForm @closeform="exitForm" />
+    <planModalForm @closeform="exitForm" @successful="successful" />
   </div>
 </template>
 <script>
@@ -14,6 +14,9 @@ export default {
   methods: {
     exitForm() {
       this.$emit("closeform");
+    },
+    successful(msg) {
+      this.$emit("successful", msg);
     },
   },
 };

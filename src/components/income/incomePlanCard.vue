@@ -90,9 +90,11 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res.data);
-          this.$emit("deleteIncomePlan");
-          this.closeModal();
+          if (res.status === 200) {
+            this.$emit("deleteIncomePlan");
+            this.$emit("successful", res.data.message);
+            this.closeModal();
+          }
         })
         .catch((err) => {
           console.log(err);

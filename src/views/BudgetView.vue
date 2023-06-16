@@ -1,5 +1,9 @@
 <template>
   <div class="budgetView-wrapper">
+    <Transition>
+      <messageBanner v-if="toggleMessage" :Msg="Msg" />
+    </Transition>
+
     <div class="header">
       <h1 class="header-title">Budget / Saving.</h1>
     </div>
@@ -11,9 +15,17 @@
     </div>
     <div class="planNav">
       <!-- <budgetRefreshButton :iconSrc="budgetRefreshIcon" /> -->
-      <ExpenseModal v-if="isAddExpense" @closeform="exitForm" />
+      <ExpenseModal
+        v-if="isAddExpense"
+        @closeform="exitForm"
+        @successful="toggleMessageBanner"
+      />
 
-      <planModal v-if="isAddPlan" @closeform="exitForm" />
+      <planModal
+        v-if="isAddPlan"
+        @closeform="exitForm"
+        @successful="toggleMessageBanner"
+      />
 
       <Button :text="'Add Expense'" @click="toggleExpenseForm" />
       <Button :text="'Create Plan'" @click="togglePlanForm" />
@@ -72,6 +84,7 @@
 <script>
 import { ref } from "vue";
 import axios from "axios";
+import messageBanner from "../components/common/messageBanner.vue";
 import savingPlanCard from "../components/budget/savingPlanCard.vue";
 import savingModal from "../components/budget/budgetModal/Saving/savingModal.vue";
 import ExpenseModal from "../components/budget/budgetModal/Expense/expenseModal.vue";
@@ -97,9 +110,11 @@ export default {
     IncomeModal,
     savingModal,
     savingPlanCard,
+    messageBanner,
   },
   data() {
     return {
+      toggleMessage: false,
       userBalance: 0,
       loaded: false,
       userBudgetPlan: {},
@@ -121,6 +136,13 @@ export default {
 
       this.getUserbudget();
     },
+    toggleMessageBanner(msg) {
+      this.toggleMessage = true;
+      this.Msg = msg;
+      setTimeout(() => {
+        this.toggleMessage = false;
+      }, 3000);
+    },
     togglePlanForm() {
       this.isAddPlan = true;
     },
@@ -132,7 +154,11 @@ export default {
     },
     getUserbudget() {
       axios
-        .get(`http://localhost:3000/${this.$route.params.id}/budget`)
+        .get(`http://localhost:3000/${this.$route.params.id}/budget`, {
+          headers: {
+            Authorization: sessionStorage.getItem("token"),
+          },
+        })
         .then((res) => {
           this.userBalance = res.data.Balance;
           this.userBudgetPlan = res.data.BudgetPlan;
@@ -141,7 +167,10 @@ export default {
           this.loaded = true;
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            this.$store.dispatch("logout");
+            this.$router.push("/login");
+          }
         });
     },
   },
@@ -187,7 +216,15 @@ export default {
   flex-direction: column;
   gap: 0.6rem;
 }
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
 
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 @media screen and (min-width: 767px) {
   .expensesPlan-main {
     display: grid;

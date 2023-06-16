@@ -1,5 +1,12 @@
 <template>
   <div class="login-wrapper">
+    <Transition>
+      <ErrorBanner v-if="toggleError" :Msg="Msg" />
+    </Transition>
+    <Transition>
+      <messageBanner v-if="toggleMessage" :Msg="Msg" />
+    </Transition>
+
     <form action="POST" class="form" @submit.prevent="submitForm">
       <h1 class="form-header">Login.</h1>
 
@@ -10,6 +17,7 @@
         class="input"
         required
         autocomplete="username"
+        :disabled="isButtonDisabled"
       />
       <label>Password:</label>
       <input
@@ -18,6 +26,7 @@
         class="input"
         required
         autocomplete="current-password"
+        :disabled="isButtonDisabled"
       />
       <p>
         Don't have an Account?
@@ -36,13 +45,21 @@
 </template>
 <script>
 import axios from "axios";
+import messageBanner from "../components/common/messageBanner.vue";
+import ErrorBanner from "../components/common/ErrorBanner.vue";
 import Button from "../components/common/Button.vue";
 export default {
   components: {
     Button,
+    ErrorBanner,
+    messageBanner,
   },
   data() {
     return {
+      isButtonDisabled: false,
+      toggleError: false,
+      toggleMessage: false,
+      Msg: "",
       usernameInput: "",
       passwordInput: "",
     };
@@ -55,23 +72,43 @@ export default {
           Password: this.passwordInput,
         })
         .then((res) => {
+          console.log(res);
           if (res.status === 200) {
             sessionStorage.setItem("token", res.data.token);
             sessionStorage.setItem("userId", res.data.userId);
+            this.toggleMessage = true;
+            this.Msg = res.data.message;
             this.$store.dispatch("login");
-            this.$router.push({
-              name: "dashboard",
-              params: { id: res.data.userId },
-            });
-          } else {
-            console.log("error");
+            setTimeout(() => {
+              this.toggleMessage = false;
+              this.$router.push({
+                name: "dashboard",
+                params: { id: res.data.userId },
+              });
+            }, 1000);
           }
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            this.isButtonDisabled = false;
+            this.toggleError = true;
+            this.Msg = err.response.data.error;
+            setTimeout(() => {
+              this.toggleError = false;
+            }, 2000);
+          }
+          if (err.response.status === 500) {
+            this.isButtonDisabled = false;
+            this.toggleError = true;
+            this.Msg = err.response.data.error;
+            setTimeout(() => {
+              this.toggleError = false;
+            }, 2000);
+          }
         });
     },
     submitForm() {
+      this.isButtonDisabled = true;
       this.loginUser();
     },
   },
@@ -119,5 +156,14 @@ span {
 }
 .formSubmit {
   margin-top: auto;
+}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

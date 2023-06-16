@@ -1,10 +1,17 @@
 <template>
   <div class="IncomeView-wrapper">
+    <Transition>
+      <messageBanner v-if="toggleMessage" :Msg="Msg" />
+    </Transition>
     <div class="header">
       <h1 class="header-title">Income.</h1>
     </div>
     <div class="planNav">
-      <IncomeModal v-if="isAddIncome" @closeform="exitForm" />
+      <IncomeModal
+        v-if="isAddIncome"
+        @closeform="exitForm"
+        @successful="toggleMessageBanner"
+      />
       <Button :text="'Add Income'" @click="toggleIncomeForm" />
     </div>
     <div class="content-card">
@@ -18,25 +25,28 @@
         :incomeStatus="incomePlan.status"
         :incomeId="incomePlan._id"
         @deleteIncomePlan="getIncomePlan"
+        @successful="toggleMessageBanner"
       />
     </div>
-    <div class="pagination">
+    <div class="pagination" v-if="exceedPages">
       <Button
         @click="showPreviousPage"
         :disabled="currentPage === 1"
         :text="'Previous'"
       />
 
-      <span>{{ currentPage }} / {{ totalPages }}</span>
+      <span>{{ currentPage }} / {{ pages }}</span>
       <Button
         @click="showNextPage"
-        :disabled="currentPage === totalPages"
+        :disabled="currentPage === pages"
         :text="'Next'"
       />
     </div>
   </div>
 </template>
 <script>
+import messageBanner from "../components/common/messageBanner.vue";
+import ErrorBanner from "../components/common/ErrorBanner.vue";
 import incomePlanCard from "../components/income/incomePlanCard.vue";
 import IncomeModal from "../components/budget/budgetModal/Income/IncomeModal.vue";
 import Button from "../components/common/Button.vue";
@@ -45,6 +55,8 @@ export default {
   data() {
     return {
       haveIncomePlan: false,
+      toggleMessage: false,
+      Msg: "",
       incomePlans: [],
       currentPage: 1, // Current page number
       plansPerPage: 9, // Number of plans per page
@@ -55,12 +67,18 @@ export default {
     Button,
     IncomeModal,
     incomePlanCard,
+    messageBanner,
+    ErrorBanner,
   },
   methods: {
     getIncomePlan() {
       //get income plan from database
       axios
-        .get(`http://localhost:3000/${this.$route.params.id}/income`)
+        .get(`http://localhost:3000/${this.$route.params.id}/income`, {
+          headers: {
+            Authorization: sessionStorage.getItem("token"),
+          },
+        })
         .then((res) => {
           console.log(res.data);
           this.incomePlans = res.data.IncomePlan;
@@ -70,9 +88,20 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            this.$store.dispatch("logout");
+            this.$router.push("/login");
+          }
         });
     },
+    toggleMessageBanner(msg) {
+      this.toggleMessage = true;
+      this.Msg = msg;
+      setTimeout(() => {
+        this.toggleMessage = false;
+      }, 3000);
+    },
+
     toggleIncomeForm() {
       this.isAddIncome = true;
     },
@@ -97,8 +126,11 @@ export default {
       const endIndex = startIndex + this.plansPerPage;
       return this.incomePlans.slice(startIndex, endIndex);
     },
-    totalPages() {
+    pages() {
       return Math.ceil(this.incomePlans.length / this.plansPerPage);
+    },
+    exceedPages() {
+      return this.currentPage > this.pages;
     },
   },
   mounted() {
@@ -131,7 +163,15 @@ export default {
   align-items: center;
   gap: 1rem;
 }
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
 
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 @media screen and (min-width: 767px) {
   .content-card {
     grid-template-columns: repeat(2, 1fr);

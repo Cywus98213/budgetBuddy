@@ -58,10 +58,12 @@
 </template>
 <script>
 import axios from "axios";
+import ErrorBanner from "../../../common/ErrorBanner.vue";
 import Button from "../../../common/Button.vue";
 export default {
   components: {
     Button,
+    ErrorBanner,
   },
   data() {
     return {
@@ -69,6 +71,8 @@ export default {
       IncomeAmount: "",
       IncomeFrequency: "",
       IncomeDate: "",
+      Msg: "",
+      toggleError: false,
     };
   },
   methods: {
@@ -92,8 +96,10 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res.data);
-          this.$emit("closeform");
+          if (res.status === 200) {
+            this.$emit("closeform");
+            this.$emit("successful", res.data.message);
+          }
         })
         .catch((err) => {
           console.log(err);

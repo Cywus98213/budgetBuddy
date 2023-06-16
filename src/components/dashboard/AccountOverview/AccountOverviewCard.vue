@@ -95,7 +95,11 @@ export default {
 
     try {
       axios
-        .get(`http://localhost:3000/${this.$route.params.id}/account`)
+        .get(`http://localhost:3000/${this.$route.params.id}/account`, {
+          headers: {
+            Authorization: sessionStorage.getItem("token"),
+          },
+        })
         .then((res) => {
           this.budgetPlans = res.data.BudgetPlan;
           this.expenses = res.data.Expenses;
@@ -112,7 +116,10 @@ export default {
           this.loaded = true;
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            this.$store.dispatch("logout");
+            this.$router.push("/login");
+          }
         });
     } catch (e) {
       console.error(e);

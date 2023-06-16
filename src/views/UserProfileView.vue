@@ -34,7 +34,11 @@ export default {
   methods: {
     getUserProfile() {
       axios
-        .get(`http://localhost:3000/${this.$route.params.id}/profile`)
+        .get(`http://localhost:3000/${this.$route.params.id}/profile`, {
+          headers: {
+            Authorization: sessionStorage.getItem("token"),
+          },
+        })
         .then((res) => {
           console.log(res.data);
           this.username = res.data.Username;
@@ -43,7 +47,10 @@ export default {
           this.loaded = true;
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            this.$store.dispatch("logout");
+            this.$router.push({ name: "Login" });
+          }
         });
     },
   },
