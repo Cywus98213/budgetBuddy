@@ -3,7 +3,7 @@
     <div class="savingPlan-header">
       <h1>{{ savingGoalName }}</h1>
       <div class="header-nav">
-        <Button :text="'View Detail'" />
+        <!-- <Button :text="'View Detail'" /> -->
       </div>
     </div>
     <div class="main">

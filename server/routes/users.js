@@ -21,12 +21,12 @@ function verifyToken(req, res, next) {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   jwt.verify(token, PrivateKey, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ message: "Invalid token" });
+      return res.status(401).json({ error: "Invalid token" });
     }
     req.user = decoded;
     next();
@@ -130,7 +130,11 @@ router.post("/login", async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "Login Successful", token: token, userId: user.id });
+      .json({
+        message: "Login Successful, Redirecting...",
+        token: token,
+        userId: user.id,
+      });
   } catch (err) {
     // Handle errors
     console.error(err);

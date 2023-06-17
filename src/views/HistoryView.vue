@@ -120,7 +120,7 @@ export default {
       return Math.ceil(this.expenses.length / this.plansPerPage);
     },
     exceedPages() {
-      return this.Expenses.length > this.expensesPerPage;
+      return this.expenses.length > this.plansPerPage;
     },
   },
   created() {
