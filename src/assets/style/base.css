@@ -5,7 +5,7 @@
   --toggle-bg-clr: #29292f;
   --secondary-bg-clr: #191922;
 
-  --primary-font-white: #fcfcfc;
+  --primary-font-white: rgb(252, 252, 252);
   --primary-component-bg: rgb(41, 41, 47);
   --primary-button-clr: #db4659;
 
@@ -13,6 +13,9 @@
   --danger-clr: #e23950;
   --warning-clr: #f5c542;
 
+  --primary-price-clr: rgb(252, 252, 252);
+  --sub-price-clr: #c3c3c5;
+  --progress-bar-fill-clr: #db4659;
 
 
 }

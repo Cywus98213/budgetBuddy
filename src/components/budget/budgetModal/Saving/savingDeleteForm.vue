@@ -1,9 +1,9 @@
 <template>
   <div class="wrapper">
     <div class="form-warpper">
-      <form class="form" @submit.prevent="createPlanHandler">
+      <form class="form" @submit.prevent="deletePlanHandler">
         <div class="form-header">
-          <h1>Create Saving Plan:</h1>
+          <h1>Delete: {{ savingplanId }}</h1>
           <img
             class="closeicon"
             src="../../../../assets/Icons/budget/closeicon.svg"
@@ -11,26 +11,16 @@
             @click="exitForm"
           />
         </div>
-        <label for="savingGoalName">Name: </label>
-        <input
-          type="text"
-          required
-          v-model="savingGoalName"
-          class="input"
-          placeholder="Saving Purpose"
-        />
 
-        <label for="savingGoalAmount">Target Amount:</label>
-        <input
-          type="number"
-          required
-          step="0.01"
-          v-model="savingGoalTarget"
-          class="input"
-          placeholder="Saving Goal Amount"
-        />
+        <p class="warning">You Sure you want to delete this Saving Plan?</p>
 
-        <Button :text="'Submit'" class="formSubmit" />
+        <p class="warning">
+          The fund within the saving Plan will refund back to your balance.
+        </p>
+
+        <p class="warning">This Action cannot be undone !</p>
+
+        <Button :text="'Yes, I Understand.'" class="formSubmit" />
       </form>
     </div>
   </div>
@@ -42,24 +32,23 @@ export default {
   components: {
     Button,
   },
+  props: {
+    savingplanId: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
-    return {
-      savingGoalName: "",
-      savingGoalTarget: "",
-    };
+    return {};
   },
   methods: {
     exitForm() {
       this.$emit("closeform");
     },
-    createPlanHandler() {
+    deletePlanHandler() {
       axios
-        .post(
-          `http://localhost:3000/${this.$route.params.id}/savingplan`,
-          {
-            SavingGoalName: this.savingGoalName,
-            SavingGoalTarget: this.savingGoalTarget,
-          },
+        .delete(
+          `http://localhost:3000/${this.$route.params.id}/savingplan/${this.savingplanId}`,
           {
             headers: {
               Authorization: sessionStorage.getItem("token"),
@@ -67,7 +56,6 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res);
           this.$emit("closeform");
         })
         .catch((err) => {
@@ -117,5 +105,8 @@ export default {
   border-radius: var(--radius);
   background-color: var(--primary-component-bg);
   border: none;
+}
+.warning {
+  color: var(--warning-clr);
 }
 </style>

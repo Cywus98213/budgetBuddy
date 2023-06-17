@@ -2,10 +2,6 @@
   <div class="savingPlan-wrapper">
     <div class="savingPlan-header">
       <h1>{{ SavingGoalName }}</h1>
-      <div class="header-nav">
-        <CircleButton :iconSrc="savingSettingIcon" @click="isSetting" />
-        <CircleButton :iconSrc="deleteIcon" @click="isDelete" />
-      </div>
     </div>
     <div class="main">
       <p class="main-money">
@@ -24,10 +20,9 @@
   </div>
 </template>
 <script>
-import deleteIcon from "../../assets/Icons/budget/delete.svg";
-import savingSettingIcon from "../../assets/Icons/budget/savingSetting.svg";
-import CircleButton from "../common/CircleButton.vue";
-import Button from "../common/Button.vue";
+import savingSettingIcon from "../../../assets/Icons/budget/savingSetting.svg";
+import CircleButton from "../../common/CircleButton.vue";
+import Button from "../../common/Button.vue";
 export default {
   components: {
     Button,
@@ -36,7 +31,6 @@ export default {
   data() {
     return {
       savingSettingIcon: savingSettingIcon,
-      deleteIcon: deleteIcon,
     };
   },
   props: {
@@ -57,14 +51,7 @@ export default {
       required: true,
     },
   },
-  methods: {
-    isSetting() {
-      this.$emit("isSetting", this.SavingPlanId);
-    },
-    isDelete() {
-      this.$emit("isDelete", this.SavingPlanId);
-    },
-  },
+  methods: {},
   computed: {
     roundedSavingGoalCurrentTarget() {
       const roundedNumber = this.SavingGoalTarget.toFixed(2);
@@ -94,18 +81,10 @@ export default {
 .savingPlan-wrapper {
   padding: 1rem;
   border-radius: var(--radius);
-  background-color: var(--primary-component-bg);
+  background-color: var(--main-bg-clr);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
-.savingPlan-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.header-nav {
-  display: flex;
-  gap: 0.5rem;
-}
+
 .savingPlan-header h1 {
   font-size: 1.1rem;
 }

@@ -91,9 +91,9 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const { Username, Password } = req.body;
-  const currentDate = new Date();
   try {
+    const { Username, Password } = req.body;
+    const currentDate = new Date();
     // Find user by email
     const user = await User.findOne({ Username: Username });
 
@@ -128,13 +128,11 @@ router.post("/login", async (req, res) => {
 
     // Respond with JWT
 
-    res
-      .status(200)
-      .json({
-        message: "Login Successful, Redirecting...",
-        token: token,
-        userId: user.id,
-      });
+    res.status(200).json({
+      message: "Login Successful, Redirecting...",
+      token: token,
+      userId: user.id,
+    });
   } catch (err) {
     // Handle errors
     console.error(err);
@@ -164,10 +162,9 @@ router.get("/:id/budget", verifyToken, async (req, res) => {
 });
 
 router.post("/:id/budget", verifyToken, async (req, res) => {
-  const { Title, Amount, Category, Date } = req.body;
-  const user = await User.findById(req.params.id);
-
   try {
+    const { Title, Amount, Category, Date } = req.body;
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -207,20 +204,23 @@ router.post("/:id/budget", verifyToken, async (req, res) => {
 });
 
 router.get("/:id/history", verifyToken, async (req, res) => {
-  const user = await User.findById(req.params.id).populate("Expenses");
+  try {
+    const user = await User.findById(req.params.id).populate("Expenses");
 
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  } else {
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     res.status(200).send(user);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
 router.post("/:id/budgetplan", verifyToken, async (req, res) => {
-  const { Category, LimitAmount } = req.body;
-  const user = await User.findById(req.params.id);
-
   try {
+    const { Category, LimitAmount } = req.body;
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -263,9 +263,9 @@ router.get("/:id/budgetplan/:budgetplanid", verifyToken, async (req, res) => {
 });
 
 router.put("/:id/budgetplan/:budgetplanid", verifyToken, async (req, res) => {
-  const { Amount, LimitAmount } = req.body;
-  const user = await User.findById(req.params.id);
   try {
+    const { Amount, LimitAmount } = req.body;
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -289,9 +289,9 @@ router.delete(
   "/:id/budgetplan/:budgetplanid",
   verifyToken,
   async (req, res) => {
-    const budgetPlan = await BudgetPlan.findById(req.params.budgetplanid);
-    const user = await User.findById(req.params.id);
     try {
+      const budgetPlan = await BudgetPlan.findById(req.params.budgetplanid);
+      const user = await User.findById(req.params.id);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
@@ -300,9 +300,11 @@ router.delete(
         return res.status(404).json({ error: "Budget Plan not found" });
       }
 
+      await BudgetPlan.findByIdAndDelete(req.params.budgetplanid);
+
       user.BudgetPlan.pull(budgetPlan);
 
-      await BudgetPlan.findByIdAndDelete(req.params.budgetplanid);
+      await user.save();
 
       res.status(200).json({ message: "Budget Plan deleted successfully" });
     } catch (err) {
@@ -312,20 +314,24 @@ router.delete(
 );
 
 router.get("/:id/income", verifyToken, async (req, res) => {
-  const { id } = req.params;
-  const user = await User.findById(id).populate("IncomePlan");
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).populate("IncomePlan");
 
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  } else {
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     res.status(200).send(user);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
 router.delete("/:id/income/:incomeplanid", verifyToken, async (req, res) => {
-  const incomePlan = await IncomePlan.findById(req.params.incomeplanid);
-  const user = await User.findById(req.params.id);
   try {
+    const incomePlan = await IncomePlan.findById(req.params.incomeplanid);
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -347,10 +353,10 @@ router.delete("/:id/income/:incomeplanid", verifyToken, async (req, res) => {
 });
 
 router.post("/:id/income", verifyToken, async (req, res) => {
-  const { IncomeSource, IncomeAmount, IncomeFrequency, IncomeDate } = req.body;
-  const user = await User.findById(req.params.id);
-
   try {
+    const { IncomeSource, IncomeAmount, IncomeFrequency, IncomeDate } =
+      req.body;
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -407,28 +413,32 @@ router.delete(
   "/:id/budgetplan/:budgetplanid/expense/:expenseid",
   verifyToken,
   async (req, res) => {
-    const { id, budgetplanid, expenseid } = req.params;
-    const budgetPlan = await BudgetPlan.findById(budgetplanid);
-    const expense = await Expenses.findById(expenseid);
-    const user = await User.findById(id);
+    try {
+      const { id, budgetplanid, expenseid } = req.params;
+      const budgetPlan = await BudgetPlan.findById(budgetplanid);
+      const expense = await Expenses.findById(expenseid);
+      const user = await User.findById(id);
 
-    if (!budgetPlan) {
-      return res.status(404).json({ error: "Budget Plan not found" });
+      if (!budgetPlan) {
+        return res.status(404).json({ error: "Budget Plan not found" });
+      }
+
+      budgetPlan.Amount -= expense.Amount;
+      user.Balance += expense.Amount;
+      user.Expenses.pull(expenseid);
+
+      await BudgetPlan.findByIdAndUpdate(budgetplanid, {
+        $pull: { Expenses: expenseid },
+      });
+      await Expenses.findByIdAndDelete(expenseid);
+
+      await budgetPlan.save();
+      await user.save();
+
+      res.status(200).json({ message: "Expense deleted successfully" });
+    } catch (err) {
+      res.status(500).json({ error: "Internal server error" });
     }
-
-    budgetPlan.Amount -= expense.Amount;
-    user.Balance += expense.Amount;
-    user.Expenses.pull(expenseid);
-
-    await BudgetPlan.findByIdAndUpdate(budgetplanid, {
-      $pull: { Expenses: expenseid },
-    });
-    await Expenses.findByIdAndDelete(expenseid);
-
-    await budgetPlan.save();
-    await user.save();
-
-    res.status(200).json({ message: "Expense deleted successfully" });
   }
 );
 
@@ -442,23 +452,105 @@ router.get("/:id/profile", verifyToken, async (req, res) => {
   res.status(200).send(user);
 });
 
-router.post("/:id/savingplan", async (req, res) => {
-  const { SavingGoalName, SavingGoalTarget, userId } = req.body;
-  const user = await User.findById(userId);
+router.get("/:id/savingplan", verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).populate("SavingPlan");
 
-  const savingPlan = new SavingPlan({
-    SavingGoalName: SavingGoalName,
-    SavingGoalTarget: SavingGoalTarget,
-    creator: userId,
-  });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
-  user.SavingPlan.push(savingPlan);
-
-  await user.save();
-
-  await savingPlan.save();
-
-  res.status(200).json({ message: "Saving Plan added successfully" });
+    res.status(200).send(user);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
+
+router.post("/:id/savingplan", async (req, res) => {
+  try {
+    const { SavingGoalName, SavingGoalTarget } = req.body;
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const savingPlan = new SavingPlan({
+      SavingGoalName: SavingGoalName,
+      SavingGoalTarget: SavingGoalTarget,
+      creator: req.params.id,
+    });
+
+    user.SavingPlan.push(savingPlan);
+
+    await user.save();
+
+    await savingPlan.save();
+
+    res.status(200).json({ message: "Saving Plan added successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.put("/:id/savingplan", verifyToken, async (req, res) => {
+  try {
+    const { depositAmount, savingplanId } = req.body;
+    const user = await User.findById(req.params.id);
+    const savingPlan = await SavingPlan.findById(savingplanId);
+
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+    }
+
+    if (!savingPlan) {
+      res.status(404).json({ error: "Saving Plan not found" });
+    }
+
+    user.Balance -= depositAmount;
+    savingPlan.SavingGoalCurrentAmount += depositAmount;
+
+    await user.save();
+    await savingPlan.save();
+
+    res.status(200).json({ message: "Saving Plan updated successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.delete(
+  "/:id/savingplan/:savingplanid",
+  verifyToken,
+  async (req, res) => {
+    try {
+      const { id, savingplanid } = req.params;
+      const user = await User.findById(id);
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const savingPlan = await SavingPlan.findById(savingplanid);
+
+      if (!savingPlan) {
+        return res.status(404).json({ error: "Saving Plan not found" });
+      }
+
+      user.SavingPlan.pull(savingplanid);
+
+      user.Balance += savingPlan.SavingGoalCurrentAmount;
+
+      await SavingPlan.findByIdAndDelete(savingplanid);
+
+      await user.save();
+
+      res.status(200).json({ message: "Saving Plan deleted successfully" });
+    } catch (err) {
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
+);
 
 module.exports = router;

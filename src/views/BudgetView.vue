@@ -11,7 +11,7 @@
       <mainBudgetCard :userBalance="userBalance" />
     </div>
     <div class="header">
-      <h1 class="header-title">Expenses Plan.</h1>
+      <h1 class="header-title">Budget Plan.</h1>
     </div>
     <div class="planNav">
       <!-- <budgetRefreshButton :iconSrc="budgetRefreshIcon" /> -->
@@ -50,11 +50,23 @@
         <p>Loading...</p>
       </div>
     </div>
+
     <div class="header">
       <h1 class="header-title">Saving Plan.</h1>
     </div>
     <div class="planNav">
       <!-- <budgetRefreshButton :iconSrc="budgetRefreshIcon" /> -->
+      <savingsettingModal
+        v-if="isSetting"
+        @closeform="exitForm"
+        :savingplanId="settingplanId"
+      />
+
+      <savingDeleteModal
+        v-if="isSavingDelete"
+        @closeform="exitForm"
+        :savingplanId="deleteSavingplanId"
+      />
 
       <savingModal v-if="isAddSavingPlan" @closeform="exitForm" />
 
@@ -70,8 +82,11 @@
       >
         <savingPlanCard
           :SavingGoalCurrentAmount="savingPlan.SavingGoalCurrentAmount"
-          :savingGoalName="savingPlan.SavingGoalName"
+          :SavingGoalName="savingPlan.SavingGoalName"
           :SavingGoalTarget="savingPlan.SavingGoalTarget"
+          :SavingPlanId="savingPlan._id"
+          @isSetting="toggleSavingSetting"
+          @isDelete="toggleSavingDelete"
         />
       </div>
       <div v-else class="loading">
@@ -84,6 +99,8 @@
 <script>
 import { ref } from "vue";
 import axios from "axios";
+import savingDeleteModal from "../components/budget/budgetModal/Saving/savingDeleteModal.vue";
+import savingsettingModal from "../components/budget/budgetModal/Saving/savingsettingModal.vue";
 import messageBanner from "../components/common/messageBanner.vue";
 import savingPlanCard from "../components/budget/savingPlanCard.vue";
 import savingModal from "../components/budget/budgetModal/Saving/savingModal.vue";
@@ -111,6 +128,8 @@ export default {
     savingModal,
     savingPlanCard,
     messageBanner,
+    savingsettingModal,
+    savingDeleteModal,
   },
   data() {
     return {
@@ -119,10 +138,14 @@ export default {
       loaded: false,
       userBudgetPlan: {},
       userSavingPlan: {},
+      isSetting: false,
+      isSavingDelete: false,
       isAddPlan: false,
       isAddExpense: false,
       isAddIncome: false,
       isAddSavingPlan: false,
+      settingplanId: "",
+      deleteSavingplanId: "",
       AddincomeIcon: AddincomeIcon,
       AddspendingIcon: AddspendingIcon,
       budgetRefreshIcon: budgetRefreshIcon,
@@ -133,6 +156,8 @@ export default {
       this.isAddPlan = false;
       this.isAddExpense = false;
       this.isAddSavingPlan = false;
+      this.isSetting = false;
+      this.isSavingDelete = false;
 
       this.getUserbudget();
     },
@@ -142,6 +167,14 @@ export default {
       setTimeout(() => {
         this.toggleMessage = false;
       }, 3000);
+    },
+    toggleSavingSetting(savingId) {
+      this.settingplanId = savingId;
+      this.isSetting = true;
+    },
+    toggleSavingDelete(savingId) {
+      this.deleteSavingplanId = savingId;
+      this.isSavingDelete = true;
     },
     togglePlanForm() {
       this.isAddPlan = true;
@@ -174,6 +207,7 @@ export default {
         });
     },
   },
+  computed: {},
   mounted() {
     this.getUserbudget();
   },

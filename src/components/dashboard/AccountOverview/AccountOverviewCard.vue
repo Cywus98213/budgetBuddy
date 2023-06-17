@@ -9,8 +9,8 @@
     <div class="account-overview-main">
       <div class="main-left">
         <div class="main-left-header">
-          <h1>Category</h1>
-          <h1>Total</h1>
+          <h1>Category:</h1>
+          <h1>Total:</h1>
         </div>
         <div class="main-left-content">
           <AccountOverviewsubCard

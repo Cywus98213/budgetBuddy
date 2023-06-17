@@ -2,10 +2,8 @@
   <div class="main-display-wrapper">
     <h1 class="main-header">BudgetPlan Overview</h1>
     <h1 class="main-amount">
-      <span class="main-amount" :class="checkLimit"
-        >${{ Amount.toFixed(2) }}
-      </span>
-      / ${{ LimitAmount }}
+      <span class="main-amount" :class="checkLimit">${{ roundedAmount }} </span>
+      / ${{ roundedLimitAmount }}
     </h1>
   </div>
 </template>
@@ -31,6 +29,12 @@ export default {
         OverLimit: this.Amount > this.LimitAmount,
         AlmostOverLimit: this.Amount > this.LimitAmount * 0.8,
       };
+    },
+    roundedAmount() {
+      return this.Amount.toFixed(2);
+    },
+    roundedLimitAmount() {
+      return this.LimitAmount.toFixed(2);
     },
   },
 };

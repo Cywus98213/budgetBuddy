@@ -14,9 +14,9 @@
     <div class="main">
       <p>
         <span class="currentValue" :class="checkLimit"
-          >${{ amount.toFixed(2) }}</span
+          >${{ roundedAmount }}</span
         >
-        <span class="limitAmount"> / ${{ limitAmount }}</span>
+        <span class="limitAmount"> / ${{ roundedLimitAmount }}</span>
       </p>
     </div>
     <br />
@@ -61,6 +61,12 @@ export default {
         OverLimit: this.amount > this.limitAmount,
         AlmostOverLimit: this.amount > this.limitAmount * 0.8,
       };
+    },
+    roundedLimitAmount() {
+      return this.limitAmount.toFixed(2);
+    },
+    roundedAmount() {
+      return this.amount.toFixed(2);
     },
   },
   mounted() {

@@ -2,7 +2,8 @@
   <div class="account-subCard-wrapper">
     <div class="account-subCard-main">
       <h1>{{ category }}</h1>
-      <h1>${{ amount }} / ${{ limitAmount }}</h1>
+
+      <h1 class="number">${{ roundedAmount }} / ${{ roundedLimitAmount }}</h1>
     </div>
   </div>
 </template>
@@ -22,6 +23,21 @@ export default {
       required: true,
     },
   },
+  computed: {
+    roundedAmount() {
+      const roundedNumber = this.amount.toFixed(2);
+      return parseFloat(roundedNumber).toLocaleString();
+    },
+    roundedLimitAmount() {
+      const roundedNumber = this.limitAmount.toFixed(2);
+      return parseFloat(roundedNumber).toLocaleString();
+    },
+    progressBar() {
+      return {
+        width: `${(this.amount / this.limitAmount) * 100}%`,
+      };
+    },
+  },
 };
 </script>
 <style scoped>
@@ -32,11 +48,12 @@ export default {
 
 .account-subCard-main h1 {
   font-size: 0.5rem;
+  transition: all 0.3s ease-in-out;
 }
 
 @media screen and (min-width: 767px) {
   .account-subCard-main h1 {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 }
 

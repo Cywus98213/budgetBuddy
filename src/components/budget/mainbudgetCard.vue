@@ -3,7 +3,7 @@
     <div class="main-section">
       <p class="budgetTitle">My Balance</p>
       <p class="budgetAmount" :class="BalanceChecker">
-        ${{ userBalance.toFixed(2) }}
+        ${{ roundedUserBalance }}
       </p>
     </div>
   </div>
@@ -24,6 +24,10 @@ export default {
         safe: this.userBalance > 0,
         alert: this.userBalance < 0,
       };
+    },
+    roundedUserBalance() {
+      const roundedNumber = this.userBalance.toFixed(2);
+      return parseFloat(roundedNumber).toLocaleString();
     },
   },
 };

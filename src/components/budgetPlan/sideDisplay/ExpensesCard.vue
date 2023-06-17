@@ -82,7 +82,7 @@ export default {
 @media screen and (min-width: 767px) {
   .Card-Wrapper {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 0.3fr;
   }
 }
 </style>

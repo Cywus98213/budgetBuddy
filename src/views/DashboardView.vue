@@ -5,17 +5,20 @@
     </div>
     <div class="dashboard-main">
       <AccountOverviewCard />
-      <incomePlanCard />
+      <incomePlanOverviewCard />
+      <savingPlanOverviewCard />
     </div>
   </div>
 </template>
 <script>
+import savingPlanOverviewCard from "../components/dashboard/SavingPlanOverview/savingPlanOverviewCard.vue";
 import AccountOverviewCard from "../components/dashboard/AccountOverview/AccountOverviewCard.vue";
-import incomePlanCard from "../components/dashboard/IncomePlanOverview/incomePlanCard.vue";
+import incomePlanOverviewCard from "../components/dashboard/IncomePlanOverview/incomePlanOverviewCard.vue";
 export default {
   components: {
     AccountOverviewCard,
-    incomePlanCard,
+    incomePlanOverviewCard,
+    savingPlanOverviewCard,
   },
 };
 </script>

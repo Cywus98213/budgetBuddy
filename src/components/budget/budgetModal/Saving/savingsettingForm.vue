@@ -3,7 +3,7 @@
     <div class="form-warpper">
       <form class="form" @submit.prevent="createPlanHandler">
         <div class="form-header">
-          <h1>Create Saving Plan:</h1>
+          <h1>Setting: {{ savingplanId }}</h1>
           <img
             class="closeicon"
             src="../../../../assets/Icons/budget/closeicon.svg"
@@ -11,23 +11,15 @@
             @click="exitForm"
           />
         </div>
-        <label for="savingGoalName">Name: </label>
-        <input
-          type="text"
-          required
-          v-model="savingGoalName"
-          class="input"
-          placeholder="Saving Purpose"
-        />
 
-        <label for="savingGoalAmount">Target Amount:</label>
+        <label for="savingGoalAmount">Save Amount:</label>
         <input
           type="number"
           required
+          v-model="depositAmount"
           step="0.01"
-          v-model="savingGoalTarget"
           class="input"
-          placeholder="Saving Goal Amount"
+          placeholder="How much you want to save?"
         />
 
         <Button :text="'Submit'" class="formSubmit" />
@@ -42,10 +34,15 @@ export default {
   components: {
     Button,
   },
+  props: {
+    savingplanId: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
-      savingGoalName: "",
-      savingGoalTarget: "",
+      depositAmount: "",
     };
   },
   methods: {
@@ -54,11 +51,11 @@ export default {
     },
     createPlanHandler() {
       axios
-        .post(
+        .put(
           `http://localhost:3000/${this.$route.params.id}/savingplan`,
           {
-            SavingGoalName: this.savingGoalName,
-            SavingGoalTarget: this.savingGoalTarget,
+            depositAmount: this.depositAmount,
+            savingplanId: this.savingplanId,
           },
           {
             headers: {
