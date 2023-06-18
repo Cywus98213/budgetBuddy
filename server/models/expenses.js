@@ -23,6 +23,11 @@ const ExpensesSchema = new Schema({
     type: String,
     required: true,
   },
+  Type: {
+    type: String,
+    required: true,
+    default: "Expense",
+  },
 });
 
 module.exports = mongoose.model("Expense", ExpensesSchema);

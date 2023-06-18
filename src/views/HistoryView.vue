@@ -22,6 +22,7 @@
           :date="expense.Date"
           :title="expense.Title"
           :category="expense.Category"
+          :type="expense.Type"
           :key="expense._id"
         />
       </div>
@@ -57,7 +58,7 @@ export default {
   },
   data() {
     return {
-      expenses: [],
+      historyRecord: [],
       descending: false,
       ascending: false,
       currentPage: 1, // Current page number
@@ -78,7 +79,7 @@ export default {
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
-            this.expenses = res.data.Expenses;
+            this.historyRecord = [...res.data.Expenses, ...res.data.Incomes];
           }
         })
         .catch((err) => {
@@ -92,14 +93,14 @@ export default {
       this.ascending = !this.ascending;
       this.descending = false;
       if (this.ascending === true) {
-        this.expenses.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+        this.historyRecord.sort((a, b) => new Date(b.Date) - new Date(a.Date));
       }
     },
     filterByDescending() {
       this.descending = !this.descending;
       this.ascending = false;
       if (this.descending === true) {
-        this.expenses.sort((a, b) => new Date(a.Date) - new Date(b.Date));
+        this.historyRecord.sort((a, b) => new Date(a.Date) - new Date(b.Date));
       }
     },
     showNextPage() {
@@ -117,13 +118,13 @@ export default {
     paginatedBudgetPlans() {
       const startIndex = (this.currentPage - 1) * this.plansPerPage;
       const endIndex = startIndex + this.plansPerPage;
-      return this.expenses.slice(startIndex, endIndex);
+      return this.historyRecord.slice(startIndex, endIndex);
     },
     totalPages() {
-      return Math.ceil(this.expenses.length / this.plansPerPage);
+      return Math.ceil(this.historyRecord.length / this.plansPerPage);
     },
     exceedPages() {
-      return this.expenses.length > this.plansPerPage;
+      return this.historyRecord.length > this.plansPerPage;
     },
   },
   created() {

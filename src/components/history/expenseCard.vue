@@ -3,7 +3,7 @@
     <p>{{ date }}</p>
     <p>{{ title }}</p>
     <p>{{ category }}</p>
-    <p>${{ amount }}</p>
+    <p :class="checkType">${{ amount }}</p>
   </div>
 </template>
 <script>
@@ -25,8 +25,19 @@ export default {
       required: true,
       type: String,
     },
+    type: {
+      required: true,
+      type: String,
+    },
   },
-  computed: {},
+  computed: {
+    checkType() {
+      return {
+        Income: this.type === "Income",
+        Expense: this.type === "Expense",
+      };
+    },
+  },
 };
 </script>
 <style scoped>
@@ -39,6 +50,14 @@ export default {
 }
 .card-wrapper p {
   font-size: 0.8rem;
+}
+
+.Income {
+  color: var(--safe-clr);
+}
+
+.Expense {
+  color: var(--danger-clr);
 }
 
 @media screen and (min-width: 767px) {

@@ -172,7 +172,6 @@ export default {
   data() {
     return {
       isToggle: false,
-      userid: sessionStorage.getItem("userId"),
     };
   },
   methods: {
@@ -189,6 +188,11 @@ export default {
   computed: {
     IsLoggedIn() {
       return this.$store.getters.IsLoggedIn;
+    },
+    userid() {
+      if (this.$store.getters.IsLoggedIn === true) {
+        return sessionStorage.getItem("userId");
+      }
     },
   },
 };

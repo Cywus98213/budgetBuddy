@@ -48,7 +48,7 @@ const userSchema = new Schema({
   Incomes: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Incomes",
+      ref: "Income",
     },
   ],
 });

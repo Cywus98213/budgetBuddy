@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const incomeSchema = new Schema({
-  IncomeName: {
+  Title: {
     type: String,
     required: true,
   },
-  IncomeAmount: {
+  Amount: {
     type: Number,
     required: true,
   },
@@ -14,10 +14,19 @@ const incomeSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
-  IncomeDate: {
+  Date: {
     type: String,
     required: true,
   },
+  Category: {
+    type: String,
+    required: true,
+  },
+  Type: {
+    type: String,
+    required: true,
+    default: "Income",
+  },
 });
 
-module.exports = mongoose.model("Incomes", incomeSchema);
+module.exports = mongoose.model("Income", incomeSchema);

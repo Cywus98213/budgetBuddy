@@ -23,6 +23,10 @@ const incomePlanSchema = new Schema({
     enum: ["Weekly", "Bi-weekly", "Monthly", "One-time"],
     required: true,
   },
+  IncomeCategory: {
+    type: String,
+    required: true,
+  },
   status: {
     type: String,
     enum: ["scheduled", "processed"],

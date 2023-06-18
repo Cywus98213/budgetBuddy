@@ -4,6 +4,7 @@ import { createStore } from "vuex";
 const store = createStore({
   state: {
     IsLoggedIn: sessionStorage.getItem("IsLoggedIn") === "true" ? true : false,
+    userId: "",
   },
   mutations: {
     login(state) {
@@ -14,6 +15,10 @@ const store = createStore({
       state.IsLoggedIn = false;
       sessionStorage.setItem("IsLoggedIn", false);
     },
+
+    setUserId(state, userId) {
+      state.userId = userId;
+    },
   },
   actions: {
     login(context) {
@@ -22,9 +27,14 @@ const store = createStore({
     logout(context) {
       context.commit("logout");
     },
+
+    setUserId(context, userId) {
+      context.commit("setUserId", userId);
+    },
   },
   getters: {
     IsLoggedIn: (state) => state.IsLoggedIn,
+    userId: (state) => state.userId,
   },
 });
 

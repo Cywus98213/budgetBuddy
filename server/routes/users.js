@@ -11,6 +11,7 @@ const jwt = require("jsonwebtoken");
 const BudgetPlan = require("../models/budgetPlan");
 const IncomePlan = require("../models/incomePlan");
 const Expenses = require("../models/expenses");
+const Income = require("../models/incomes");
 const SavingPlan = require("../models/savingPlan");
 const moment = require("moment");
 
@@ -33,8 +34,22 @@ function verifyToken(req, res, next) {
 }
 
 router.post("/register", async (req, res) => {
-  const { Email, Username, Password } = req.body;
   try {
+    const { Email, Username, Password } = req.body;
+
+    // Check if user already exists
+
+    User.find().then((users) => {
+      users.forEach((user) => {
+        if (user.Email === Email) {
+          return res.status(400).json({ error: "Email already exists" });
+        }
+        if (user.Username === Username) {
+          return res.status(400).json({ error: "Username already exists" });
+        }
+      });
+    });
+
     // Hash password using bcrypt
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(Password, saltRounds);
@@ -124,18 +139,6 @@ router.post("/login", async (req, res) => {
       expiresIn: "3h",
     });
 
-    user.IncomePlan.forEach((incomePlan) => {
-      if (incomePlan.status === "processed") {
-        return;
-      } else if (incomePlan.status === "scheduled") {
-        const scheduledDate = new Date(incomePlan.Date);
-        if (currentDate.toDateString() === scheduledDate.toDateString()) {
-          user.Balance += incomePlan.Amount;
-          incomePlan.status = "processed";
-        }
-      }
-    });
-
     // Respond with JWT
 
     res.status(200).json({
@@ -151,23 +154,28 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/:id/budget", verifyToken, async (req, res) => {
-  const user = await User.findById(req.params.id)
-    .populate({
-      path: "BudgetPlan",
-      populate: {
-        path: "Expenses",
-        model: "Expense",
-      },
-    })
-    .populate({
-      path: "SavingPlan",
-      model: "SavingPlan",
-    });
+  try {
+    const user = await User.findById(req.params.id)
+      .populate({
+        path: "BudgetPlan",
+        model: "BudgetPlan",
+        populate: {
+          path: "Expenses",
+          model: "Expense",
+        },
+      })
+      .populate({
+        path: "SavingPlan",
+        model: "SavingPlan",
+      });
 
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  } else {
-    res.status(200).send(user);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -217,7 +225,15 @@ router.post("/:id/budget", verifyToken, async (req, res) => {
 
 router.get("/:id/history", verifyToken, async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).populate("Expenses");
+    const user = await User.findById(req.params.id)
+      .populate({
+        path: "Expenses",
+        model: "Expense",
+      })
+      .populate({
+        path: "Incomes",
+        model: "Income",
+      });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -366,9 +382,15 @@ router.delete("/:id/income/:incomeplanid", verifyToken, async (req, res) => {
 
 router.post("/:id/income", verifyToken, async (req, res) => {
   try {
-    const { IncomeSource, IncomeAmount, IncomeFrequency, IncomeDate } =
-      req.body;
+    const {
+      IncomeSource,
+      IncomeAmount,
+      IncomeFrequency,
+      IncomeDate,
+      IncomeCategory,
+    } = req.body;
     const user = await User.findById(req.params.id);
+
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -381,14 +403,27 @@ router.post("/:id/income", verifyToken, async (req, res) => {
       IncomeAmount: IncomeAmount,
       IncomeFrequency: IncomeFrequency,
       IncomeDate: parsedDate,
+      IncomeCategory: IncomeCategory,
       creator: user._id,
     });
 
     user.IncomePlan.push(incomePlan);
 
-    if (parsedDate === todayDate) {
+    if (moment(parsedDate).isSameOrBefore(todayDate)) {
       user.Balance += IncomeAmount;
       incomePlan.status = "processed";
+
+      const income = new Income({
+        Title: IncomeSource,
+        Amount: IncomeAmount,
+        Category: IncomeCategory,
+        Date: parsedDate,
+        creator: user._id,
+      });
+
+      user.Incomes.push(income);
+
+      await income.save();
     }
 
     await user.save();
@@ -406,18 +441,22 @@ router.post("/:id/income", verifyToken, async (req, res) => {
 });
 
 router.get("/:id/account", verifyToken, async (req, res) => {
-  const user = await User.findById(req.params.id).populate({
-    path: "BudgetPlan",
-    populate: {
-      path: "Expenses",
-      model: "Expense",
-    },
-  });
+  try {
+    const user = await User.findById(req.params.id).populate({
+      path: "BudgetPlan",
+      populate: {
+        path: "Expenses",
+        model: "Expense",
+      },
+    });
 
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  } else {
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     res.status(200).send(user);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

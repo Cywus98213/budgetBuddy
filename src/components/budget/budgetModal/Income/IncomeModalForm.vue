@@ -20,7 +20,7 @@
           placeholder="Income Source"
         />
 
-        <label>Amount:</label>
+        <label>Income Amount:</label>
         <input
           v-model="IncomeAmount"
           class="input"
@@ -30,6 +30,17 @@
           placeholder="Income Amount"
           required
         />
+
+        <label>Income Category:</label>
+        <select v-model="IncomeCategory" class="input" required>
+          <option value="" disabled selected>Select a Category</option>
+          <option value="Salary">Salary</option>
+          <option value="Freelance">Freelance</option>
+          <option value="Rental">Rental</option>
+          <option value="Investment">Investment</option>
+          <option value="Gifts">Gifts</option>
+          <option value="Business">Business</option>
+        </select>
 
         <label>Income Frequency:</label>
         <select v-model="IncomeFrequency" class="input" required>
@@ -71,6 +82,7 @@ export default {
       IncomeAmount: "",
       IncomeFrequency: "",
       IncomeDate: "",
+      IncomeCategory: "",
       Msg: "",
       toggleError: false,
     };
@@ -88,6 +100,7 @@ export default {
             IncomeAmount: this.IncomeAmount,
             IncomeFrequency: this.IncomeFrequency,
             IncomeDate: this.IncomeDate,
+            IncomeCategory: this.IncomeCategory,
           },
           {
             headers: {

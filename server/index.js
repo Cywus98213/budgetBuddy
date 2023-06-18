@@ -38,4 +38,5 @@ app.use("/", usersRoute);
 
 app.listen(PORT, () => {
   console.log(`listening to port ${PORT}`);
+  cronJobs.testing.start();
 });
