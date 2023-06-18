@@ -90,10 +90,10 @@ export default {
         .post(
           `http://localhost:3000/${this.$route.params.id}/budget`,
           {
-            Title: this.title,
-            Amount: this.amount,
-            Category: this.category,
-            Date: this.date,
+            inputTitle: this.title,
+            inputAmount: this.amount,
+            inputCategory: this.category,
+            inputDate: this.date,
           },
           {
             headers: {

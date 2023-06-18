@@ -76,7 +76,10 @@ export default {
           },
         })
         .then((res) => {
-          this.expenses = res.data.Expenses;
+          console.log(res);
+          if (res.status === 200) {
+            this.expenses = res.data.Expenses;
+          }
         })
         .catch((err) => {
           if (err.response.status === 401) {

@@ -8,7 +8,8 @@
       <p class="incometype">Amount:</p>
       <p>${{ incomeAmount }}</p>
       <p class="incometype">Date:</p>
-      <p>{{ convertDate }}</p>
+      <p v-if="checkisOneTime">{{ convertOneTimeDate }}</p>
+      <p v-else>{{ convertMonthDate }}</p>
     </div>
     <div class="income-footer">
       <p class="incometype">Frequency:</p>
@@ -19,6 +20,7 @@
   </div>
 </template>
 <script>
+import moment from "moment-timezone";
 export default {
   props: {
     incomeName: {
@@ -43,13 +45,18 @@ export default {
     },
   },
   computed: {
-    convertDate() {
+    convertOneTimeDate() {
       const date = new Date(this.incomeDate);
-      const formattedDateString = date.toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-      });
+      const formattedDateString = moment(date).format("MMM Do YYYY");
       return formattedDateString;
+    },
+    convertMonthDate() {
+      const date = new Date(this.incomeDate);
+      const formattedDateString = moment(date).format("MMM Do");
+      return formattedDateString;
+    },
+    checkisOneTime() {
+      return this.incomeFrequency === "One-time" ? true : false;
     },
     checkincomeStatus() {
       return {

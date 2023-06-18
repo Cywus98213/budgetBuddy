@@ -36,18 +36,6 @@ app.use((req, res, next) => {
 
 app.use("/", usersRoute);
 
-app.get("/", (req, res) => {
-  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-  console.log(ip); // The user's IP address
-
-  // Perform IP geolocation to determine the user's approximate location
-  // You can use third-party APIs or libraries to perform IP geolocation
-
-  // Based on the location, determine the appropriate time zone and send it to the client
-  const timeZone = "America/New_York"; // Example time zone
-  res.send(timeZone);
-});
-
 app.listen(PORT, () => {
   console.log(`listening to port ${PORT}`);
 });

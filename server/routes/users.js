@@ -9,11 +9,10 @@ const User = require("../models/users");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const BudgetPlan = require("../models/budgetPlan");
-const mongoose = require("mongoose");
-const schedule = require("node-schedule");
 const IncomePlan = require("../models/incomePlan");
 const Expenses = require("../models/expenses");
 const SavingPlan = require("../models/savingPlan");
+const moment = require("moment");
 
 const PrivateKey = process.env.PRIVATE_KEY;
 
@@ -94,12 +93,23 @@ router.post("/login", async (req, res) => {
   try {
     const { Username, Password } = req.body;
     const currentDate = new Date();
+
+    // const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    // console.log(ip); // The user's IP address
+
+    // Perform IP geolocation to determine the user's approximate location
+    // You can use third-party APIs or libraries to perform IP geolocation
+
+    // Based on the location, determine the appropriate time zone and send it to the client
+    // const timeZone = "America/New_York"; // Example time zone
+    // res.send(timeZone);
+
     // Find user by email
     const user = await User.findOne({ Username: Username });
 
     // Check if user exists
     if (!user) {
-      return res.status(401).json({ error: "Invalid email or password" });
+      return res.status(401).json({ error: "Invalid username" });
     }
 
     // Compare password using bcrypt
@@ -107,7 +117,7 @@ router.post("/login", async (req, res) => {
 
     // Check if password is correct
     if (!passwordMatches) {
-      return res.status(401).json({ error: "Invalid email or password" });
+      return res.status(401).json({ error: "Invalid password" });
     }
     // Generate JWT
     const token = jwt.sign({ userId: user._id }, PrivateKey, {
@@ -163,31 +173,33 @@ router.get("/:id/budget", verifyToken, async (req, res) => {
 
 router.post("/:id/budget", verifyToken, async (req, res) => {
   try {
-    const { Title, Amount, Category, Date } = req.body;
+    const { inputTitle, inputAmount, inputCategory, inputDate } = req.body;
     const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
+    const parseDate = moment(inputDate).format("YYYY-MM-DD");
+
     const expense = new Expenses({
-      Title: Title,
-      Amount: Amount,
-      Category: Category,
-      Date: Date,
-      creator: user._id,
+      Title: inputTitle,
+      Amount: inputAmount,
+      Category: inputCategory,
+      Date: parseDate,
+      creator: req.params.id,
     });
 
     await expense.save();
 
-    user.Balance -= Amount;
+    user.Balance -= inputAmount;
 
-    const budgetPlan = await BudgetPlan.findOne({ Category: Category });
+    const budgetPlan = await BudgetPlan.findOne({ Category: inputCategory });
 
     if (!budgetPlan) {
       return res.status(404).json({ error: "Budget Plan not found." });
     } else {
       budgetPlan.Expenses.push(expense);
-      budgetPlan.Amount += Amount;
+      budgetPlan.Amount += inputAmount;
     }
 
     await budgetPlan.save();
@@ -361,8 +373,8 @@ router.post("/:id/income", verifyToken, async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    const todayDate = new Date();
-    const parsedDate = new Date(IncomeDate);
+    const todayDate = moment().format("YYYY-MM-DD");
+    const parsedDate = moment(IncomeDate).format("YYYY-MM-DD");
 
     const incomePlan = new IncomePlan({
       IncomeName: IncomeSource,
@@ -374,7 +386,7 @@ router.post("/:id/income", verifyToken, async (req, res) => {
 
     user.IncomePlan.push(incomePlan);
 
-    if (parsedDate.toDateString() === todayDate.toDateString()) {
+    if (parsedDate === todayDate) {
       user.Balance += IncomeAmount;
       incomePlan.status = "processed";
     }
