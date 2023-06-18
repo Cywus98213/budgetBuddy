@@ -72,7 +72,6 @@ export default {
           Password: this.passwordInput,
         })
         .then((res) => {
-          console.log(res);
           if (res.status === 200) {
             sessionStorage.setItem("token", res.data.token);
             sessionStorage.setItem("userId", res.data.userId);

@@ -80,7 +80,6 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data);
           this.incomePlans = res.data.IncomePlan;
 
           if (this.incomePlans.length > 0) {
@@ -130,7 +129,7 @@ export default {
       return Math.ceil(this.incomePlans.length / this.plansPerPage);
     },
     exceedPages() {
-      return this.currentPage > this.pages;
+      return this.incomePlans.length > this.plansPerPage;
     },
   },
   mounted() {

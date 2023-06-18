@@ -22,5 +22,6 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   border-radius: 0 0 var(--radius) var(--radius);
+  text-align: center;
 }
 </style>

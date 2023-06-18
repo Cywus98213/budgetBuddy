@@ -15,7 +15,8 @@ main {
   display: flex;
   height: 100vh;
   background-color: var(--main-bg-clr);
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .content {
   flex-grow: 1;

@@ -33,6 +33,14 @@ export default {
     Button,
   },
   methods: {},
+  created() {
+    if (sessionStorage.getItem("token")) {
+      this.$router.push({
+        name: "dashboard",
+        params: { id: sessionStorage.getItem("userId") },
+      });
+    }
+  },
 };
 </script>
 <style scoped>
