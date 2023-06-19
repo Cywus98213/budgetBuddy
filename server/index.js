@@ -13,15 +13,15 @@ const cronJobs = require("./utils/cronJobs");
 
 const PORT = process.env.PORT || 3000;
 
-const MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost:27017/budgetbuddy";
+// const MONGODB_URI =
+//   process.env.MONGODB_URI || "mongodb://localhost:27017/budgetbuddy";
 
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect(MONGODB_URI, {
+mongoose.connect("mongodb://localhost:27017/budgetbuddy", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -38,5 +38,5 @@ app.use("/", usersRoute);
 
 app.listen(PORT, () => {
   console.log(`listening to port ${PORT}`);
-  // cronJobs.testing.start();
+  cronJobs.DailyCheck.start();
 });

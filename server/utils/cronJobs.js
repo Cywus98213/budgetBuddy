@@ -24,7 +24,7 @@ const incomePlan = require("../models/incomePlan");
 
 // });
 
-const testing = cron.schedule("* * * * *", () => {
+const DailyCheck = cron.schedule("0 0 * * *", () => {
   try {
     const todayDate = moment().format("YYYY-MM-DD");
     User.find().then((users) => {
@@ -75,4 +75,4 @@ const testing = cron.schedule("* * * * *", () => {
   }
 });
 
-module.exports = { testing };
+module.exports = { DailyCheck };
