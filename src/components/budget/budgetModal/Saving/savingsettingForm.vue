@@ -64,7 +64,6 @@ export default {
           }
         )
         .then((res) => {
-          console.log(res);
           this.$emit("closeform");
         })
         .catch((err) => {

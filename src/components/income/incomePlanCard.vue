@@ -7,9 +7,16 @@
     <div class="income-main">
       <p class="incometype">Amount:</p>
       <p>${{ incomeAmount }}</p>
-      <p class="incometype">Date:</p>
+
+      <p class="incometype">Excute Date:</p>
       <p v-if="checkisOneTime">{{ convertOneTimeDate }}</p>
       <p v-else>{{ convertMonthDate }}</p>
+      <p class="incometype grey" v-if="incomePerviousExcutedDate">
+        Last Excuted Date:
+      </p>
+      <p class="grey" v-if="incomePerviousExcutedDate">
+        {{ incomePerviousExcutedDate }}
+      </p>
     </div>
     <div class="income-footer">
       <p class="incometype">Frequency:</p>
@@ -75,6 +82,9 @@ export default {
       type: String,
       required: true,
     },
+    incomePerviousExcutedDate: {
+      type: String,
+    },
   },
   components: {
     Button,
@@ -112,12 +122,12 @@ export default {
   computed: {
     convertOneTimeDate() {
       const date = new Date(this.incomeDate);
-      const formattedDateString = moment(date).format("MMM Do YYYY");
+      const formattedDateString = moment(date).format("YYYY-MM-DD");
       return formattedDateString;
     },
     convertMonthDate() {
       const date = new Date(this.incomeDate);
-      const formattedDateString = moment(date).format("MMM Do");
+      const formattedDateString = moment(date).format("YYYY-MM-DD");
       return formattedDateString;
     },
     checkisOneTime() {
@@ -134,8 +144,8 @@ export default {
 </script>
 <style scoped>
 .incomeplan-wrapper {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 1fr;
   background-color: var(--primary-component-bg);
   border-radius: var(--radius);
   padding: 1rem;
@@ -143,7 +153,7 @@ export default {
   gap: 1rem;
 }
 .incometype {
-  font-weight: 100;
+  font-weight: 300;
 }
 
 .scheduled {
@@ -182,5 +192,8 @@ export default {
 }
 .modal-footer {
   margin-top: 1rem;
+}
+.grey {
+  color: var(--grey-clr);
 }
 </style>

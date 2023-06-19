@@ -1,9 +1,9 @@
 <template>
   <div class="wrapper">
     <div class="form-warpper">
-      <form class="form" @submit.prevent="createPlanHandler">
+      <form class="form" @submit.prevent="DeleteBudgetPlanHandler">
         <div class="form-header">
-          <h1>Create Saving Plan:</h1>
+          <h1>Delete Plan: {{ this.$route.params.budgetplanid }}</h1>
           <img
             class="closeicon"
             src="../../../../assets/Icons/budget/closeicon.svg"
@@ -11,55 +11,46 @@
             @click="exitForm"
           />
         </div>
-        <label for="savingGoalName">Name: </label>
-        <input
-          type="text"
-          required
-          v-model="savingGoalName"
-          class="input"
-          placeholder="Saving Purpose"
-        />
 
-        <label for="savingGoalAmount">Target Amount:</label>
-        <input
-          type="number"
-          required
-          step="0.01"
-          v-model="savingGoalTarget"
-          class="input"
-          placeholder="Saving Goal Amount"
-        />
+        <p class="warning">This action cannot be undo.</p>
 
-        <Button :text="'Submit'" class="formSubmit" />
+        <p class="warning">
+          The fund within the budget plan will refund back to your balance.
+        </p>
+
+        <p class="warning">The expenses within the plan will be delete.</p>
+
+        <p class="warning">Are you sure you want to delete this plan?</p>
+
+        <Button :text="'Yes, I understand !'" class="formSubmit" />
       </form>
     </div>
   </div>
 </template>
 <script>
 import axios from "axios";
+import ErrorBanner from "../../../common/ErrorBanner.vue";
 import Button from "../../../common/Button.vue";
 export default {
   components: {
     Button,
+    ErrorBanner,
   },
   data() {
     return {
-      savingGoalName: "",
-      savingGoalTarget: "",
+      category: "",
+      limitAmount: "",
+      toggleError: false,
     };
   },
   methods: {
     exitForm() {
       this.$emit("closeform");
     },
-    createPlanHandler() {
+    DeleteBudgetPlanHandler() {
       axios
-        .post(
-          `http://localhost:3000/${this.$route.params.id}/savingplan`,
-          {
-            SavingGoalName: this.savingGoalName,
-            SavingGoalTarget: this.savingGoalTarget,
-          },
+        .delete(
+          `http://localhost:3000/${this.$route.params.id}/budgetplan/${this.$route.params.budgetplanid}`,
           {
             headers: {
               Authorization: sessionStorage.getItem("token"),
@@ -67,7 +58,10 @@ export default {
           }
         )
         .then((res) => {
-          this.$emit("closeform");
+          if (res.status === 200) {
+            this.$emit("successful", res.data.message);
+            this.$router.push({ name: "budget" });
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -116,5 +110,18 @@ export default {
   border-radius: var(--radius);
   background-color: var(--primary-component-bg);
   border: none;
+}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.warning {
+  color: var(--warning-clr);
 }
 </style>

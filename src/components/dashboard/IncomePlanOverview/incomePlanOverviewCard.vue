@@ -1,7 +1,7 @@
 <template>
   <div class="Income-Overview-wrapper">
     <div class="Income-Overview-wrapper-header">
-      <h1>Income Overview</h1>
+      <h1>Income Plan Overview</h1>
     </div>
     <div class="income-overview-main">
       <incomePlansubCard
@@ -12,6 +12,7 @@
         :incomeDate="incomeplan.IncomeDate"
         :incomeStatus="incomeplan.status"
         :incomeFrequency="incomeplan.IncomeFrequency"
+        :incomePerviousExcutedDate="incomeplan.IncomePerviousExcutedDate"
         :incomeId="incomeplan._id"
         :key="index"
       />

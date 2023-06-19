@@ -60,6 +60,14 @@ router.post("/register", async (req, res) => {
       Username: Username,
       Hashedpassword: passwordHash,
     });
+    // Save new user document to database
+    await user.save();
+
+    const newUser = await User.findById(user._id);
+
+    if (!newUser) {
+      return res.status(400).json({ error: "User not found" });
+    }
 
     // Create Default Gorceries Plan
     const groceriesPlan = new BudgetPlan({
@@ -84,16 +92,18 @@ router.post("/register", async (req, res) => {
       Expenses: [],
       creator: user._id,
     });
+
+    // Create Default Income Plan
     await groceriesPlan.save();
     await entertainmentPlan.save();
     await utilitiesPlan.save();
 
-    user.BudgetPlan.push(groceriesPlan);
-    user.BudgetPlan.push(entertainmentPlan);
-    user.BudgetPlan.push(utilitiesPlan);
+    // Create Default Income Plan
+    newUser.BudgetPlan.push(groceriesPlan);
+    newUser.BudgetPlan.push(entertainmentPlan);
+    newUser.BudgetPlan.push(utilitiesPlan);
 
-    // Save new user document to database
-    await user.save();
+    await newUser.save();
 
     // Respond with success message
     res.json({ message: "User registered successfully" });
@@ -328,6 +338,11 @@ router.delete(
         return res.status(404).json({ error: "Budget Plan not found" });
       }
 
+      budgetPlan.Expenses.forEach(async (expense) => {
+        const expenseToDelete = await Expenses.findById(expense._id);
+        user.Balance += expenseToDelete.Amount;
+      });
+
       await BudgetPlan.findByIdAndDelete(req.params.budgetplanid);
 
       user.BudgetPlan.pull(budgetPlan);
@@ -421,29 +436,44 @@ router.post("/:id/income", verifyToken, async (req, res) => {
 
       // "Weekly", "Bi-weekly", "Monthly", "One-time"
       if (incomePlan.IncomeFrequency === "Bi-Weekly") {
+        incomePlan.IncomePerviousExcutedDate =
+          moment(parsedDate).format("YYYY-MM-DD");
         incomePlan.IncomeDate = moment(parsedDate)
           .add(2, "w")
           .format("YYYY-MM-DD");
+        incomePlan.status = "scheduled";
       } else if (incomePlan.IncomeFrequency === "Monthly") {
+        incomePlan.IncomePerviousExcutedDate =
+          moment(parsedDate).format("YYYY-MM-DD");
         incomePlan.IncomeDate = moment(parsedDate)
           .add(1, "M")
           .format("YYYY-MM-DD");
+        incomePlan.status = "scheduled";
       } else if (incomePlan.IncomeFrequency === "Weekly") {
+        incomePlan.IncomePerviousExcutedDate =
+          moment(parsedDate).format("YYYY-MM-DD");
         incomePlan.IncomeDate = moment(parsedDate)
           .add(1, "w")
           .format("YYYY-MM-DD");
+        incomePlan.status = "scheduled";
       }
 
       user.IncomePlan.push(incomePlan);
 
       user.Incomes.push(income);
 
+      await incomePlan.save();
+
       await income.save();
+
+      await user.save();
+    } else {
+      user.IncomePlan.push(incomePlan);
+
+      await user.save();
+
+      await incomePlan.save();
     }
-
-    await user.save();
-
-    await incomePlan.save();
 
     res.status(200).json({ message: "IncomePlan added successfully" });
   } catch (err) {

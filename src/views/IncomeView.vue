@@ -22,6 +22,7 @@
         :incomeAmount="incomePlan.IncomeAmount"
         :incomeDate="incomePlan.IncomeDate"
         :incomeFrequency="incomePlan.IncomeFrequency"
+        :incomePerviousExcutedDate="incomePlan.IncomePerviousExcutedDate"
         :incomeStatus="incomePlan.status"
         :incomeId="incomePlan._id"
         @deleteIncomePlan="getIncomePlan"

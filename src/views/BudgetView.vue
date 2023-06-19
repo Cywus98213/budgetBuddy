@@ -49,6 +49,9 @@
       <div v-else class="loading">
         <p>Loading...</p>
       </div>
+      <div class="empty" v-if="isBudgetEmpty">
+        <p>You don't have any Budget Plan...</p>
+      </div>
     </div>
 
     <div class="header">
@@ -91,6 +94,9 @@
       </div>
       <div v-else class="loading">
         <p>Loading...</p>
+      </div>
+      <div class="empty" v-if="isSavingEmpty">
+        <p>You don't have any saving Plan...</p>
       </div>
     </div>
   </div>
@@ -207,7 +213,14 @@ export default {
         });
     },
   },
-  computed: {},
+  computed: {
+    isSavingEmpty() {
+      return this.userSavingPlan.length === 0;
+    },
+    isBudgetEmpty() {
+      return this.userBudgetPlan.length === 0;
+    },
+  },
   mounted() {
     this.getUserbudget();
   },

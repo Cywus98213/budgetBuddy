@@ -11,15 +11,17 @@
       @closeform="exitForm"
       @successful="toggleMessageBanner"
     />
+    <deleteplanModal
+      v-if="isDeletePlan"
+      @closeform="exitForm"
+      @successful="toggleMessageBanner"
+    />
     <div class="header">
       <BackButton />
       <h1 class="budgetPlanCategory">{{ Category }} Plan</h1>
       <div class="navButton">
         <budgetPlanNavButton :iconSrc="NavEditIcon" @click="toggleEdit" />
-        <budgetPlanNavButton
-          :iconSrc="NavDeleteIcon"
-          @click="DeleteBudgetPlanHandler"
-        />
+        <budgetPlanNavButton :iconSrc="NavDeleteIcon" @click="toggleDelete" />
       </div>
     </div>
     <div class="grid-container">
@@ -36,6 +38,7 @@
   </div>
 </template>
 <script>
+import deleteplanModal from "../components/budget/budgetModal/plan/deleteplanModal.vue";
 import ErrorBanner from "../components/common/ErrorBanner.vue";
 import messageBanner from "../components/common/messageBanner.vue";
 import budgetplanModal from "../components/budgetPlan/budgetPlanModal/budgetplanModal.vue";
@@ -55,9 +58,11 @@ export default {
     budgetPlanNavButton,
     ErrorBanner,
     messageBanner,
+    deleteplanModal,
   },
   data() {
     return {
+      isDeletePlan: false,
       isEditPlan: false,
       toggleError: false,
       toggleMessage: false,
@@ -94,30 +99,15 @@ export default {
           }
         });
     },
-    DeleteBudgetPlanHandler() {
-      axios
-        .delete(
-          `http://localhost:3000/${this.$route.params.id}/budgetplan/${this.$route.params.budgetplanid}`,
-          {
-            headers: {
-              Authorization: sessionStorage.getItem("token"),
-            },
-          }
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            this.$router.push({ name: "budget" });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     toggleEdit() {
       this.isEditPlan = true;
     },
+    toggleDelete() {
+      this.isDeletePlan = true;
+    },
     exitForm() {
       this.isEditPlan = false;
+      this.isDeletePlan = false;
       this.getbudgetPlanDetail();
     },
     toggleMessageBanner(msg) {

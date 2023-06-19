@@ -18,6 +18,9 @@ const incomePlanSchema = new Schema({
     type: String,
     required: true,
   },
+  IncomePerviousExcutedDate: {
+    type: String,
+  },
   IncomeFrequency: {
     type: String,
     enum: ["Weekly", "Bi-weekly", "Monthly", "One-time"],

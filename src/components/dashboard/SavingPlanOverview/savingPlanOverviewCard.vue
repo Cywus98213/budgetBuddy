@@ -1,7 +1,7 @@
 <template>
   <div class="SavingOverview-wrapper">
     <div class="SavingOverview-header">
-      <h1>Saving Overview</h1>
+      <h1>Saving Plan Overview</h1>
     </div>
     <div class="saving-overview-main">
       <savingPlansubCard
@@ -75,7 +75,7 @@ export default {
   display: grid;
   gap: 1rem;
   overflow-y: auto;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 270px));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 265px));
 }
 .SavingOverview-header h1 {
   font-size: 1.2rem;
