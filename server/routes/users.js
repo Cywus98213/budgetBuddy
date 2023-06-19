@@ -407,8 +407,6 @@ router.post("/:id/income", verifyToken, async (req, res) => {
       creator: user._id,
     });
 
-    user.IncomePlan.push(incomePlan);
-
     if (moment(parsedDate).isSameOrBefore(todayDate)) {
       user.Balance += IncomeAmount;
       incomePlan.status = "processed";
@@ -420,6 +418,23 @@ router.post("/:id/income", verifyToken, async (req, res) => {
         Date: parsedDate,
         creator: user._id,
       });
+
+      // "Weekly", "Bi-weekly", "Monthly", "One-time"
+      if (incomePlan.IncomeFrequency === "Bi-Weekly") {
+        incomePlan.IncomeDate = moment(parsedDate)
+          .add(2, "w")
+          .format("YYYY-MM-DD");
+      } else if (incomePlan.IncomeFrequency === "Monthly") {
+        incomePlan.IncomeDate = moment(parsedDate)
+          .add(1, "M")
+          .format("YYYY-MM-DD");
+      } else if (incomePlan.IncomeFrequency === "Weekly") {
+        incomePlan.IncomeDate = moment(parsedDate)
+          .add(1, "w")
+          .format("YYYY-MM-DD");
+      }
+
+      user.IncomePlan.push(incomePlan);
 
       user.Incomes.push(income);
 

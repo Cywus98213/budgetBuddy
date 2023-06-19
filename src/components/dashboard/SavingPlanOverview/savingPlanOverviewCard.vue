@@ -70,25 +70,14 @@ export default {
   margin: 0.5rem 0;
 }
 .saving-overview-main {
+  max-height: calc(100vw - 5rem);
   padding: 0.5rem 1rem 0 0;
   display: grid;
   gap: 1rem;
-  max-height: calc(100vw - 5rem);
   overflow-y: auto;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 270px));
 }
 .SavingOverview-header h1 {
   font-size: 1.2rem;
-}
-
-@media screen and (min-width: 424px) {
-  .saving-overview-main {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-}
-@media screen and (min-width: 767px) {
-  .saving-overview-main {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
 }
 </style>

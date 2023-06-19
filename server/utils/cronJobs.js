@@ -2,38 +2,26 @@ const cron = require("node-cron");
 const User = require("../models/users");
 const moment = require("moment");
 const income = require("../models/incomes");
+const incomePlan = require("../models/incomePlan");
 
-// const dailyIncomePlanCheck = cron.schedule("0 0 * * *", () => {
-//   try {
-//     const todayDate = moment().format("YYYY-MM-DD");
-//     User.find().then((users) => {
-//       users.forEach((user) => {
-//         user.IncomePlan.forEach((plan) => {
-//           if (plan.status === "schedule") {
-//             if (moment(plan.IncomeDate).isSame(todayDate)) {
-//               user.Balance += plan.IncomeAmount;
-//               plan.status = "processed";
+// const Monthlytesting = cron.schedule("*/2 * * * *", () => {
+//   User.find().then((users) => {
+//     users.forEach((user) => {
+//       if (user.IncomePlan.length === 0) {
+//         console.log("User Dont have any Income Plan");
+//         return;
+//       }
+//       user.IncomePlan.forEach(async (plan) => {
+//         const CurrentCheckingPlan = await incomePlan.findById(plan._id);
+//         if (CurrentCheckingPlan.IncomeFrequency === "Monthly") {
+//           if (moment(CurrentCheckingPlan.IncomeDate).isAfter()){
 
-//               const newIncome = new income({
-//                 Title: plan.IncomeName,
-//                 Amount: plan.IncomeAmount,
-//                 creator: user._id,
-//                 Date: plan.IncomeDate,
-//                 Category: plan.IncomeCategory,
-//               });
-
-//               newIncome.save();
-//               user.Incomes.push(newIncome);
-//               plan.save();
-//               user.save();
-//             }
 //           }
-//         });
-//       });
+//         }
 //     });
-//   } catch (err) {
-//     console.log(err);
-//   }
+//   });
+// });
+
 // });
 
 const testing = cron.schedule("* * * * *", () => {
@@ -41,37 +29,47 @@ const testing = cron.schedule("* * * * *", () => {
     const todayDate = moment().format("YYYY-MM-DD");
     User.find().then((users) => {
       users.forEach((user) => {
-        console.log("--------------------");
-        console.log(`User Check ${user._id}`);
         if (user.IncomePlan.length === 0) {
           console.log("User Dont have any Income Plan");
           return;
         }
-        user.IncomePlan.forEach((plan) => {
-          console.log(`Status Check ${plan._id}`);
-          if (plan.status === "scheduled") {
+        user.IncomePlan.forEach(async (plan) => {
+          const CurrentCheckingPlan = await incomePlan.findById(plan._id);
+          console.log("--------------------");
+          console.log(`User Check ${user._id}`);
+          console.log(
+            `Status Check ${CurrentCheckingPlan._id}: ${CurrentCheckingPlan.status}`
+          );
+          if (CurrentCheckingPlan.status === "scheduled") {
             console.log("Status Check Passed");
-            if (moment(plan.IncomeDate).isSame(plan.IncomeDate)) {
-              user.Balance += plan.IncomeAmount;
-              plan.status = "processed";
+            if (moment(CurrentCheckingPlan.IncomeDate).isSame(todayDate)) {
+              user.Balance += CurrentCheckingPlan.IncomeAmount;
+              CurrentCheckingPlan.status = "processed";
+              CurrentCheckingPlan.IncomeDate = moment(
+                CurrentCheckingPlan.IncomeDate
+              ).add(1, "months");
+
               const newIncome = new income({
-                Title: plan.IncomeName,
-                Amount: plan.IncomeAmount,
+                Title: CurrentCheckingPlan.IncomeName,
+                Amount: CurrentCheckingPlan.IncomeAmount,
                 creator: user._id,
-                Date: plan.IncomeDate,
-                Category: plan.IncomeCategory,
+                Date: CurrentCheckingPlan.IncomeDate,
+                Category: CurrentCheckingPlan.IncomeCategory,
               });
               newIncome.save();
               user.Incomes.push(newIncome);
-              plan.save();
+              CurrentCheckingPlan.save();
               user.save();
-              console.log("Excuted");
+              console.log("Date Matched");
+            } else {
+              console.log("Date Not Matched");
             }
+          } else {
+            console.log("Status Check Failed");
           }
         });
       });
     });
-    console.log("1 Minute Passed");
   } catch (err) {
     console.log(err);
   }
