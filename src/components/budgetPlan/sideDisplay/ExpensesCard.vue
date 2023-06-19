@@ -44,23 +44,7 @@ export default {
   },
   methods: {
     deleteExpense() {
-      //delete expense
-      axios
-        .delete(
-          `http://localhost:3000/${this.$route.params.id}/budgetplan/${this.$route.params.budgetplanid}/expense/${this.expenseId}`,
-          {
-            headers: {
-              Authorization: sessionStorage.getItem("token"),
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res);
-          this.$emit("renderExpenses");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.$emit("deleteExpense", this.expenseId);
     },
   },
 };

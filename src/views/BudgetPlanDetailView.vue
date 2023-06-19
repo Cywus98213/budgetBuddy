@@ -16,12 +16,16 @@
       @closeform="exitForm"
       @successful="toggleMessageBanner"
     />
+
     <div class="header">
       <BackButton />
       <h1 class="budgetPlanCategory">{{ Category }} Plan</h1>
       <div class="navButton">
         <budgetPlanNavButton :iconSrc="NavEditIcon" @click="toggleEdit" />
-        <budgetPlanNavButton :iconSrc="NavDeleteIcon" @click="toggleDelete" />
+        <budgetPlanNavButton
+          :iconSrc="NavDeleteIcon"
+          @click="toggleDeletePlan"
+        />
       </div>
     </div>
     <div class="grid-container">
@@ -31,7 +35,9 @@
       <div class="side">
         <sideRecentExpense
           :Expenses="Expenses"
+          @deleteExpense="isDeleteExpenseToggle"
           @renderExpenses="getbudgetPlanDetail"
+          @successful="toggleMessageBanner"
         />
       </div>
     </div>
@@ -102,10 +108,14 @@ export default {
     toggleEdit() {
       this.isEditPlan = true;
     },
-    toggleDelete() {
+    toggleDeletePlan() {
       this.isDeletePlan = true;
     },
+    isDeleteExpenseToggle() {
+      this.isDeleteExpense = true;
+    },
     exitForm() {
+      this.isDeleteExpense = false;
       this.isEditPlan = false;
       this.isDeletePlan = false;
       this.getbudgetPlanDetail();

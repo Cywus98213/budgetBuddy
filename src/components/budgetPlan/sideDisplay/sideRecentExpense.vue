@@ -1,5 +1,12 @@
 <template>
   <div class="side-display-wrapper">
+    <deleteExpenseModal
+      v-if="showDeleteModal"
+      @closeform="exitForm"
+      @successful="successful"
+      :expenseId="expenseId"
+      @renderExpenses="renderExpenses"
+    />
     <h1>Recent Expenses:</h1>
     <div class="Cards-container">
       <ExpensesCard
@@ -10,7 +17,8 @@
         :expenseAmount="expense.Amount"
         :expenseId="expense._id"
         :key="index"
-        @renderExpenses="$emit('renderExpenses')"
+        @renderExpenses="renderExpenses"
+        @deleteExpense="deleteExpense"
       />
       <p v-else>No Expenses...</p>
     </div>
@@ -31,6 +39,7 @@
   </div>
 </template>
 <script>
+import deleteExpenseModal from "../../budget/budgetModal/Expense/deleteExpenseModal.vue";
 import Button from "../../common/Button.vue";
 import ExpensesCard from "./ExpensesCard.vue";
 export default {
@@ -38,11 +47,14 @@ export default {
     return {
       currentPage: 1,
       expensesPerPage: 5,
+      showDeleteModal: false,
+      expenseId: "",
     };
   },
   components: {
     ExpensesCard,
     Button,
+    deleteExpenseModal,
   },
   props: {
     Expenses: {
@@ -73,6 +85,20 @@ export default {
       if (this.currentPage > 1) {
         this.currentPage--;
       }
+    },
+    exitForm() {
+      this.showDeleteModal = false;
+    },
+    renderExpenses() {
+      this.$emit("renderExpenses");
+    },
+    successful(msg) {
+      this.$emit("successful", msg);
+    },
+    deleteExpense(expenseId) {
+      this.showDeleteModal = true;
+      this.expenseId = expenseId;
+      this.$emit("deleteExpense");
     },
   },
 };
