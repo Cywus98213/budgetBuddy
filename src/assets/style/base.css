@@ -1,0 +1,96 @@
+:root {
+
+  --radius: 0.3rem;
+  --main-bg-clr: #1c1c21;
+  --toggle-bg-clr: #29292f;
+  --secondary-bg-clr: #191922;
+
+  --primary-font-white: rgb(252, 252, 252);
+  --primary-component-bg: rgb(41, 41, 47);
+  --primary-button-clr: #db4659;
+
+  --safe-clr: #4bcc4f;
+  --danger-clr: #e23950;
+  --warning-clr: #f5c542;
+
+  --primary-price-clr: rgb(252, 252, 252);
+  --sub-price-clr: #c3c3c5;
+  --progress-bar-fill-clr: #db4659;
+
+  --grey-clr: #969696;
+
+
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url(../fonts/ClashDisplay-Extralight.ttf);
+  font-weight: 100;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url(../fonts/ClashDisplay-Light.ttf);
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url(../fonts/ClashDisplay-Variable.ttf);
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url(../fonts/ClashDisplay-Regular.ttf);
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url(../fonts/ClashDisplay-Semibold.ttf);
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url(../fonts/ClashDisplay-Bold.ttf);
+  font-weight: 600;
+}
+
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  color: var(--primary-font-white);
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+::-webkit-scrollbar {
+  width: 1rem;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 1rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary-font-white);
+  border: 6px var(--main-bg-clr) solid;
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 1rem;
+  background-color: var(--main-bg-clr);
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
