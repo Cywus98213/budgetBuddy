@@ -4,7 +4,8 @@ This is a web application built with Vue.js and Express.js that helps users to m
 
 ## Demo Draft
 
-![Alt text](Demo-app-design.png)
+![image](https://github.com/Cywus98213/budgetBuddy/assets/91040918/748330ff-3209-4bbd-acde-0f9118524322)
+
 
 ### Frontend
 
