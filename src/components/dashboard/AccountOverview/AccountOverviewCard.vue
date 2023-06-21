@@ -6,6 +6,10 @@
         <Button :iconSrc="downloadIcon" :text="'Download report'" />
       </div> -->
     </div>
+    <div class="balance-dispaly">
+      <h1>Balance:</h1>
+      <p class="number" :class="BalanceChecker">${{ roundedUserBalance }}</p>
+    </div>
     <div class="account-overview-main">
       <div class="main-left">
         <div class="main-left-header">
@@ -58,6 +62,7 @@ export default {
     return {
       downloadIcon: downloadIcon,
       budgetPlans: [],
+      userBalance: 0,
       expenses: [],
       incomes: [],
       loaded: false,
@@ -104,6 +109,7 @@ export default {
           }
         )
         .then((res) => {
+          this.userBalance = res.data.Balance;
           this.budgetPlans = res.data.BudgetPlan;
           this.expenses = res.data.Expenses;
           this.incomes = res.data.IncomePlan;
@@ -128,6 +134,18 @@ export default {
       console.error(e);
     }
   },
+  computed: {
+    roundedUserBalance() {
+      const roundedNumber = this.userBalance.toFixed(2);
+      return parseFloat(roundedNumber).toLocaleString();
+    },
+    BalanceChecker() {
+      return {
+        safe: this.userBalance > 0,
+        alert: this.userBalance < 0,
+      };
+    },
+  },
 };
 </script>
 <style scoped>
@@ -142,6 +160,21 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+.balance-dispaly {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem 0;
+}
+.balance-dispaly h1 {
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin: 0.5rem 0;
+}
+.number {
+  font-size: 2rem;
+  font-weight: bold;
 }
 .account-overview-header h1 {
   font-size: 1.2rem;
@@ -201,6 +234,13 @@ export default {
 .overviewChart {
   height: 175px;
   width: 175px;
+}
+.safe {
+  color: var(--safe-clr);
+}
+
+.alert {
+  color: var(--danger-clr);
 }
 
 @media screen and (min-width: 767px) {
