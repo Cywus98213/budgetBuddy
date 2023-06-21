@@ -7,6 +7,12 @@ This is a web application built with Vue.js and Express.js that helps users to m
 ![image](https://github.com/Cywus98213/budgetBuddy/assets/91040918/748330ff-3209-4bbd-acde-0f9118524322)
 
 
+## Live Demo
+https://6490fdf012fa584eb5402276--silver-toffee-714e93.netlify.app/
+
+
+
+
 ### Frontend
 
 - Vue js
