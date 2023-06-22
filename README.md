@@ -88,6 +88,10 @@ BudgetBuddy currently supports the following features:
 
 Please feel free to report any issues or bugs that you encounter while using the application.
 
+## Reflection
+
+- Overall, this project helped me improve my skills as a full-stack developer , gave me valuable experience working with popular tools and technologies used in modern web development, and also give some basic understanding of how to build a website. And also have more understanding of how to build out a system and the concepts.
+
 ## Contributing
 
 BudgetBuddy is a self-practice project and is not currently accepting contributions.
