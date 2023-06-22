@@ -88,9 +88,15 @@ BudgetBuddy currently supports the following features:
 
 Please feel free to report any issues or bugs that you encounter while using the application.
 
-## Reflection
+Reflection:
 
-- Overall, this project helped me improve my skills as a full-stack developer , gave me valuable experience working with popular tools and technologies used in modern web development, and also give some basic understanding of how to build a website. And also have more understanding of how to build out a system and the concepts.
+- Building BudgetBuddy has been an enriching experience in my journey as a web developer. It allowed me to leverage Vue.js and Express.js to create a practical and user-friendly expense management and savings tracking tool. Throughout the development process, I honed my skills in frontend and backend technologies, and gained hands-on experience with authentication systems and database integration.
+
+- One of the highlights of this project was implementing user authentication using JSON Web Tokens (JWT), ensuring the security of user accounts and data. I also incorporated features such as setting monthly budget goals, adding transactions with categories and tags, and visualizing expenses through interactive bar charts. These functionalities provide users with comprehensive tools to monitor and manage their finances effectively.
+
+- Although BudgetBuddy is a work in progress, with areas such as the account summary and PDF functionality still being developed, I am proud of the foundation I have built. I am aware that there may be room for optimization and improvement in terms of performance and code quality. However, this project has allowed me to strengthen my understanding of best practices and coding standards.
+
+- mOverall, BudgetBuddy has been a significant learning opportunity, reinforcing my knowledge of full-stack web development and enhancing my ability to deliver practical solutions. I look forward to further refining and expanding this project, as well as applying the lessons learned to future endeavors in the dynamic world of web development.
 
 ## Contributing
 
