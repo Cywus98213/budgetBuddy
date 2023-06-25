@@ -96,7 +96,7 @@ Reflection:
 
 - Although BudgetBuddy is a work in progress, with areas such as the account summary and PDF functionality still being developed, I am proud of the foundation I have built. I am aware that there may be room for optimization and improvement in terms of performance and code quality. However, this project has allowed me to strengthen my understanding of best practices and coding standards.
 
-- mOverall, BudgetBuddy has been a significant learning opportunity, reinforcing my knowledge of full-stack web development and enhancing my ability to deliver practical solutions. I look forward to further refining and expanding this project, as well as applying the lessons learned to future endeavors in the dynamic world of web development.
+- Overall, BudgetBuddy has been a significant learning opportunity, reinforcing my knowledge of full-stack web development and enhancing my ability to deliver practical solutions. I look forward to further refining and expanding this project, as well as applying the lessons learned to future endeavors in the dynamic world of web development.
 
 ## Contributing
 
