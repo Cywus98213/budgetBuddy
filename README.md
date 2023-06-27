@@ -98,6 +98,11 @@ Reflection:
 
 - Overall, BudgetBuddy has been a significant learning opportunity, reinforcing my knowledge of full-stack web development and enhancing my ability to deliver practical solutions. I look forward to further refining and expanding this project, as well as applying the lessons learned to future endeavors in the dynamic world of web development.
 
+## Future Enhancements
+- PDF Summary: Implementing a PDF summary feature that allows users to generate and download a detailed summary of their spending patterns and financial insights.
+- Enhanced Analytics: Integrating advanced analytics capabilities to provide users with comprehensive insights into their spending habits, trends, and personalized recommendations for better financial management.
+- Enhanced User Management: Developing an admin panel that empowers business owners to easily manage their menu, track orders, and gain valuable insights into their business performance through a user-friendly dashboard.
+
 ## Contributing
 
 BudgetBuddy is a self-practice project and is not currently accepting contributions.
