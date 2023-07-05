@@ -8,8 +8,7 @@ This is a web application built with Vue.js and Express.js that helps users to m
 
 
 ## Live Demo
-https://silver-toffee-714e93.netlify.app/
-
+https://budgetbuddydemo.netlify.app/
 
 
 
